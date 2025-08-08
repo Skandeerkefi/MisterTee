@@ -65,19 +65,19 @@ function SignupPage() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#191F3B] text-white'>
+		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
 			<Navbar />
 
 			<main className='container flex items-center justify-center flex-grow py-12'>
-				<Card className='w-full max-w-md bg-[#191F3B] border border-[#EA8105]/40 text-white shadow-md rounded-xl'>
+				<Card className='w-full max-w-md bg-[#F5F5F5] border border-[#E0E0E0] text-[#000000] shadow-md rounded-xl'>
 					<CardHeader className='space-y-1'>
 						<div className='flex items-center justify-center gap-2 mb-2'>
-							<UserPlus className='w-6 h-6 text-[#38BDF8]' />
-							<CardTitle className='text-2xl text-[#EA8105]'>
+							<UserPlus className='w-6 h-6 text-[#000000]' />
+							<CardTitle className='text-2xl text-[#000000]'>
 								Create an Account
 							</CardTitle>
 						</div>
-						<CardDescription className='text-center text-[#ffffff]'>
+						<CardDescription className='text-center text-[#000000]'>
 							Enter your Kick and Rainbet usernames to register and join the
 							community
 						</CardDescription>
@@ -87,7 +87,7 @@ function SignupPage() {
 						<CardContent className='space-y-4'>
 							{/* Kick Username */}
 							<div className='space-y-2'>
-								<Label htmlFor='username' className='text-[#EA8105]'>
+								<Label htmlFor='username' className='text-[#000000]'>
 									Kick Username
 								</Label>
 								<Input
@@ -96,13 +96,13 @@ function SignupPage() {
 									value={username}
 									onChange={(e) => setUsername(e.target.value)}
 									required
-									className='bg-[#191F3B] border border-[#EA8105] text-white placeholder:text-[#ffffff]'
+									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
 							{/* Rainbet Username */}
 							<div className='space-y-2'>
-								<Label htmlFor='rainbetUsername' className='text-[#EA8105]'>
+								<Label htmlFor='rainbetUsername' className='text-[#000000]'>
 									Rainbet Username
 								</Label>
 								<Input
@@ -111,13 +111,13 @@ function SignupPage() {
 									value={rainbetUsername}
 									onChange={(e) => setRainbetUsername(e.target.value)}
 									required
-									className='bg-[#191F3B] border border-[#EA8105] text-white placeholder:text-[#ffffff]'
+									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
 							{/* Password */}
 							<div className='space-y-2'>
-								<Label htmlFor='password' className='text-[#EA8105]'>
+								<Label htmlFor='password' className='text-[#000000]'>
 									Password
 								</Label>
 								<Input
@@ -130,13 +130,13 @@ function SignupPage() {
 										setPasswordError("");
 									}}
 									required
-									className='bg-[#191F3B] border border-[#EA8105] text-white placeholder:text-[#ffffff]'
+									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
 							{/* Confirm Password */}
 							<div className='space-y-2'>
-								<Label htmlFor='confirmPassword' className='text-[#EA8105]'>
+								<Label htmlFor='confirmPassword' className='text-[#000000]'>
 									Confirm Password
 								</Label>
 								<Input
@@ -149,7 +149,7 @@ function SignupPage() {
 										setPasswordError("");
 									}}
 									required
-									className='bg-[#191F3B] border border-[#EA8105] text-white placeholder:text-[#ffffff]'
+									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 								{passwordError && (
 									<p className='mt-1 text-xs text-[#AF2D03]'>{passwordError}</p>
@@ -164,20 +164,20 @@ function SignupPage() {
 									onCheckedChange={(checked) =>
 										setAgreedToTerms(checked as boolean)
 									}
-									className='border-[#EA8105]'
+									className='border-[#E0E0E0]'
 								/>
 								<label
 									htmlFor='terms'
 									className='text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
 								>
 									I agree to the{" "}
-									<Link to='/terms' className='text-[#EA8105] hover:underline'>
+									<Link to='/terms' className='text-[#000000] hover:underline'>
 										Terms of Service
 									</Link>{" "}
 									and{" "}
 									<Link
 										to='/privacy'
-										className='text-[#EA8105] hover:underline'
+										className='text-[#000000] hover:underline'
 									>
 										Privacy Policy
 									</Link>
@@ -188,15 +188,18 @@ function SignupPage() {
 						<CardFooter className='flex flex-col space-y-4'>
 							<Button
 								type='submit'
-								className='w-full bg-[#EA8105] hover:bg-[#C33B52] text-white'
+								className='w-full bg-[#000000] hover:bg-[#222222] text-[#FFFFFF]'
 								disabled={isLoading || !agreedToTerms}
 							>
 								{isLoading ? "Creating Account..." : "Create Account"}
 							</Button>
 
-							<div className='text-sm text-center text-[#C33B52]'>
+							<div className='text-sm text-center text-[#222222]'>
 								Already have an account?{" "}
-								<Link to='/login' className='text-[#EA8105] hover:underline'>
+								<Link
+									to='/login'
+									className='text-[#000000] hover:underline font-semibold'
+								>
 									Sign In
 								</Link>
 							</div>
