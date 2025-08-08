@@ -149,7 +149,7 @@ function HomePage() {
 						<Button
 							variant='outline'
 							size='sm'
-							className='border-[#000000] text-[#000000] hover:bg-[#000000] hover:text-white'
+							className='border-[#000000] text-[#ffffff] hover:bg-[#000000] hover:text-white'
 							asChild
 						>
 							<Link to='/leaderboard' className='flex items-center gap-1'>
