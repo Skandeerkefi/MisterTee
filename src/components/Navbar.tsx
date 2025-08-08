@@ -21,7 +21,7 @@ export function Navbar() {
 	useEffect(() => {
 		const fetchLiveStatus = async () => {
 			try {
-				const res = await fetch("https://kick.com/api/v2/channels/MONEYLIFE1K");
+				const res = await fetch("https://kick.com/api/v2/channels/MisterTee");
 				const data = await res.json();
 
 				if (data.livestream) {
@@ -61,26 +61,24 @@ export function Navbar() {
 	];
 
 	return (
-		<nav className='sticky top-0 z-50 border-b border-[#CF9F86]/40 backdrop-blur-md bg-[#161A34]/95 text-white shadow-md'>
+		<nav className='sticky top-0 z-50 border-b border-[#E0E0E0] backdrop-blur-md bg-[#FFFFFF] text-[#000000] shadow-md'>
 			<div className='container flex items-center justify-between py-3 mx-auto'>
 				<div className='flex items-center gap-3'>
 					<Link to='/' className='flex items-center gap-2'>
 						<img
-							src='https://files.kick.com/images/user/39074313/profile_image/conversion/56920648-3c8c-46b9-b833-bbd1f5fa2b18-fullsize.webp'
-							alt='MONEYLIFE1K Logo'
-							className='object-cover w-10 h-10 border rounded-full shadow-sm border-[#CF9F86]/60'
+							src='https://media.discordapp.net/attachments/1398864689559109784/1402771759824109619/48877C4C-038D-458E-B111-4B92E934384E.jpg?ex=68971ac1&is=6895c941&hm=4050594e1db8907b87742b68b80ea6184c0ce367744e30760e411ae42027a3b9&=&format=webp&width=686&height=845'
+							alt='MisterTee Logo'
+							className='object-cover w-10 h-10 border rounded-full shadow-sm border-[#E0E0E0]'
 						/>
-						<span className='text-2xl font-bold text-[#38BDF8] select-none'>
-							Moneylife1k
-						</span>
+						<span className='text-2xl font-bold select-none'>MisterTee</span>
 					</Link>
 
 					{isLive ? (
-						<span className='ml-2 px-3 py-0.5 text-xs bg-[#38BDF8] text-white rounded-full font-semibold animate-pulse select-none'>
+						<span className='ml-2 px-3 py-0.5 text-xs bg-black text-white rounded-full font-semibold animate-pulse select-none'>
 							🔴 LIVE {viewerCount !== null ? `(${viewerCount})` : ""}
 						</span>
 					) : (
-						<span className='ml-2 px-3 py-0.5 text-xs bg-[#CF9F86] text-white rounded-full font-semibold select-none'>
+						<span className='ml-2 px-3 py-0.5 text-xs bg-[#F5F5F5] text-black rounded-full font-semibold select-none'>
 							Offline
 						</span>
 					)}
@@ -94,8 +92,8 @@ export function Navbar() {
 								to={item.path}
 								className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
 									location.pathname === item.path
-										? "bg-[#38BDF8] text-white shadow-md"
-										: "text-white hover:bg-[#CF9F86] hover:text-white"
+										? "bg-black text-white shadow-md"
+										: "text-black hover:bg-[#F5F5F5] hover:text-black"
 								}`}
 							>
 								{item.icon}
@@ -110,7 +108,7 @@ export function Navbar() {
 								<Button variant='ghost' size='sm' asChild>
 									<Link
 										to='/'
-										className='flex items-center gap-1 font-semibold text-white'
+										className='flex items-center gap-1 font-semibold text-black'
 									>
 										<User className='w-4 h-4' />
 										{user.username}
@@ -120,7 +118,7 @@ export function Navbar() {
 									variant='outline'
 									size='sm'
 									onClick={logout}
-									className='border-white text-white hover:bg-[#38BDF8] hover:border-[#38BDF8]'
+									className='text-white border-black hover:bg-black hover:text-white'
 								>
 									<LogOut className='w-4 h-4 mr-1' />
 									Logout
@@ -132,7 +130,7 @@ export function Navbar() {
 									variant='outline'
 									size='sm'
 									asChild
-									className='border-white text-white hover:bg-[#CF9F86] hover:border-[#CF9F86]'
+									className='text-white border-black hover:bg-black hover:text-white'
 								>
 									<Link to='/login' className='flex items-center'>
 										<LogIn className='w-4 h-4 mr-1' />
@@ -142,7 +140,7 @@ export function Navbar() {
 								<Button
 									size='sm'
 									asChild
-									className='text-white hover:text-[#38BDF8] font-semibold'
+									className='font-semibold text-black hover:text-gray-600'
 								>
 									<Link to='/signup'>Sign Up</Link>
 								</Button>
@@ -153,24 +151,24 @@ export function Navbar() {
 
 				{isMobile && (
 					<button
-						className='p-2 rounded-md hover:bg-[#CF9F86]/30 focus:outline-none focus:ring-2 focus:ring-[#CF9F86]'
+						className='p-2 rounded-md hover:bg-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-black'
 						onClick={() => setIsOpen(!isOpen)}
 						aria-label='Toggle menu'
 						aria-expanded={isOpen}
 					>
 						<div className='space-y-1.5'>
 							<span
-								className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
 									isOpen ? "rotate-45 translate-y-2" : ""
 								}`}
 							/>
 							<span
-								className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
 									isOpen ? "opacity-0" : "opacity-100"
 								}`}
 							/>
 							<span
-								className={`block h-0.5 w-6 bg-white transition-all duration-300 ${
+								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
 									isOpen ? "-rotate-45 -translate-y-2" : ""
 								}`}
 							/>
@@ -182,9 +180,7 @@ export function Navbar() {
 			{isMobile && (
 				<div
 					className={`container mx-auto overflow-hidden transition-all duration-300 ease-in-out ${
-						isOpen
-							? "max-h-screen py-3 border-t border-[#CF9F86]/40"
-							: "max-h-0"
+						isOpen ? "max-h-screen py-3 border-t border-[#E0E0E0]" : "max-h-0"
 					}`}
 				>
 					<div className='flex flex-col gap-2 pb-4'>
@@ -195,8 +191,8 @@ export function Navbar() {
 								onClick={() => setIsOpen(false)}
 								className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
 									location.pathname === item.path
-										? "bg-[#38BDF8] text-white"
-										: "text-white hover:bg-[#CF9F86] hover:text-white"
+										? "bg-black text-white"
+										: "text-black hover:bg-[#F5F5F5] hover:text-black"
 								}`}
 							>
 								{item.icon}
@@ -211,7 +207,7 @@ export function Navbar() {
 										<Link
 											to='/profile'
 											onClick={() => setIsOpen(false)}
-											className='flex items-center font-semibold text-white'
+											className='flex items-center font-semibold text-black'
 										>
 											<User className='w-4 h-4 mr-1' />
 											{user.username}
@@ -220,7 +216,7 @@ export function Navbar() {
 									<Button
 										variant='outline'
 										size='sm'
-										className='w-full border-white text-white hover:bg-[#38BDF8] hover:border-[#38BDF8]'
+										className='w-full text-black border-black hover:bg-black hover:text-white'
 										onClick={() => {
 											logout();
 											setIsOpen(false);
@@ -235,7 +231,7 @@ export function Navbar() {
 									<Button
 										variant='outline'
 										size='sm'
-										className='w-full border-white text-white hover:bg-[#CF9F86] hover:border-[#CF9F86]'
+										className='w-full text-black border-black hover:bg-black hover:text-white'
 										asChild
 									>
 										<Link
@@ -249,7 +245,7 @@ export function Navbar() {
 									</Button>
 									<Button
 										size='sm'
-										className='w-full text-white hover:text-[#38BDF8] font-semibold'
+										className='w-full font-semibold text-black hover:text-gray-600'
 										asChild
 									>
 										<Link to='/signup' onClick={() => setIsOpen(false)}>

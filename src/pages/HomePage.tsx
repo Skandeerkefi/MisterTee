@@ -62,13 +62,13 @@ function HomePage() {
 	}, [monthEndISO]);
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#161A34] text-white'>
+		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
 			<Navbar />
 
 			<main className='flex-grow'>
 				{/* Hero Section */}
 				<section className='relative overflow-hidden'>
-					<div className='absolute inset-0 bg-gradient-to-br from-[#161A34]/90 to-[#161A34]/70 z-10' />
+					<div className='absolute inset-0 bg-gradient-to-br from-[#FFFFFF]/90 to-[#F5F5F5]/70 z-10' />
 					<div
 						className='absolute inset-0 z-0 bg-center bg-cover opacity-30'
 						style={{
@@ -78,26 +78,26 @@ function HomePage() {
 					/>
 
 					<div className='container relative z-20 px-4 py-20 text-center md:py-28'>
-						<h1 className='mb-4 text-4xl md:text-6xl font-bold text-[#38BDF8]'>
-							Welcome to MONEYLIFE1K's
-							<span className='block mt-2 text-[#CF9F86]'>
+						<h1 className='mb-4 text-4xl md:text-6xl font-bold text-[#000000]'>
+							Welcome to MisterTee's
+							<span className='block mt-2 text-[#555555]'>
 								Official Website
 							</span>
 						</h1>
-						<p className='mb-8 text-lg text-white md:text-xl'>
+						<p className='mb-8 text-lg text-[#000000] md:text-xl'>
 							Join the community for exciting gambling streams, giveaways, slot
 							calls, and leaderboard competitions with affiliate code{" "}
-							<span className='font-bold text-[#38BDF8]'>MONEYLIFE</span>
+							<span className='font-bold text-[#000000]'>MisterTee</span>
 						</p>
 
 						<div className='flex flex-col justify-center gap-4 sm:flex-row'>
 							<Button
 								size='lg'
-								className='bg-[#38BDF8] hover:bg-[#2DA2D2] text-white'
+								className='bg-[#000000] hover:bg-[#222222] text-white'
 								asChild
 							>
 								<a
-									href='https://kick.com/MONEYLIFE1K'
+									href='https://kick.com/MisterTee'
 									target='_blank'
 									rel='noreferrer'
 								>
@@ -107,15 +107,15 @@ function HomePage() {
 							<Button
 								size='lg'
 								variant='outline'
-								className='border-[#38BDF8] text-[#38BDF8] hover:bg-[#38BDF8] hover:text-white'
+								className='border-[#000000] text-[#ffffff] hover:bg-[#000000] hover:text-white'
 								asChild
 							>
 								<a
-									href='https://rainbet.com/?r=MONEYLIFE'
+									href='https://rainbet.com/?r=MisterTee'
 									target='_blank'
 									rel='noreferrer'
 								>
-									Join Rainbet with Code: MONEYLIFE
+									Join Rainbet with Code: MisterTee
 								</a>
 							</Button>
 						</div>
@@ -124,14 +124,14 @@ function HomePage() {
 
 				{/* Countdown Section */}
 				<section className='flex justify-center py-12'>
-					<div className='text-center border border-[#CF9F86] rounded-lg px-6 py-6 bg-[#1E2547] shadow-md inline-flex flex-col items-center'>
-						<h2 className='text-xl font-semibold text-[#CF9F86] mb-4'>
+					<div className='text-center border border-[#E0E0E0] rounded-lg px-6 py-6 bg-[#F5F5F5] shadow-md inline-flex flex-col items-center'>
+						<h2 className='text-xl font-semibold text-[#000000] mb-4'>
 							⏳ Leaderboard Ends In
 						</h2>
-						<p className='font-mono text-3xl text-[#38BDF8] tracking-widest select-none'>
+						<p className='font-mono text-3xl text-[#000000] tracking-widest select-none'>
 							{timeLeft}
 						</p>
-						<p className='mt-2 text-sm text-white/80'>
+						<p className='mt-2 text-sm text-[#555555]'>
 							Keep playing to secure your rank!
 						</p>
 					</div>
@@ -141,15 +141,15 @@ function HomePage() {
 				<section className='container py-16'>
 					<div className='flex items-center justify-between mb-8'>
 						<div className='flex items-center gap-2'>
-							<Crown className='w-6 h-6 text-[#38BDF8]' />
-							<h2 className='text-2xl font-bold text-[#38BDF8]'>
+							<Crown className='w-6 h-6 text-[#000000]' />
+							<h2 className='text-2xl font-bold text-[#000000]'>
 								Monthly Leaderboard
 							</h2>
 						</div>
 						<Button
 							variant='outline'
 							size='sm'
-							className='border-[#38BDF8] text-[#38BDF8] hover:bg-[#38BDF8] hover:text-white'
+							className='border-[#000000] text-[#000000] hover:bg-[#000000] hover:text-white'
 							asChild
 						>
 							<Link to='/leaderboard' className='flex items-center gap-1'>
@@ -162,24 +162,24 @@ function HomePage() {
 				</section>
 
 				{/* Features */}
-				<section className='bg-[#161A34] border-y border-[#38BDF8]/20 py-16'>
+				<section className='bg-[#FFFFFF] border-y border-[#E0E0E0] py-16'>
 					<div className='container text-center'>
-						<h2 className='text-2xl font-bold text-[#38BDF8] mb-12'>
+						<h2 className='text-2xl font-bold text-[#000000] mb-12'>
 							What We Offer
 						</h2>
 						<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
 							<FeatureCard
-								icon={<Dices className='w-8 h-8 text-[#CF9F86]' />}
+								icon={<Dices className='w-8 h-8 text-[#000000]' />}
 								title='Exciting Gambling Streams'
-								description='Watch thrilling slot sessions, casino games, and big win moments with MONEYLIFE1K on Rainbet.'
+								description='Watch thrilling slot sessions, casino games, and big win moments with MisterTee1K on Rainbet.'
 							/>
 							<FeatureCard
-								icon={<Users className='w-8 h-8 text-[#CF9F86]' />}
+								icon={<Users className='w-8 h-8 text-[#000000]' />}
 								title='Slot Call System'
-								description='Suggest slots for MONEYLIFE1K to play during streams and see your suggestions come to life.'
+								description='Suggest slots for MisterTee to play during streams and see your suggestions come to life.'
 							/>
 							<FeatureCard
-								icon={<Gift className='w-8 h-8 text-[#CF9F86]' />}
+								icon={<Gift className='w-8 h-8 text-[#000000]' />}
 								title='Regular Giveaways'
 								description='Participate in frequent giveaways for a chance to win cash, gaming gear, and more.'
 							/>
@@ -201,10 +201,10 @@ interface FeatureCardProps {
 
 function FeatureCard({ icon, title, description }: FeatureCardProps) {
 	return (
-		<div className='bg-[#1E2547] p-6 rounded-2xl border border-[#38BDF8]/20 text-white shadow-md hover:shadow-xl transition'>
-			<div className='flex justify-center mb-4 text-[#CF9F86]'>{icon}</div>
-			<h3 className='text-xl font-bold text-[#CF9F86] mb-2'>{title}</h3>
-			<p className='text-white/80'>{description}</p>
+		<div className='bg-[#F5F5F5] p-6 rounded-2xl border border-[#E0E0E0] text-black shadow-md hover:shadow-lg transition'>
+			<div className='flex justify-center mb-4'>{icon}</div>
+			<h3 className='mb-2 text-xl font-bold'>{title}</h3>
+			<p className='text-[#555555]'>{description}</p>
 		</div>
 	);
 }

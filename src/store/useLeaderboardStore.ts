@@ -18,7 +18,7 @@ interface LeaderboardState {
 	fetchLeaderboard: () => Promise<void>;
 }
 
-const API_URL = "https://moneylife1kdata.onrender.com/api/affiliates";
+const API_URL = "https://misterteedata.onrender.com/api/affiliates";
 
 const getDateRange = (
 	period: LeaderboardPeriod

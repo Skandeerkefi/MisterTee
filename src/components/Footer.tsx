@@ -5,115 +5,102 @@ export function Footer() {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className='py-6 mt-16 border-t border-[#CF9F86]/20 bg-[#161A34] text-white'>
+		<footer className='py-6 mt-16 border-t border-[#E0E0E0] bg-[#FFFFFF] text-[#000000]'>
 			<div className='container mx-auto'>
 				<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
+					{/* About */}
 					<div>
-						<h3 className='mb-3 text-lg font-bold text-[#CF9F86]'>
-							MONEYLIFE1K
-						</h3>
-						<p className='text-sm text-[#545F7D]'>
-							Join MONEYLIFE1K&apos;s community for exciting gambling streams,
+						<h3 className='mb-3 text-lg font-bold text-black'>MisterTee</h3>
+						<p className='text-sm text-[#333333]'>
+							Join MisterTee&apos;s community for exciting gambling streams,
 							giveaways, and more. Use affiliate code{" "}
-							<span className='font-semibold text-[#CF9F86]'>MONEYLIFE</span> on
+							<span className='font-semibold text-black'>MisterTee</span> on
 							Rainbet.
 						</p>
 					</div>
 
+					{/* Links */}
 					<div>
-						<h3 className='mb-3 text-lg font-bold text-[#CF9F86]'>Links</h3>
+						<h3 className='mb-3 text-lg font-bold text-black'>Links</h3>
 						<div className='grid grid-cols-2 gap-2'>
 							<Link
 								to='/'
-								className='text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors'
+								className='text-sm text-[#555555] transition-colors hover:text-black'
 							>
 								Home
 							</Link>
 							<Link
 								to='/leaderboard'
-								className='text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors'
+								className='text-sm text-[#555555] transition-colors hover:text-black'
 							>
 								Leaderboard
 							</Link>
-							{/* Uncomment if needed */}
-							{/* <Link to="/slot-calls" className="text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors">
-                Slot Calls
-              </Link>
-              <Link to="/giveaways" className="text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors">
-                Giveaways
-              </Link> */}
 							<Link
 								to='/terms'
-								className='text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors'
+								className='text-sm text-[#555555] transition-colors hover:text-black'
 							>
 								Terms & Conditions
 							</Link>
 							<Link
 								to='/privacy'
-								className='text-sm text-[#38BDF8] hover:text-[#CF9F86] transition-colors'
+								className='text-sm text-[#555555] transition-colors hover:text-black'
 							>
 								Privacy Policy
 							</Link>
 						</div>
 					</div>
 
+					{/* Social */}
 					<div>
-						<h3 className='mb-3 text-lg font-bold text-[#CF9F86]'>Connect</h3>
+						<h3 className='mb-3 text-lg font-bold text-black'>Connect</h3>
 						<div className='flex gap-3'>
 							<a
-								href='https://kick.com/MONEYLIFE1K'
+								href='https://kick.com/MisterTee'
 								target='_blank'
 								rel='noreferrer'
-								className='w-9 h-9 rounded-full flex items-center justify-center bg-[#AF2D03] hover:bg-[#CF9F86] transition-colors'
+								className='flex items-center justify-center transition-colors bg-black rounded-full w-9 h-9 hover:bg-[#F5F5F5] hover:text-black text-white font-bold'
 							>
 								K
 							</a>
 							<a
-								href='https://x.com/moneylife1k?s=21'
+								href='https://x.com/Mister7ee'
 								target='_blank'
 								rel='noreferrer'
-								className='w-9 h-9 rounded-full flex items-center justify-center bg-[#545F7D] hover:bg-[#CF9F86] transition-colors'
+								className='flex items-center justify-center transition-colors bg-[#555555] rounded-full w-9 h-9 hover:bg-[#F5F5F5] hover:text-black text-white font-bold'
 							>
 								X
 							</a>
 							<a
-								href='https://discord.com/invite/49aCsAvsBn'
+								href='https://discord.gg/YmvDexVt'
 								target='_blank'
 								rel='noreferrer'
-								className='w-9 h-9 rounded-full flex items-center justify-center bg-[#38BDF8] hover:bg-[#CF9F86] transition-colors'
+								className='flex items-center justify-center transition-colors bg-[#444444] rounded-full w-9 h-9 hover:bg-[#F5F5F5] hover:text-black text-white font-bold'
 							>
 								D
 							</a>
 							<a
-								href='https://www.instagram.com/moneylife1k'
+								href='https://www.instagram.com/MisterTee'
 								target='_blank'
 								rel='noreferrer'
-								className='w-9 h-9 rounded-full flex items-center justify-center bg-[#CF9F86] hover:bg-[#38BDF8] transition-colors'
+								className='flex items-center justify-center transition-colors bg-[#000000] rounded-full w-9 h-9 hover:bg-[#F5F5F5] hover:text-black text-white font-bold'
 							>
 								I
-							</a>
-							<a
-								href='https://www.youtube.com/@MONEYLIFE1K'
-								target='_blank'
-								rel='noreferrer'
-								className='w-9 h-9 rounded-full flex items-center justify-center bg-[#ff4a26] hover:bg-[#38BDF8] transition-colors'
-							>
-								Y
 							</a>
 						</div>
 					</div>
 				</div>
 
-				<div className='pt-4 mt-8 text-sm text-center border-t border-[#CF9F86]/20 text-[#545F7D]'>
+				{/* Bottom Bar */}
+				<div className='pt-4 mt-8 text-sm text-center text-[#555555] border-t border-[#E0E0E0]'>
 					<p className='flex flex-wrap items-center justify-center gap-1 text-sm'>
-						© {currentYear} MONEYLIFE1K. Made with
-						<Heart className='w-3 h-3 mx-1 text-[#AF2D03]' />
+						© {currentYear} MisterTee. Made with
+						<Heart className='w-3 h-3 mx-1 text-black' />
 						for the community by
 						<a
 							href='https://www.linkedin.com/in/skander-kefi/'
 							target='_blank'
 							rel='noreferrer'
-							className='font-medium text-[#CF9F86] hover:underline'
+							className='font-medium text-black hover:underline'
 						>
 							Skander
 						</a>

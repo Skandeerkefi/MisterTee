@@ -9,7 +9,7 @@ export default function SlotOverlay() {
 		const fetchOverlayCalls = async () => {
 			try {
 				const res = await fetch(
-					"https://moneylife1kdata.onrender.com/api/slot-calls",
+					"https://misterteedata.onrender.com/api/slot-calls",
 					{
 						headers: {
 							Authorization:

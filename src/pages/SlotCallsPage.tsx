@@ -3,7 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SlotCallCard } from "@/components/SlotCallCard";
 import { useSlotCallStore } from "@/store/useSlotCallStore";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,6 +35,7 @@ function SlotCallsPage() {
 
 	const { user, token } = useAuthStore();
 	const { toast } = useToast();
+
 	const handleToggleX250 = async (id: string, newValue: boolean) => {
 		const result = await updateSlotStatus(id, "played", newValue); // keep status 'played'
 		if (result.success) {
@@ -48,6 +49,7 @@ function SlotCallsPage() {
 			});
 		}
 	};
+
 	const [searchQuery, setSearchQuery] = useState("");
 	const [slotName, setSlotName] = useState("");
 	const [filter, setFilter] = useState<FilterStatus>("all");
@@ -179,18 +181,21 @@ function SlotCallsPage() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#191F3B] text-white'>
+		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
 			<Navbar />
 			<main className='container flex-grow py-8'>
 				<div className='flex items-center justify-between mb-4'>
 					<h1 className='text-2xl font-bold'>Slot Calls</h1>
 					<Dialog>
 						<DialogTrigger asChild>
-							<Button variant='outline' className='flex items-center gap-2'>
+							<Button
+								variant='outline'
+								className='flex items-center gap-2 border-[#000000] text-[#ffffff] hover:bg-[#F5F5F5]'
+							>
 								<Plus className='w-4 h-4' /> New Slot Call
 							</Button>
 						</DialogTrigger>
-						<DialogContent>
+						<DialogContent className='bg-[#000000 ] text-[#000000] border-[#E0E0E0]'>
 							<DialogHeader>
 								<DialogTitle>New Slot Call</DialogTitle>
 								<DialogDescription>
@@ -203,11 +208,13 @@ function SlotCallsPage() {
 									value={slotName}
 									onChange={(e) => setSlotName(e.target.value)}
 									disabled={isSubmitting}
+									className='bg-[#FFFFFF] text-[#000000] border border-[#E0E0E0]'
 								/>
 								<DialogFooter>
 									<Button
 										onClick={handleSubmit}
 										disabled={isSubmitting || !slotName.trim()}
+										className='bg-[#000000] text-[#FFFFFF] hover:bg-gray-800'
 									>
 										Submit
 									</Button>
@@ -222,7 +229,7 @@ function SlotCallsPage() {
 						placeholder='Search slot name or requester...'
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
-						className='flex-grow max-w-sm'
+						className='flex-grow max-w-sm bg-[#ffffff] text-[#000000] border border-[#E0E0E0]'
 					/>
 
 					<Tabs
@@ -230,16 +237,41 @@ function SlotCallsPage() {
 						onValueChange={(val) => setFilter(val as FilterStatus)}
 						className='flex-grow max-w-lg'
 					>
-						<TabsList>
-							<TabsTrigger value='all'>All</TabsTrigger>
-							<TabsTrigger value='pending'>Pending</TabsTrigger>
-							<TabsTrigger value='accepted'>Accepted</TabsTrigger>
-							<TabsTrigger value='played'>Played</TabsTrigger>
-							<TabsTrigger value='rejected'>Rejected</TabsTrigger>
+						<TabsList className='border-b border-[#E0E0E0]'>
+							<TabsTrigger
+								value='all'
+								className='text-[#ffffff] data-[state=active]:bg-[#000000] data-[state=active]:text-[#FFFFFF]'
+							>
+								All
+							</TabsTrigger>
+							<TabsTrigger
+								value='pending'
+								className='text-[#ffffff] data-[state=active]:bg-[#000000] data-[state=active]:text-[#FFFFFF]'
+							>
+								Pending
+							</TabsTrigger>
+							<TabsTrigger
+								value='accepted'
+								className='text-[#ffffff] data-[state=active]:bg-[#000000] data-[state=active]:text-[#FFFFFF]'
+							>
+								Accepted
+							</TabsTrigger>
+							<TabsTrigger
+								value='played'
+								className='text-[#ffffff] data-[state=active]:bg-[#000000] data-[state=active]:text-[#FFFFFF]'
+							>
+								Played
+							</TabsTrigger>
+							<TabsTrigger
+								value='rejected'
+								className='text-[#ffffff] data-[state=active]:bg-[#000000] data-[state=active]:text-[#FFFFFF]'
+							>
+								Rejected
+							</TabsTrigger>
 						</TabsList>
 					</Tabs>
 
-					<label className='flex items-center gap-2 text-sm text-white'>
+					<label className='flex items-center gap-2 text-sm text-[#000000]'>
 						<input
 							type='checkbox'
 							checked={showOnly250Hit}
@@ -250,9 +282,9 @@ function SlotCallsPage() {
 				</div>
 
 				{isLoading ? (
-					<div className='text-center text-white/70'>Loading...</div>
+					<div className='text-center text-black/70'>Loading...</div>
 				) : filteredSlotCalls.length === 0 ? (
-					<div className='text-center text-white/70'>No slot calls found.</div>
+					<div className='text-center text-black/70'>No slot calls found.</div>
 				) : (
 					<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
 						{filteredSlotCalls.map((call) => (
