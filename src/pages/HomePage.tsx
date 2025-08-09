@@ -1,3 +1,9 @@
+// 🎨 Color Palette:
+// Black: #000000
+// White: #FFFFFF
+// Red: #E10600
+// Light Gray: #D3D3D3
+
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -18,7 +24,6 @@ function HomePage() {
 		? monthlyLeaderboard.slice(0, 5)
 		: [];
 
-	// Calculate current month end date string for countdown
 	const now = new Date();
 	const monthEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 	monthEndDate.setHours(23, 59, 59, 999);
@@ -68,32 +73,24 @@ function HomePage() {
 			<main className='flex-grow'>
 				{/* Hero Section */}
 				<section className='relative overflow-hidden'>
-					<div className='absolute inset-0 bg-gradient-to-br from-[#FFFFFF]/90 to-[#F5F5F5]/70 z-10' />
-					<div
-						className='absolute inset-0 z-0 bg-center bg-cover opacity-30'
-						style={{
-							backgroundImage:
-								"url(https://images.unsplash.com/photo-1614585507279-e3dda7937fdf?w=1200&h=600&fit=crop)",
-						}}
-					/>
-
+					{/* Removed gradient and background overlays for full white */}
 					<div className='container relative z-20 px-4 py-20 text-center md:py-28'>
 						<h1 className='mb-4 text-4xl md:text-6xl font-bold text-[#000000]'>
-							Welcome to MisterTee's
-							<span className='block mt-2 text-[#555555]'>
+							Welcome to MisterTee&apos;s
+							<span className='block mt-2 text-[#E10600]'>
 								Official Website
 							</span>
 						</h1>
 						<p className='mb-8 text-lg text-[#000000] md:text-xl'>
 							Join the community for exciting gambling streams, giveaways, slot
 							calls, and leaderboard competitions with affiliate code{" "}
-							<span className='font-bold text-[#000000]'>MisterTee</span>
+							<span className='font-bold text-[#E10600]'>MisterTee</span>
 						</p>
 
 						<div className='flex flex-col justify-center gap-4 sm:flex-row'>
 							<Button
 								size='lg'
-								className='bg-[#000000] hover:bg-[#222222] text-white'
+								className='bg-[#E10600] hover:bg-[#b00500] text-white'
 								asChild
 							>
 								<a
@@ -107,7 +104,7 @@ function HomePage() {
 							<Button
 								size='lg'
 								variant='outline'
-								className='border-[#000000] text-[#ffffff] hover:bg-[#000000] hover:text-white'
+								className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white'
 								asChild
 							>
 								<a
@@ -124,14 +121,14 @@ function HomePage() {
 
 				{/* Countdown Section */}
 				<section className='flex justify-center py-12'>
-					<div className='text-center border border-[#E0E0E0] rounded-lg px-6 py-6 bg-[#F5F5F5] shadow-md inline-flex flex-col items-center'>
+					<div className='text-center border border-[#D3D3D3] rounded-lg px-6 py-6 bg-[#F5F5F5] shadow-md inline-flex flex-col items-center'>
 						<h2 className='text-xl font-semibold text-[#000000] mb-4'>
 							⏳ Leaderboard Ends In
 						</h2>
-						<p className='font-mono text-3xl text-[#000000] tracking-widest select-none'>
+						<p className='font-mono text-3xl text-[#E10600] tracking-widest select-none'>
 							{timeLeft}
 						</p>
-						<p className='mt-2 text-sm text-[#555555]'>
+						<p className='mt-2 text-sm text-[#000000]'>
 							Keep playing to secure your rank!
 						</p>
 					</div>
@@ -141,7 +138,7 @@ function HomePage() {
 				<section className='container py-16'>
 					<div className='flex items-center justify-between mb-8'>
 						<div className='flex items-center gap-2'>
-							<Crown className='w-6 h-6 text-[#000000]' />
+							<Crown className='w-6 h-6 text-[#E10600]' />
 							<h2 className='text-2xl font-bold text-[#000000]'>
 								Monthly Leaderboard
 							</h2>
@@ -149,7 +146,7 @@ function HomePage() {
 						<Button
 							variant='outline'
 							size='sm'
-							className='border-[#000000] text-[#ffffff] hover:bg-[#000000] hover:text-white'
+							className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white'
 							asChild
 						>
 							<Link to='/leaderboard' className='flex items-center gap-1'>
@@ -162,28 +159,67 @@ function HomePage() {
 				</section>
 
 				{/* Features */}
-				<section className='bg-[#FFFFFF] border-y border-[#E0E0E0] py-16'>
+				<section className='bg-[#FFFFFF] border-y border-[#D3D3D3] py-16'>
 					<div className='container text-center'>
 						<h2 className='text-2xl font-bold text-[#000000] mb-12'>
 							What We Offer
 						</h2>
 						<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
 							<FeatureCard
-								icon={<Dices className='w-8 h-8 text-[#000000]' />}
+								icon={<Dices className='w-8 h-8 text-[#E10600]' />}
 								title='Exciting Gambling Streams'
-								description='Watch thrilling slot sessions, casino games, and big win moments with MisterTee1K on Rainbet.'
+								description='Watch thrilling slot sessions, casino games, and big win moments with MisterTee on Rainbet.'
 							/>
 							<FeatureCard
-								icon={<Users className='w-8 h-8 text-[#000000]' />}
+								icon={<Users className='w-8 h-8 text-[#E10600]' />}
 								title='Slot Call System'
 								description='Suggest slots for MisterTee to play during streams and see your suggestions come to life.'
 							/>
 							<FeatureCard
-								icon={<Gift className='w-8 h-8 text-[#000000]' />}
+								icon={<Gift className='w-8 h-8 text-[#E10600]' />}
 								title='Regular Giveaways'
 								description='Participate in frequent giveaways for a chance to win cash, gaming gear, and more.'
 							/>
 						</div>
+					</div>
+				</section>
+
+				{/* 📅 Stream Schedule */}
+				<section className='container py-16'>
+					<h2 className='text-2xl font-bold text-[#000000] mb-8 text-center'>
+						📅 Stream Schedule
+					</h2>
+					<p className='text-center mb-8 text-[#000000]'>
+						MisterTee goes live <strong>every day</strong> — join the fun
+						anytime!
+					</p>
+					<div className='grid grid-cols-2 gap-6 md:grid-cols-4'>
+						{[
+							"Monday",
+							"Tuesday",
+							"Wednesday",
+							"Thursday",
+							"Friday",
+							"Saturday",
+							"Sunday",
+						].map((day) => (
+							<ScheduleCard key={day} day={day} time='7:30pm EST' />
+						))}
+					</div>
+					<div className='flex justify-center mt-8'>
+						<Button
+							size='lg'
+							className='bg-[#E10600] hover:bg-[#b00500] text-white'
+							asChild
+						>
+							<a
+								href='https://kick.com/MisterTee'
+								target='_blank'
+								rel='noreferrer'
+							>
+								Watch Live on Kick
+							</a>
+						</Button>
 					</div>
 				</section>
 			</main>
@@ -193,18 +229,29 @@ function HomePage() {
 	);
 }
 
-interface FeatureCardProps {
+function FeatureCard({
+	icon,
+	title,
+	description,
+}: {
 	icon: React.ReactNode;
 	title: string;
 	description: string;
-}
-
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
+}) {
 	return (
-		<div className='bg-[#F5F5F5] p-6 rounded-2xl border border-[#E0E0E0] text-black shadow-md hover:shadow-lg transition'>
+		<div className='bg-[#D3D3D3] p-6 rounded-2xl border border-[#D3D3D3] text-black shadow-md hover:shadow-lg transition'>
 			<div className='flex justify-center mb-4'>{icon}</div>
 			<h3 className='mb-2 text-xl font-bold'>{title}</h3>
-			<p className='text-[#555555]'>{description}</p>
+			<p className='text-[#000000]'>{description}</p>
+		</div>
+	);
+}
+
+function ScheduleCard({ day, time }: { day: string; time: string }) {
+	return (
+		<div className='bg-[#D3D3D3] p-4 rounded-xl border border-[#D3D3D3] shadow-sm'>
+			<h4 className='font-bold text-[#000000]'>{day}</h4>
+			<p className='text-[#000000]'>{time}</p>
 		</div>
 	);
 }

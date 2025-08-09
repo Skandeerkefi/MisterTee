@@ -33,23 +33,23 @@ export function GiveawayCard({
 	);
 
 	return (
-		<div className='overflow-hidden rounded-lg border border-red-600 bg-[#010001]'>
+		<div className='overflow-hidden rounded-lg border border-[#E10600] bg-[#000000]'>
 			{/* Accent top bar */}
-			<div className='h-3 bg-gradient-to-r from-red-600 via-red-500 to-red-400' />
+			<div className='h-3 bg-gradient-to-r from-[#E10600] via-[#ff2a2a] to-[#ff5555]' />
 
-			<div className='p-5 text-[#f4f5f4]'>
+			<div className='p-5 text-[#FFFFFF]'>
 				<div className='flex items-start justify-between'>
-					<h3 className='text-lg font-bold text-red-500'>{title}</h3>
+					<h3 className='text-lg font-bold text-[#E10600]'>{title}</h3>
 					<StatusPill status={status} />
 				</div>
 
 				<div className='flex items-center gap-2 mt-4'>
-					<Gift className='w-5 h-5 text-red-500' />
+					<Gift className='w-5 h-5 text-[#E10600]' />
 					<span className='text-lg font-semibold'>{prize}</span>
 				</div>
 
 				<div className='mt-4 space-y-3'>
-					<div className='flex justify-between text-sm text-[#f4f5f4]/70'>
+					<div className='flex justify-between text-sm text-[#D3D3D3]'>
 						<div className='flex items-center gap-1.5'>
 							<Users className='w-4 h-4' />
 							<span>{participants} participants</span>
@@ -62,11 +62,11 @@ export function GiveawayCard({
 
 					<Progress
 						value={participationPercentage}
-						className='h-2 bg-[#f4f5f4]/20'
-						color='#ff0000'
+						className='h-2 bg-[#D3D3D3]'
+						color='#E10600'
 					/>
 
-					<div className='text-xs text-right text-[#f4f5f4]/60'>
+					<div className='text-xs text-right text-[#D3D3D3]'>
 						{participants} / {maxParticipants} entries
 					</div>
 				</div>
@@ -74,7 +74,7 @@ export function GiveawayCard({
 				<div className='mt-4'>
 					{status === "active" && !isEntered && (
 						<Button
-							className='w-full bg-red-600 hover:bg-red-500 text-[#f4f5f4]'
+							className='w-full bg-[#E10600] hover:bg-[#ff2a2a] text-[#FFFFFF]'
 							onClick={() => onEnter && onEnter(id)}
 						>
 							Enter Giveaway
@@ -84,7 +84,7 @@ export function GiveawayCard({
 					{status === "active" && isEntered && (
 						<Button
 							variant='outline'
-							className='w-full text-red-500 border-red-500'
+							className='w-full text-[#E10600] border-[#E10600]'
 							disabled
 						>
 							Entered
@@ -94,7 +94,7 @@ export function GiveawayCard({
 					{status === "completed" && (
 						<Button
 							variant='outline'
-							className='w-full text-red-400 border-red-400'
+							className='w-full text-[#D3D3D3] border-[#D3D3D3]'
 							disabled
 						>
 							Giveaway Ended
@@ -104,7 +104,7 @@ export function GiveawayCard({
 					{status === "upcoming" && (
 						<Button
 							variant='outline'
-							className='w-full text-red-300 border-red-300'
+							className='w-full text-[#FFFFFF] border-[#FFFFFF]'
 							disabled
 						>
 							Coming Soon
@@ -119,19 +119,19 @@ export function GiveawayCard({
 function StatusPill({ status }: { status: GiveawayStatus }) {
 	if (status === "active") {
 		return (
-			<div className='px-2 py-0.5 rounded-full bg-red-600/20 text-red-500 text-xs'>
+			<div className='px-2 py-0.5 rounded-full bg-[#E10600]/20 text-[#E10600] text-xs'>
 				Active
 			</div>
 		);
 	} else if (status === "completed") {
 		return (
-			<div className='px-2 py-0.5 rounded-full bg-red-400/20 text-red-400 text-xs'>
+			<div className='px-2 py-0.5 rounded-full bg-[#D3D3D3]/20 text-[#D3D3D3] text-xs'>
 				Completed
 			</div>
 		);
 	} else {
 		return (
-			<div className='px-2 py-0.5 rounded-full bg-red-300/20 text-red-300 text-xs'>
+			<div className='px-2 py-0.5 rounded-full bg-[#FFFFFF]/20 text-[#FFFFFF] text-xs'>
 				Upcoming
 			</div>
 		);

@@ -23,7 +23,6 @@ interface LeaderboardTableProps {
 	data: LeaderboardPlayer[] | undefined;
 }
 
-// Prize mapping for monthly leaderboard (adjust as needed)
 const PRIZES: Record<LeaderboardPeriod, Record<number, number>> = {
 	monthly: { 1: 600, 2: 300, 3: 175, 4: 75, 5: 50, 6: 25, 7: 25 },
 };
@@ -38,9 +37,9 @@ export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 	}
 
 	return (
-		<div className='overflow-hidden border rounded-lg border-[#E0E0E0] bg-[#FFFFFF]'>
+		<div className='overflow-hidden bg-white border rounded-lg border-lightgray'>
 			<Table>
-				<TableHeader className='bg-[#F5F5F5]'>
+				<TableHeader className='bg-lightgray'>
 					<TableRow>
 						<TableHead className='w-12 text-center text-black'>Rank</TableHead>
 						<TableHead className='text-black'>Player</TableHead>
@@ -55,7 +54,7 @@ export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 						return (
 							<TableRow
 								key={player.username}
-								className={player.isFeatured ? "bg-[#F5F5F5]" : ""}
+								className={player.isFeatured ? "bg-lightgray" : ""}
 							>
 								<TableCell className='font-medium text-center text-black'>
 									{player.rank <= 3 ? (
@@ -63,10 +62,10 @@ export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 											<Crown
 												className={`h-4 w-4 ${
 													player.rank === 1
-														? "text-black"
+														? "text-red"
 														: player.rank === 2
-														? "text-[#666666]"
-														: "text-[#999999]"
+														? "text-black"
+														: "text-lightgray"
 												}`}
 											/>
 										</div>
@@ -77,10 +76,7 @@ export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 								<TableCell className='flex items-center gap-2 font-medium text-black'>
 									{player.username}
 									{player.isFeatured && (
-										<Badge
-											variant='outline'
-											className='text-black border-black'
-										>
+										<Badge variant='outline' className='text-red border-red'>
 											Streamer
 										</Badge>
 									)}
@@ -88,7 +84,11 @@ export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 								<TableCell className='text-right text-black'>
 									${player.wager.toLocaleString()}
 								</TableCell>
-								<TableCell className='text-right text-black'>
+								<TableCell
+									className={`text-right ${
+										prize > 0 ? "text-red" : "text-black"
+									}`}
+								>
 									{prize > 0 ? `$${prize}` : "-"}
 								</TableCell>
 							</TableRow>

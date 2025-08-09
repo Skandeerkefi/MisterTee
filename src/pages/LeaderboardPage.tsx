@@ -73,12 +73,12 @@ function LeaderboardPage() {
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<div className='flex items-center gap-1 text-sm text-[#000000] hover:text-gray-700 cursor-help'>
+								<div className='flex items-center gap-1 text-sm text-[#000000] hover:text-[#E10600] cursor-help'>
 									<Info className='w-4 h-4' />
 									<span>How It Works</span>
 								</div>
 							</TooltipTrigger>
-							<TooltipContent className='max-w-xs bg-[#FFFFFF] text-[#000000] border border-[#E0E0E0] shadow-lg'>
+							<TooltipContent className='max-w-xs bg-[#FFFFFF] text-[#000000] border border-[#D3D3D3] shadow-lg'>
 								<p>
 									The leaderboard ranks players based on their total wager
 									amount using the MisterTee affiliate code on Rainbet. Higher
@@ -90,7 +90,7 @@ function LeaderboardPage() {
 				</div>
 
 				{/* Affiliate Info */}
-				<div className='p-6 mb-8 rounded-lg bg-[#F5F5F5] border border-[#E0E0E0]'>
+				<div className='p-6 mb-8 rounded-lg bg-[#F5F5F5] border border-[#D3D3D3]'>
 					<p className='mb-4 text-[#000000]'>
 						Use affiliate code{" "}
 						<span className='font-semibold text-[#000000]'>MisterTee</span> on{" "}
@@ -106,7 +106,7 @@ function LeaderboardPage() {
 					</p>
 
 					<div className='flex items-center gap-4'>
-						<div className='px-3 py-1.5 rounded-md bg-[#E0E0E0] flex items-center'>
+						<div className='px-3 py-1.5 rounded-md bg-[#D3D3D3] flex items-center'>
 							<span className='text-[#000000]'>Affiliate Code:</span>
 							<span className='ml-2 font-bold text-[#000000]'>MisterTee</span>
 						</div>
@@ -117,7 +117,7 @@ function LeaderboardPage() {
 				{error && (
 					<Alert
 						variant='destructive'
-						className='mb-6 bg-[#E0E0E0]/50 border-[#E0E0E0] text-[#000000]'
+						className='mb-6 bg-[#D3D3D3]/50 border-[#D3D3D3] text-[#000000]'
 					>
 						<AlertDescription>
 							Failed to load leaderboard: {error}
@@ -136,23 +136,23 @@ function LeaderboardPage() {
 								<RewardCard
 									position='2nd Place'
 									reward='$250 Cash + Special Role'
-									backgroundColor='from-gray-300 to-gray-400'
+									backgroundColor='from-[#D3D3D3] to-[#A9A9A9]'
 									player={monthlyLeaderboard[1]}
-									icon={<Award className='w-8 h-8 text-gray-600' />}
+									icon={<Award className='w-8 h-8 text-[#666666]' />}
 								/>
 								<RewardCard
 									position='1st Place'
 									reward='$500 Cash + Special Role'
-									backgroundColor='from-black to-gray-800'
+									backgroundColor='from-[#000000] to-[#333333]'
 									player={monthlyLeaderboard[0]}
-									icon={<Trophy className='w-8 h-8 text-black' />}
+									icon={<Trophy className='w-8 h-8 text-[#000000]' />}
 								/>
 								<RewardCard
 									position='3rd Place'
 									reward='$100 Cash + Special Role'
-									backgroundColor='from-gray-800 to-gray-900'
+									backgroundColor='from-[#333333] to-[#1a1a1a]'
 									player={monthlyLeaderboard[2]}
-									icon={<Medal className='w-8 h-8 text-gray-700' />}
+									icon={<Medal className='w-8 h-8 text-[#555555]' />}
 								/>
 							</>
 						) : (
@@ -160,20 +160,20 @@ function LeaderboardPage() {
 								<RewardCard
 									position='1st Place'
 									reward='$500 Cash + Special Role'
-									backgroundColor='from-black to-gray-800'
-									icon={<Trophy className='w-8 h-8 text-black' />}
+									backgroundColor='from-[#000000] to-[#333333]'
+									icon={<Trophy className='w-8 h-8 text-[#000000]' />}
 								/>
 								<RewardCard
 									position='2nd Place'
 									reward='$250 Cash + Special Role'
-									backgroundColor='from-gray-300 to-gray-400'
-									icon={<Award className='w-8 h-8 text-gray-600' />}
+									backgroundColor='from-[#D3D3D3] to-[#A9A9A9]'
+									icon={<Award className='w-8 h-8 text-[#666666]' />}
 								/>
 								<RewardCard
 									position='3rd Place'
 									reward='$100 Cash + Special Role'
-									backgroundColor='from-gray-800 to-gray-900'
-									icon={<Medal className='w-8 h-8 text-gray-700' />}
+									backgroundColor='from-[#333333] to-[#1a1a1a]'
+									icon={<Medal className='w-8 h-8 text-[#555555]' />}
 								/>
 							</>
 						)}
@@ -183,7 +183,7 @@ function LeaderboardPage() {
 				{/* Leaderboard Table */}
 				<div>
 					<div className='flex flex-col items-center justify-center mb-4'>
-						<h2 className='text-xl font-semibold text-center text-[#000000] border-2 border-[#E0E0E0] rounded-md py-2 px-6 inline-block'>
+						<h2 className='text-xl font-semibold text-center text-[#000000] border-2 border-[#D3D3D3] rounded-md py-2 px-6 inline-block'>
 							Monthly Leaderboard
 						</h2>
 						<p className='mt-2 text-sm text-[#000000]'>
@@ -193,7 +193,7 @@ function LeaderboardPage() {
 					</div>
 					{isLoading ? (
 						<div className='flex items-center justify-center h-64'>
-							<Loader2 className='w-8 h-8 text-black animate-spin' />
+							<Loader2 className='w-8 h-8 text-[#000000] animate-spin' />
 						</div>
 					) : (
 						<LeaderboardTable period='monthly' data={monthlyLeaderboard} />
@@ -223,7 +223,7 @@ function RewardCard({
 }: RewardCardProps) {
 	return (
 		<div
-			className='flex flex-col h-full overflow-hidden border border-[#E0E0E0] shadow-sm rounded-xl'
+			className='flex flex-col h-full overflow-hidden border border-[#D3D3D3] shadow-sm rounded-xl'
 			style={{
 				background: "linear-gradient(to right, var(--tw-gradient-stops))",
 			}}
@@ -236,20 +236,20 @@ function RewardCard({
 				{player ? (
 					<>
 						<p className='font-medium'>{player.username}</p>
-						<p className='text-black'>${player.wager.toLocaleString()}</p>
+						<p className='text-[#000000]'>${player.wager.toLocaleString()}</p>
 						<a
 							href='https://discord.gg/YmvDexVt'
 							target='_blank'
 							rel='noreferrer'
 							className='w-full mt-4'
 						>
-							<Button className='w-full bg-black hover:bg-gray-900 text-white'>
+							<Button className='w-full bg-[#000000] hover:bg-[#222222] text-[#FFFFFF]'>
 								Claim Prize
 							</Button>
 						</a>
 					</>
 				) : (
-					<p className='text-black'>{reward}</p>
+					<p className='text-[#000000]'>{reward}</p>
 				)}
 			</div>
 		</div>
