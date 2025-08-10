@@ -80,14 +80,14 @@ export function Footer() {
 							>
 								<FaDiscord className='w-5 h-5' />
 							</a>
-							<a
+							{/* <a
 								href='https://www.instagram.com/MisterTee'
 								target='_blank'
 								rel='noreferrer'
 								className='flex items-center justify-center transition-colors bg-black rounded-full w-9 h-9 hover:bg-[#E10600] text-white'
 							>
 								<FaInstagram className='w-5 h-5' />
-							</a>
+							</a> */}
 						</div>
 					</div>
 				</div>
