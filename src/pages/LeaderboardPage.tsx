@@ -15,6 +15,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import GraphicalBackground from "@/components/GraphicalBackground";
 
 function LeaderboardPage() {
 	const { monthlyLeaderboard, fetchLeaderboard, isLoading, error } =
@@ -24,7 +25,6 @@ function LeaderboardPage() {
 		fetchLeaderboard();
 	}, [fetchLeaderboard]);
 
-	// Current month range
 	const now = new Date();
 	const start_at = new Date(now.getFullYear(), now.getMonth(), 1)
 		.toISOString()
@@ -59,57 +59,63 @@ function LeaderboardPage() {
 	}, [end_at]);
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
+		<div className='relative flex flex-col min-h-screen text-white '>
+			{/* Background Canvas */}
+			<GraphicalBackground />
+
 			<Navbar />
 
-			<main className='container flex-grow py-8'>
+			<main className='container relative z-10 flex-grow max-w-6xl px-6 py-12 mx-auto'>
 				{/* Header */}
-				<div className='flex items-center justify-between mb-8'>
-					<div className='flex items-center gap-2'>
-						<Crown className='w-6 h-6 text-[#000000]' />
-						<h1 className='text-3xl font-bold'>Rainbet Monthly Leaderboard</h1>
+				<div className='flex flex-col items-center justify-between gap-4 mb-10 sm:flex-row'>
+					<div className='flex items-center gap-3 text-[#AF2D03]'>
+						<Crown className='w-7 h-7' />
+						<h1 className='text-3xl font-extrabold tracking-tight'>
+							Rainbet Monthly Leaderboard
+						</h1>
 					</div>
 
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger asChild>
-								<div className='flex items-center gap-1 text-sm text-[#000000] hover:text-[#E10600] cursor-help'>
-									<Info className='w-4 h-4' />
-									<span>How It Works</span>
-								</div>
+								<button
+									className='flex items-center gap-1 text-sm font-semibold text-[#EA6D0C] hover:text-[#AF2D03] transition-colors'
+									aria-label='How the leaderboard works'
+								>
+									<Info className='w-5 h-5' />
+									How It Works
+								</button>
 							</TooltipTrigger>
-							<TooltipContent className='max-w-xs bg-[#FFFFFF] text-[#000000] border border-[#D3D3D3] shadow-lg'>
-								<p>
-									The leaderboard ranks players based on their total wager
-									amount using the MisterTee affiliate code on Rainbet. Higher
-									wagers result in a better ranking.
-								</p>
+							<TooltipContent className='max-w-xs bg-[#191F3B] text-white border border-[#EA6D0C] shadow-lg rounded-md p-3 text-sm'>
+								The leaderboard ranks players based on their total wager amount
+								using the MisterTee affiliate code on Rainbet. Higher wagers
+								result in a better ranking.
 							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 				</div>
 
 				{/* Affiliate Info */}
-				<div className='p-6 mb-8 rounded-lg bg-[#F5F5F5] border border-[#D3D3D3]'>
-					<p className='mb-4 text-[#000000]'>
+				<div className='p-6 mb-10 rounded-lg bg-gray-300/20 border border-[#AF2D03] text-white shadow-md'>
+					<p className='mb-4 leading-relaxed text-gray-100'>
 						Use affiliate code{" "}
-						<span className='font-semibold text-[#000000]'>MisterTee</span> on{" "}
+						<span className='font-semibold text-[#AF2D03]'>MisterTee</span> on{" "}
 						<a
 							href='https://rainbet.com'
 							target='_blank'
 							rel='noreferrer'
-							className='mx-1 text-[#000000] hover:underline'
+							className='text-[#AF2D03] hover:underline'
 						>
 							Rainbet
 						</a>{" "}
 						to appear on this leaderboard and compete for rewards!
 					</p>
 
-					<div className='flex items-center gap-4'>
-						<div className='px-3 py-1.5 rounded-md bg-[#D3D3D3] flex items-center'>
-							<span className='text-[#000000]'>Affiliate Code:</span>
-							<span className='ml-2 font-bold text-[#000000]'>MisterTee</span>
-						</div>
+					<div className='inline-flex items-center gap-3 rounded-md bg-[#AF2D03]/30 px-4 py-2 w-max select-text'>
+						<span className='font-semibold text-[#AF2D03]'>
+							Affiliate Code:
+						</span>
+						<span className='font-bold text-white'>MisterTee</span>
 					</div>
 				</div>
 
@@ -117,7 +123,7 @@ function LeaderboardPage() {
 				{error && (
 					<Alert
 						variant='destructive'
-						className='mb-6 bg-[#D3D3D3]/50 border-[#D3D3D3] text-[#000000]'
+						className='mb-8 bg-[#AF2D03]/40 border-[#AF2D03] text-white shadow-md'
 					>
 						<AlertDescription>
 							Failed to load leaderboard: {error}
@@ -126,33 +132,36 @@ function LeaderboardPage() {
 				)}
 
 				{/* Reward Cards */}
-				<div className='mb-8'>
-					<h2 className='mb-6 text-2xl font-bold text-center text-[#000000]'>
+				<section className='mb-12'>
+					<h2 className='mb-8 text-3xl font-bold text-center text-[#AF2D03] tracking-wide'>
 						Top Players
 					</h2>
-					<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+					<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
 						{monthlyLeaderboard.length > 0 ? (
 							<>
 								<RewardCard
 									position='2nd Place'
 									reward='$250 Cash + Special Role'
-									backgroundColor='from-[#D3D3D3] to-[#A9A9A9]'
+									backgroundColor='from-[#4E1800] to-[#AF2D03]'
 									player={monthlyLeaderboard[1]}
-									icon={<Award className='w-8 h-8 text-[#666666]' />}
+									icon={<Award className='text-yellow-400 w-9 h-9' />}
+									lightBg
 								/>
 								<RewardCard
 									position='1st Place'
 									reward='$500 Cash + Special Role'
-									backgroundColor='from-[#000000] to-[#333333]'
+									backgroundColor='from-[#AF2D03] to-[#7A1B00]'
 									player={monthlyLeaderboard[0]}
-									icon={<Trophy className='w-8 h-8 text-[#000000]' />}
+									icon={<Trophy className='w-10 h-10 text-yellow-300' />}
+									lightBg
 								/>
 								<RewardCard
 									position='3rd Place'
 									reward='$100 Cash + Special Role'
-									backgroundColor='from-[#333333] to-[#1a1a1a]'
+									backgroundColor='from-[#6E3D00] to-[#4B2700]'
 									player={monthlyLeaderboard[2]}
-									icon={<Medal className='w-8 h-8 text-[#555555]' />}
+									icon={<Medal className='w-8 h-8 text-yellow-500' />}
+									lightBg
 								/>
 							</>
 						) : (
@@ -160,45 +169,49 @@ function LeaderboardPage() {
 								<RewardCard
 									position='1st Place'
 									reward='$500 Cash + Special Role'
-									backgroundColor='from-[#000000] to-[#333333]'
-									icon={<Trophy className='w-8 h-8 text-[#000000]' />}
+									backgroundColor='from-[#AF2D03] to-[#7A1B00]'
+									icon={<Trophy className='w-10 h-10 text-yellow-300' />}
+									lightBg
 								/>
 								<RewardCard
 									position='2nd Place'
 									reward='$250 Cash + Special Role'
-									backgroundColor='from-[#D3D3D3] to-[#A9A9A9]'
-									icon={<Award className='w-8 h-8 text-[#666666]' />}
+									backgroundColor='from-[#4E1800] to-[#AF2D03]'
+									icon={<Award className='text-yellow-400 w-9 h-9' />}
+									lightBg
 								/>
 								<RewardCard
 									position='3rd Place'
 									reward='$100 Cash + Special Role'
-									backgroundColor='from-[#333333] to-[#1a1a1a]'
-									icon={<Medal className='w-8 h-8 text-[#555555]' />}
+									backgroundColor='from-[#6E3D00] to-[#4B2700]'
+									icon={<Medal className='w-8 h-8 text-yellow-500' />}
+									lightBg
 								/>
 							</>
 						)}
 					</div>
-				</div>
+				</section>
 
 				{/* Leaderboard Table */}
-				<div>
-					<div className='flex flex-col items-center justify-center mb-4'>
-						<h2 className='text-xl font-semibold text-center text-[#000000] border-2 border-[#D3D3D3] rounded-md py-2 px-6 inline-block'>
+				<section>
+					<div className='flex flex-col items-center justify-center mb-6'>
+						<h2 className='text-2xl font-semibold text-center text-[#AF2D03] border-2 border-[#AF2D03] rounded-md py-2 px-8 inline-block'>
 							Monthly Leaderboard
 						</h2>
-						<p className='mt-2 text-sm text-[#000000]'>
+						<p className='mt-2 text-sm text-gray-300 select-none'>
 							Period: {start_at} → {end_at}
 						</p>
-						<p className='mt-1 text-sm text-[#000000]'>{timeLeft}</p>
+						<p className='mt-1 text-sm text-gray-300 select-none'>{timeLeft}</p>
 					</div>
+
 					{isLoading ? (
-						<div className='flex items-center justify-center h-64'>
-							<Loader2 className='w-8 h-8 text-[#000000] animate-spin' />
+						<div className='flex items-center justify-center h-52'>
+							<Loader2 className='w-10 h-10 text-[#AF2D03] animate-spin' />
 						</div>
 					) : (
 						<LeaderboardTable period='monthly' data={monthlyLeaderboard} />
 					)}
-				</div>
+				</section>
 			</main>
 
 			<Footer />
@@ -212,6 +225,7 @@ interface RewardCardProps {
 	backgroundColor: string;
 	player?: LeaderboardPlayer;
 	icon?: React.ReactNode;
+	lightBg?: boolean;
 }
 
 function RewardCard({
@@ -220,36 +234,51 @@ function RewardCard({
 	backgroundColor,
 	player,
 	icon,
+	lightBg = false,
 }: RewardCardProps) {
 	return (
 		<div
-			className='flex flex-col h-full overflow-hidden border border-[#D3D3D3] shadow-sm rounded-xl'
+			className={`flex flex-col h-full overflow-hidden rounded-xl shadow-lg border border-[#AF2D03] ${
+				lightBg ? "bg-gray-300/20 text-[#ffffff]" : "text-white"
+			}`}
 			style={{
-				background: "linear-gradient(to right, var(--tw-gradient-stops))",
+				background: lightBg
+					? undefined
+					: `linear-gradient(to right, var(--tw-gradient-stops))`,
 			}}
 		>
 			<div className={`h-2 bg-gradient-to-r ${backgroundColor}`} />
-			<div className='flex flex-col items-center flex-grow p-6 text-center text-[#000000] bg-[#FFFFFF]'>
-				<div className='mb-4'>{icon}</div>
-				<h3 className='mb-2 text-xl font-bold'>{position}</h3>
+			<div className='flex flex-col items-center flex-grow p-6 text-center'>
+				<div className='mb-5'>{icon}</div>
+				<h3 className='mb-3 text-xl font-bold tracking-wide'>{position}</h3>
 
 				{player ? (
 					<>
-						<p className='font-medium'>{player.username}</p>
-						<p className='text-[#000000]'>${player.wager.toLocaleString()}</p>
+						<p className='text-lg font-semibold'>{player.username}</p>
+						<p className='text-lg font-medium'>
+							$ {player.wager.toLocaleString()}
+						</p>
 						<a
 							href='https://discord.gg/YmvDexVt'
 							target='_blank'
 							rel='noreferrer'
-							className='w-full mt-4'
+							className='w-full mt-6'
 						>
-							<Button className='w-full bg-[#000000] hover:bg-[#222222] text-[#FFFFFF]'>
+							<Button
+								className={`w-full ${
+									lightBg
+										? "bg-[#AF2D03] hover:bg-[#7A1B00] text-black font-semibold"
+										: "bg-[#AF2D03] hover:bg-[#7A1B00] text-black font-semibold"
+								}`}
+							>
 								Claim Prize
 							</Button>
 						</a>
 					</>
 				) : (
-					<p className='text-[#000000]'>{reward}</p>
+					<p className={`text-lg font-medium ${lightBg ? "" : "text-white"}`}>
+						{reward}
+					</p>
 				)}
 			</div>
 		</div>

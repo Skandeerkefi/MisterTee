@@ -19,6 +19,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useDebounce } from "@/hooks/use-debounce";
+import GraphicalBackground from "@/components/GraphicalBackground";
 
 type FilterStatus = "all" | "pending" | "accepted" | "rejected" | "played";
 
@@ -181,21 +182,25 @@ function SlotCallsPage() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-screen text-black bg-white'>
+		<div className='relative flex flex-col min-h-screen text-white '>
+			{/* Background Canvas */}
+			<GraphicalBackground />
+
 			<Navbar />
-			<main className='container flex-grow py-8'>
+
+			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 mx-auto'>
 				<div className='flex items-center justify-between mb-4'>
 					<h1 className='text-2xl font-bold'>Slot Calls</h1>
 					<Dialog>
 						<DialogTrigger asChild>
 							<Button
 								variant='outline'
-								className='flex items-center gap-2 border-black text-white hover:bg-[#F5F5F5]'
+								className='flex items-center gap-2 border-[#ff0000] text-[#000000] hover:bg-[#AF2D03] bg-white'
 							>
 								<Plus className='w-4 h-4' /> New Slot Call
 							</Button>
 						</DialogTrigger>
-						<DialogContent className='bg-black text-black border-[#D3D3D3]'>
+						<DialogContent className='bg-[#000000] text-white border border-[#ff0000]'>
 							<DialogHeader>
 								<DialogTitle>New Slot Call</DialogTitle>
 								<DialogDescription>
@@ -208,13 +213,13 @@ function SlotCallsPage() {
 									value={slotName}
 									onChange={(e) => setSlotName(e.target.value)}
 									disabled={isSubmitting}
-									className='bg-white text-black border border-[#D3D3D3]'
+									className='bg-[#ffffff] text-black border border-[#ff0000]'
 								/>
 								<DialogFooter>
 									<Button
 										onClick={handleSubmit}
 										disabled={isSubmitting || !slotName.trim()}
-										className='text-white bg-black hover:bg-gray-800'
+										className='text-black bg-[#ff0000] hover:bg-[#ffffff]'
 									>
 										Submit
 									</Button>
@@ -229,7 +234,7 @@ function SlotCallsPage() {
 						placeholder='Search slot name or requester...'
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
-						className='flex-grow max-w-sm bg-white text-black border border-[#D3D3D3]'
+						className='flex-grow max-w-sm bg-[#ffffff] text-white border border-[#ff0000]'
 					/>
 
 					<Tabs
@@ -237,55 +242,57 @@ function SlotCallsPage() {
 						onValueChange={(val) => setFilter(val as FilterStatus)}
 						className='flex-grow max-w-lg'
 					>
-						<TabsList className='border-b border-[#D3D3D3]'>
+						<TabsList className='border-b border-[#ff0000] bg-black'>
 							<TabsTrigger
 								value='all'
-								className='text-white data-[state=active]:bg-black data-[state=active]:text-white'
+								className='text-[#ffffff] data-[state=active]:bg-[#ffffff] data-[state=active]:text-black'
 							>
 								All
 							</TabsTrigger>
 							<TabsTrigger
 								value='pending'
-								className='text-white data-[state=active]:bg-black data-[state=active]:text-white'
+								className='text-[#ffffff] data-[state=active]:bg-[#ffffff] data-[state=active]:text-black'
 							>
 								Pending
 							</TabsTrigger>
 							<TabsTrigger
 								value='accepted'
-								className='text-white data-[state=active]:bg-black data-[state=active]:text-white'
+								className='text-[#ffffff] data-[state=active]:bg-[#ffffff] data-[state=active]:text-black'
 							>
 								Accepted
 							</TabsTrigger>
 							<TabsTrigger
 								value='played'
-								className='text-white data-[state=active]:bg-black data-[state=active]:text-white'
+								className='text-[#ffffff] data-[state=active]:bg-[#ffffff] data-[state=active]:text-black'
 							>
 								Played
 							</TabsTrigger>
 							<TabsTrigger
 								value='rejected'
-								className='text-white data-[state=active]:bg-black data-[state=active]:text-white'
+								className='text-[#ffffff] data-[state=active]:bg-[#ffffff] data-[state=active]:text-black'
 							>
 								Rejected
 							</TabsTrigger>
 						</TabsList>
 					</Tabs>
 
-					<label className='flex items-center gap-2 text-sm text-black'>
+					<label className='flex items-center gap-2 text-sm text-[#ffffff]'>
 						<input
 							type='checkbox'
 							checked={showOnly250Hit}
 							onChange={(e) => setShowOnly250Hit(e.target.checked)}
-							className='accent-black'
+							className='accent-[#ff0000]'
 						/>
 						Show only 250x Hit
 					</label>
 				</div>
 
 				{isLoading ? (
-					<div className='text-center text-black/70'>Loading...</div>
+					<div className='text-center text-[#ff0000]/70'>Loading...</div>
 				) : filteredSlotCalls.length === 0 ? (
-					<div className='text-center text-black/70'>No slot calls found.</div>
+					<div className='text-center text-[#ff0000]/70'>
+						No slot calls found.
+					</div>
 				) : (
 					<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
 						{filteredSlotCalls.map((call) => (
@@ -311,6 +318,7 @@ function SlotCallsPage() {
 					</div>
 				)}
 			</main>
+
 			<Footer />
 		</div>
 	);

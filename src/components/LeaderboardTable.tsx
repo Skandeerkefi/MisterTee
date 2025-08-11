@@ -30,72 +30,91 @@ const PRIZES: Record<LeaderboardPeriod, Record<number, number>> = {
 export function LeaderboardTable({ period, data }: LeaderboardTableProps) {
 	if (!data || data.length === 0) {
 		return (
-			<div className='py-10 text-center text-black'>
+			<div className='py-10 italic text-center text-white/60'>
 				No leaderboard data available for {period}.
 			</div>
 		);
 	}
 
 	return (
-		<div className='overflow-hidden bg-white border rounded-lg border-lightgray'>
-			<Table>
-				<TableHeader className='bg-lightgray'>
-					<TableRow>
-						<TableHead className='w-12 text-center text-black'>Rank</TableHead>
-						<TableHead className='text-black'>Player</TableHead>
-						<TableHead className='text-right text-black'>Wager</TableHead>
-						<TableHead className='text-right text-black'>Prize</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{data.map((player) => {
-						const prize = PRIZES[period]?.[player.rank] || 0;
+		<div className='overflow-x-auto rounded-2xl border-4 border-[#E10600] shadow-[0_0_12px_#E10600] bg-[#0d111c]'>
+			{/* Transparent Gray Background covering full inside of border */}
+			<div className='bg-black/50 backdrop-blur-sm '>
+				<Table className='min-w-full'>
+					<TableHeader>
+						<TableRow className='bg-[#E10600]/20 hover:bg-[#ffff]/30 border-b border-white'>
+							<TableHead className='w-16 text-left text-[#FF4A00] font-semibold tracking-wide py-3 pl-6'>
+								Rank
+							</TableHead>
+							<TableHead className='py-3 pl-6 font-semibold tracking-wide text-left text-white'>
+								Player
+							</TableHead>
+							<TableHead className='text-right text-[#FF4A00] font-semibold tracking-wide py-3 pr-6'>
+								Wager
+							</TableHead>
+							<TableHead className='text-right text-[#FF4A00] font-semibold tracking-wide py-3 pr-6'>
+								Prize
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{data.map((player) => {
+							const prize = PRIZES[period]?.[player.rank] || 0;
+							const isTop3 = player.rank <= 3;
 
-						return (
-							<TableRow
-								key={player.username}
-								className={player.isFeatured ? "bg-lightgray" : ""}
-							>
-								<TableCell className='font-medium text-center text-black'>
-									{player.rank <= 3 ? (
-										<div className='flex items-center justify-center'>
-											<Crown
-												className={`h-4 w-4 ${
-													player.rank === 1
-														? "text-red"
-														: player.rank === 2
-														? "text-black"
-														: "text-lightgray"
-												}`}
-											/>
-										</div>
-									) : (
-										player.rank
-									)}
-								</TableCell>
-								<TableCell className='flex items-center gap-2 font-medium text-black'>
-									{player.username}
-									{player.isFeatured && (
-										<Badge variant='outline' className='text-red border-red'>
-											Streamer
-										</Badge>
-									)}
-								</TableCell>
-								<TableCell className='text-right text-black'>
-									${player.wager.toLocaleString()}
-								</TableCell>
-								<TableCell
-									className={`text-right ${
-										prize > 0 ? "text-red" : "text-black"
+							return (
+								<TableRow
+									key={player.username}
+									className={`border-b border-[#E10600]/30  hover:bg-[#E10600]/10 cursor-default ${
+										player.isFeatured ? "bg-[#E10600]/15" : ""
 									}`}
 								>
-									{prize > 0 ? `$${prize}` : "-"}
-								</TableCell>
-							</TableRow>
-						);
-					})}
-				</TableBody>
-			</Table>
+									<TableCell className='py-3 pl-6 font-semibold text-[#FF4A00] text-center'>
+										{isTop3 ? (
+											<Crown
+												className={`inline-block h-5 w-5 ${
+													player.rank === 1
+														? "text-[#FF3500]"
+														: player.rank === 2
+														? "text-[#FF6A00]"
+														: "text-[#FF8F4A]"
+												}`}
+												aria-label={`Rank ${player.rank}`}
+											/>
+										) : (
+											<span>{player.rank}</span>
+										)}
+									</TableCell>
+
+									<TableCell className='py-3 pl-6 font-medium text-white whitespace-nowrap'>
+										{player.username}
+										{player.isFeatured && (
+											<Badge
+												variant='outline'
+												className='text-[#E10600] border-[#E10600] ml-2 select-none'
+											>
+												Streamer
+											</Badge>
+										)}
+									</TableCell>
+
+									<TableCell className='py-3 pr-6 text-right text-[#FF4A00] font-mono font-semibold whitespace-nowrap'>
+										${player.wager.toLocaleString()}
+									</TableCell>
+
+									<TableCell
+										className={`py-3 pr-6 text-right font-semibold whitespace-nowrap ${
+											prize > 0 ? "text-[#FF4A00]" : "text-white/50 italic"
+										}`}
+									>
+										{prize > 0 ? `$${prize}` : "-"}
+									</TableCell>
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</div>
 		</div>
 	);
 }

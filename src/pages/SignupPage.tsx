@@ -17,6 +17,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
+import GraphicalBackground from "@/components/GraphicalBackground";
 
 function SignupPage() {
 	const [username, setUsername] = useState("");
@@ -65,11 +66,16 @@ function SignupPage() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
+		<div className='relative flex flex-col min-h-screen'>
+			{/* Background Layer */}
+			<div className='absolute inset-0 -z-10'>
+				<GraphicalBackground />
+			</div>
+
 			<Navbar />
 
 			<main className='container flex items-center justify-center flex-grow py-12'>
-				<Card className='w-full max-w-md bg-[#F5F5F5] border border-[#E0E0E0] text-[#000000] shadow-md rounded-xl'>
+				<Card className='w-full max-w-md bg-white/90 border border-[#E0E0E0] text-[#000000] shadow-md rounded-xl backdrop-blur-md'>
 					<CardHeader className='space-y-1'>
 						<div className='flex items-center justify-center gap-2 mb-2'>
 							<UserPlus className='w-6 h-6 text-[#000000]' />
@@ -96,7 +102,7 @@ function SignupPage() {
 									value={username}
 									onChange={(e) => setUsername(e.target.value)}
 									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
+									className='bg-white border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
@@ -111,7 +117,7 @@ function SignupPage() {
 									value={rainbetUsername}
 									onChange={(e) => setRainbetUsername(e.target.value)}
 									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
+									className='bg-white border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
@@ -130,7 +136,7 @@ function SignupPage() {
 										setPasswordError("");
 									}}
 									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
+									className='bg-white border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 							</div>
 
@@ -149,7 +155,7 @@ function SignupPage() {
 										setPasswordError("");
 									}}
 									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
+									className='bg-white border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
 								/>
 								{passwordError && (
 									<p className='mt-1 text-xs text-[#AF2D03]'>{passwordError}</p>
@@ -188,7 +194,7 @@ function SignupPage() {
 						<CardFooter className='flex flex-col space-y-4'>
 							<Button
 								type='submit'
-								className='w-full bg-[#000000] hover:bg-[#222222] text-[#FFFFFF]'
+								className='w-full bg-[#000000] hover:bg-[#222222] text-white'
 								disabled={isLoading || !agreedToTerms}
 							>
 								{isLoading ? "Creating Account..." : "Create Account"}

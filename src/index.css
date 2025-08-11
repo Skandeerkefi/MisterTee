@@ -70,7 +70,7 @@
 	}
 
 	.dark {
-		--background: 226 37% 17%; /* #191F3B */
+		--background: 226 37% 17%; /* #0000 */
 		--foreground: 0 0% 100%; /* #FFFFFF */
 		--card: 226 37% 19%;
 		--card-foreground: 0 0% 100%;
@@ -120,7 +120,7 @@
 	}
 
 	.glass-card {
-		@apply border shadow-lg bg-card/80 backdrop-blur-sm border-white/10;
+		@apply border shadow-lg bg-card/80 backdrop-blur-sm border-black/20;
 	}
 
 	.nav-link {
@@ -130,4 +130,33 @@
 	.nav-link-active {
 		@apply text-white bg-primary/20;
 	}
+}
+@keyframes neon-flicker {
+	0%,
+	19%,
+	21%,
+	23%,
+	25%,
+	54%,
+	56%,
+	100% {
+		text-shadow: 0 0 4px #ff0000, 0 0 11px #ea380c, 0 0 19px #ea0c0c,
+			0 0 40px #ea6d0c, 0 0 80px #ea6d0c;
+		color: #000000;
+	}
+	20%,
+	22%,
+	24%,
+	55% {
+		text-shadow: none;
+		color: #b44e00;
+	}
+}
+
+.neon-text {
+	animation: neon-flicker 2.5s infinite alternate;
+	color: #ff0000;
+	text-shadow: 0 0 5px #ea6d0c, 0 0 10px #ea6d0c, 0 0 20px #ea6d0c,
+		0 0 40px #ea6d0c, 0 0 80px #ea6d0c;
+	user-select: none;
 }

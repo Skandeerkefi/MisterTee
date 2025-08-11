@@ -1,9 +1,3 @@
-// 🎨 Color Palette:
-// Black: #000000
-// White: #FFFFFF
-// Red: #E10600
-// Light Gray: #D3D3D3
-
 import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -14,6 +8,7 @@ import { Dices, Crown, Gift, Users, ArrowRight } from "lucide-react";
 import { useLeaderboardStore } from "@/store/useLeaderboardStore";
 import { useSlotCallStore } from "@/store/useSlotCallStore";
 import { useGiveawayStore } from "@/store/useGiveawayStore";
+import GraphicalBackground from "@/components/GraphicalBackground";
 
 function HomePage() {
 	const { slotCalls } = useSlotCallStore();
@@ -67,86 +62,81 @@ function HomePage() {
 	}, [monthEndISO]);
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
+		<div className='relative flex flex-col min-h-screen text-white'>
+			{/* 🎨 Animated Graphical Background */}
+			<GraphicalBackground />
+
 			<Navbar />
 
-			<main className='flex-grow'>
-				{/* Hero Section */}
-				<section className='relative overflow-hidden'>
-					{/* Removed gradient and background overlays for full white */}
-					<div className='container relative z-20 px-4 py-20 text-center md:py-28'>
-						<h1 className='mb-4 text-4xl md:text-6xl font-bold text-[#000000]'>
-							Welcome to MisterTee&apos;s
-							<span className='block mt-2 text-[#E10600]'>
-								Official Website
-							</span>
+			<main className='relative z-10 flex-grow'>
+				{/* Modern Hero Section with Kick Player Side-by-Side */}
+				<section className='flex flex-col-reverse items-center justify-center max-w-6xl gap-16 px-6 mx-auto py-28 sm:flex-row sm:items-center'>
+					{/* Text Content */}
+					<div className='max-w-xl text-center sm:text-left'>
+						<h1 className='text-5xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#E10600] via-[#B03400] to-[#E10600] bg-clip-text text-transparent drop-shadow-md'>
+							MisterTee&apos;s <br /> Official Stream
 						</h1>
-						<p className='mb-8 text-lg text-[#000000] md:text-xl'>
-							Join the community for exciting gambling streams, giveaways, slot
-							calls, and leaderboard competitions with affiliate code{" "}
-							<span className='font-bold text-[#E10600]'>MisterTee</span>
-						</p>
 
-						<div className='flex flex-col justify-center gap-4 sm:flex-row'>
-							<Button
-								size='lg'
-								className='bg-[#E10600] hover:bg-[#b00500] text-white'
-								asChild
-							>
-								<a
-									href='https://kick.com/MisterTee'
-									target='_blank'
-									rel='noreferrer'
-								>
-									Watch Stream
-								</a>
-							</Button>
-							<Button
-								size='lg'
-								variant='outline'
-								className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white'
-								asChild
-							>
-								<a
-									href='https://rainbet.com/?r=MisterTee'
-									target='_blank'
-									rel='noreferrer'
-								>
-									Join Rainbet with Code: MisterTee
-								</a>
-							</Button>
-						</div>
+						<div className='w-24 h-1 mt-6 rounded-full bg-[#E10600] animate-pulse' />
+
+						<p className='mt-6 text-lg font-medium tracking-wide text-gray-300'>
+							Watch MisterTee live on Kick — your go-to destination for
+							thrilling gambling streams, giveaways, and more.
+						</p>
+					</div>
+
+					{/* Kick Stream Embed */}
+					<div className='w-full max-w-xl aspect-video rounded-3xl overflow-hidden shadow-lg border-4 border-[#E10600]'>
+						<iframe
+							src='https://player.kick.com/mistertee'
+							frameBorder='0'
+							allowFullScreen
+							title='MisterTee Live Stream'
+							className='w-full h-full'
+						></iframe>
 					</div>
 				</section>
 
-				{/* Countdown Section */}
-				<section className='flex justify-center py-12'>
-					<div className='text-center border border-[#D3D3D3] rounded-lg px-6 py-6 bg-[#F5F5F5] shadow-md inline-flex flex-col items-center'>
-						<h2 className='text-xl font-semibold text-[#000000] mb-4'>
-							⏳ Leaderboard Ends In
-						</h2>
-						<p className='font-mono text-3xl text-[#E10600] tracking-widest select-none'>
-							{timeLeft}
-						</p>
-						<p className='mt-2 text-sm text-[#000000]'>
-							Keep playing to secure your rank!
-						</p>
+				{/* Metric-style Countdown Section */}
+				<section className='max-w-4xl mx-auto px-6 py-10 rounded-3xl bg-black/70 border border-[#E10600] shadow-lg'>
+					<h2 className='text-center text-3xl font-semibold mb-8 text-[#E10600] tracking-wide'>
+						⏳ Monthly Leaderboard Ends In
+					</h2>
+
+					<div className='flex flex-col justify-center gap-6 text-center select-none sm:flex-row'>
+						{["Days", "Hours", "Minutes", "Seconds"].map((label, idx) => {
+							const timeParts = timeLeft.split(" : ");
+							const value =
+								timeParts.length === 4 ? timeParts[idx].slice(0, -1) : "--";
+
+							return (
+								<div
+									key={label}
+									className='flex flex-col items-center justify-center bg-[#E10600]/10 rounded-xl py-6 px-8 min-w-[80px] sm:min-w-[100px] shadow-sm'
+								>
+									<span className='text-5xl font-extrabold tracking-tight text-white'>
+										{value}
+									</span>
+									<span className='mt-2 text-sm font-medium text-[#E10600]'>
+										{label}
+									</span>
+								</div>
+							);
+						})}
 					</div>
 				</section>
 
-				{/* Leaderboard Section */}
+				{/* Leaderboard */}
 				<section className='container py-16'>
 					<div className='flex items-center justify-between mb-8'>
 						<div className='flex items-center gap-2'>
 							<Crown className='w-6 h-6 text-[#E10600]' />
-							<h2 className='text-2xl font-bold text-[#000000]'>
-								Monthly Leaderboard
-							</h2>
+							<h2 className='text-2xl font-bold'>Monthly Leaderboard</h2>
 						</div>
 						<Button
 							variant='outline'
 							size='sm'
-							className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white'
+							className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white bg-black'
 							asChild
 						>
 							<Link to='/leaderboard' className='flex items-center gap-1'>
@@ -154,46 +144,72 @@ function HomePage() {
 							</Link>
 						</Button>
 					</div>
-
 					<LeaderboardTable period='monthly' data={topLeaderboard} />
 				</section>
 
-				{/* Features */}
-				<section className='bg-[#FFFFFF] border-y border-[#D3D3D3] py-16'>
-					<div className='container text-center'>
-						<h2 className='text-2xl font-bold text-[#000000] mb-12'>
-							What We Offer
-						</h2>
-						<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
-							<FeatureCard
-								icon={<Dices className='w-8 h-8 text-[#E10600]' />}
-								title='Exciting Gambling Streams'
-								description='Watch thrilling slot sessions, casino games, and big win moments with MisterTee on Rainbet.'
-							/>
-							<FeatureCard
-								icon={<Users className='w-8 h-8 text-[#E10600]' />}
-								title='Slot Call System'
-								description='Suggest slots for MisterTee to play during streams and see your suggestions come to life.'
-							/>
-							<FeatureCard
-								icon={<Gift className='w-8 h-8 text-[#E10600]' />}
-								title='Regular Giveaways'
-								description='Participate in frequent giveaways for a chance to win cash, gaming gear, and more.'
-							/>
-						</div>
+				{/* Redesigned Features Section */}
+				<section className='max-w-6xl px-6 py-16 mx-auto'>
+					<h2 className='mb-12 text-4xl font-bold text-center text-white'>
+						What We Offer
+					</h2>
+					<div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
+						{[
+							{
+								icon: (
+									<Dices className='w-12 h-12 text-[#E10600] animate-pulse' />
+								),
+								title: "Exciting Gambling Streams",
+								description:
+									"Watch thrilling slot sessions, casino games, and big win moments with MisterTee on Rainbet.",
+							},
+							{
+								icon: (
+									<Users className='w-12 h-12 text-[#E10600] animate-pulse' />
+								),
+								title: "Slot Call System",
+								description:
+									"Suggest slots for MisterTee to play during streams and see your suggestions come to life.",
+							},
+							{
+								icon: (
+									<Gift className='w-12 h-12 text-[#E10600] animate-pulse' />
+								),
+								title: "Regular Giveaways",
+								description:
+									"Participate in frequent giveaways for a chance to win cash, gaming gear, and more.",
+							},
+						].map(({ icon, title, description }) => (
+							<div
+								key={title}
+								className='flex flex-col items-center bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.05] transition-transform cursor-default'
+							>
+								<div className='flex items-center justify-center w-20 h-20 rounded-full bg-black/50 border-2 border-[#E10600] mb-6'>
+									{icon}
+								</div>
+								<h3 className='text-xl font-semibold text-white mb-3 relative after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-14 after:h-[2px] after:bg-gradient-to-r after:from-[#E10600] after:to-[#B03400]'>
+									{title}
+								</h3>
+								<p className='text-center text-gray-300'>{description}</p>
+							</div>
+						))}
 					</div>
 				</section>
 
-				{/* 📅 Stream Schedule */}
-				<section className='container py-16'>
-					<h2 className='text-2xl font-bold text-[#000000] mb-8 text-center'>
+				{/* Redesigned Schedule Section */}
+				<section className='max-w-5xl px-6 py-16 mx-auto'>
+					<h2 className='mb-8 text-4xl font-bold text-center text-white'>
 						📅 Stream Schedule
 					</h2>
-					<p className='text-center mb-8 text-[#000000]'>
+					<p className='max-w-xl mx-auto mb-10 text-center text-gray-400'>
 						MisterTee goes live <strong>every day</strong> — join the fun
 						anytime!
 					</p>
-					<div className='grid grid-cols-2 gap-6 md:grid-cols-4'>
+
+					{/* Timeline container */}
+					<div className='relative items-center justify-between hidden max-w-full gap-8 px-4 mx-auto select-none sm:flex'>
+						{/* Horizontal connecting line */}
+						<div className='absolute top-1/2 left-8 right-8 h-1 bg-[#E10600]/30 rounded-full -z-10'></div>
+
 						{[
 							"Monday",
 							"Tuesday",
@@ -203,13 +219,45 @@ function HomePage() {
 							"Saturday",
 							"Sunday",
 						].map((day) => (
-							<ScheduleCard key={day} day={day} time='7:30pm EST' />
+							<div
+								key={day}
+								className='flex flex-col items-center cursor-default group'
+							>
+								<div className='w-14 h-14 rounded-full border-4 border-[#E10600] bg-black/70 shadow-[0_0_12px_#E10600] group-hover:scale-110 transition-transform flex items-center justify-center text-[#E10600] font-semibold text-lg select-text'>
+									{day.slice(0, 3)}
+								</div>
+								<p className='mt-3 text-sm text-gray-300 select-text'>
+									7:30pm EST
+								</p>
+							</div>
 						))}
 					</div>
-					<div className='flex justify-center mt-8'>
+
+					{/* Mobile stacked schedule */}
+					<div className='flex flex-col gap-4 sm:hidden'>
+						{[
+							"Monday",
+							"Tuesday",
+							"Wednesday",
+							"Thursday",
+							"Friday",
+							"Saturday",
+							"Sunday",
+						].map((day) => (
+							<div
+								key={day}
+								className='bg-black/60 rounded-xl border border-[#E10600] p-4 shadow-md flex justify-between items-center'
+							>
+								<span className='font-semibold text-[#E10600]'>{day}</span>
+								<span className='text-gray-300'>7:30pm EST</span>
+							</div>
+						))}
+					</div>
+
+					<div className='flex justify-center mt-12'>
 						<Button
 							size='lg'
-							className='bg-[#E10600] hover:bg-[#b00500] text-white'
+							className='bg-[#E10600] hover:bg-[#b00500] text-white shadow-lg transition'
 							asChild
 						>
 							<a
@@ -225,33 +273,6 @@ function HomePage() {
 			</main>
 
 			<Footer />
-		</div>
-	);
-}
-
-function FeatureCard({
-	icon,
-	title,
-	description,
-}: {
-	icon: React.ReactNode;
-	title: string;
-	description: string;
-}) {
-	return (
-		<div className='bg-[#D3D3D3] p-6 rounded-2xl border border-[#D3D3D3] text-black shadow-md hover:shadow-lg transition'>
-			<div className='flex justify-center mb-4'>{icon}</div>
-			<h3 className='mb-2 text-xl font-bold'>{title}</h3>
-			<p className='text-[#000000]'>{description}</p>
-		</div>
-	);
-}
-
-function ScheduleCard({ day, time }: { day: string; time: string }) {
-	return (
-		<div className='bg-[#D3D3D3] p-4 rounded-xl border border-[#D3D3D3] shadow-sm'>
-			<h4 className='font-bold text-[#000000]'>{day}</h4>
-			<p className='text-[#000000]'>{time}</p>
 		</div>
 	);
 }

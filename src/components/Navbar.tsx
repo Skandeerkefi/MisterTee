@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Dices, Crown, Gift, Users, LogIn, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Dices, Crown, Gift, Users, LogIn, User, LogOut } from "lucide-react";
 import useMediaQuery from "@/hooks/use-media-query";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -42,219 +41,218 @@ export function Navbar() {
 	}, []);
 
 	const menuItems = [
-		{ path: "/", name: "Home", icon: <Dices className='w-4 h-4 mr-1' /> },
+		{ path: "/", name: "Home", icon: <Dices className='w-5 h-5' /> },
 		{
 			path: "/leaderboard",
 			name: "Leaderboard",
-			icon: <Crown className='w-4 h-4 mr-1' />,
+			icon: <Crown className='w-5 h-5' />,
 		},
 		{
 			path: "/slot-calls",
 			name: "Slot Calls",
-			icon: <Users className='w-4 h-4 mr-1' />,
+			icon: <Users className='w-5 h-5' />,
 		},
 		{
 			path: "/giveaways",
 			name: "Giveaways",
-			icon: <Gift className='w-4 h-4 mr-1' />,
+			icon: <Gift className='w-5 h-5' />,
 		},
 	];
 
 	return (
-		<nav className='sticky top-0 z-50 border-b border-[#D3D3D3] backdrop-blur-md bg-[#FFFFFF] text-[#000000] shadow-md'>
-			<div className='container flex items-center justify-between py-3 mx-auto'>
-				<div className='flex items-center gap-3'>
-					<Link to='/' className='flex items-center gap-2'>
-						<img
-							src='https://media.discordapp.net/attachments/1398864689559109784/1402771759824109619/48877C4C-038D-458E-B111-4B92E934384E.jpg?ex=68971ac1&is=6895c941&hm=4050594e1db8907b87742b68b80ea6184c0ce367744e30760e411ae42027a3b9&=&format=webp&width=686&height=845'
-							alt='MisterTee Logo'
-							className='object-cover w-10 h-10 border rounded-full shadow-sm border-[#D3D3D3]'
-						/>
-						<span className='text-2xl font-bold select-none'>MisterTee</span>
-					</Link>
-
-					{isLive ? (
-						<span className='ml-2 px-3 py-0.5 text-xs bg-[#E10600] text-white rounded-full font-semibold animate-pulse select-none'>
-							🔴 LIVE {viewerCount !== null ? `(${viewerCount})` : ""}
-						</span>
-					) : (
-						<span className='ml-2 px-3 py-0.5 text-xs bg-[#D3D3D3] text-black rounded-full font-semibold select-none'>
-							Offline
-						</span>
-					)}
-				</div>
+		<nav className='sticky top-0 z-50 bg-black border-b border-gray-800 shadow-lg bg-opacity-90 backdrop-blur-md'>
+			<div className='container flex items-center justify-between px-6 py-4 mx-auto'>
+				{/* Logo */}
+				<Link to='/' className='flex items-center space-x-3 select-none'>
+					<img
+						src='https://media.discordapp.net/attachments/1398864689559109784/1402771759824109619/48877C4C-038D-458E-B111-4B92E934384E.jpg?ex=68971ac1&is=6895c941&hm=4050594e1db8907b87742b68b80ea6184c0ce367744e30760e411ae42027a3b9&=&format=webp&width=686&height=845'
+						alt='MisterTee Logo'
+						className='w-10 h-10 rounded-full border-2 border-[#E10600] shadow-sm object-cover'
+					/>
+					<span className='text-3xl font-extrabold italic tracking-wide text-[#E10600] [text-shadow:2px_2px_4px_black]'>
+						Mister<span className='text-white'>Tee</span>
+					</span>
+				</Link>
 
 				{/* Desktop Menu */}
-				<div className={`${isMobile ? "hidden" : "flex items-center gap-6"}`}>
-					<div className='flex items-center gap-3'>
-						{menuItems.map((item) => (
-							<Link
-								key={item.path}
-								to={item.path}
-								className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-									location.pathname === item.path
-										? "bg-[#000000] text-white shadow-md"
-										: "text-black hover:bg-[#D3D3D3] hover:text-black"
-								}`}
-							>
-								{item.icon}
-								{item.name}
-							</Link>
-						))}
-					</div>
-
-					<div className='flex items-center gap-3'>
-						{user ? (
-							<>
-								<Button variant='ghost' size='sm' asChild>
+				{!isMobile && (
+					<div className='flex items-center space-x-10'>
+						<ul className='flex space-x-8 font-medium text-white'>
+							{menuItems.map((item) => (
+								<li key={item.path}>
 									<Link
-										to='/'
-										className='flex items-center gap-1 font-semibold text-black'
+										to={item.path}
+										className={`flex items-center space-x-2 text-lg px-1 border-b-2 border-transparent transition-all duration-300 hover:border-[#E10600] ${
+											location.pathname === item.path ? "border-[#E10600]" : ""
+										}`}
 									>
-										<User className='w-4 h-4' />
-										{user.username}
+										{item.icon}
+										<span>{item.name}</span>
 									</Link>
-								</Button>
-								<Button
-									variant='outline'
-									size='sm'
-									onClick={logout}
-									className='text-white border-[#000000] bg-[#E10600] hover:bg-[#000000] hover:text-white'
-								>
-									<LogOut className='w-4 h-4 mr-1' />
-									Logout
-								</Button>
-							</>
-						) : (
-							<>
-								<Button
-									variant='outline'
-									size='sm'
-									asChild
-									className='text-white border-[#000000] bg-[#E10600] hover:bg-[#000000] hover:text-white'
-								>
-									<Link to='/login' className='flex items-center'>
-										<LogIn className='w-4 h-4 mr-1' />
-										Login
+								</li>
+							))}
+						</ul>
+
+						{/* User controls */}
+						<div className='flex items-center space-x-5'>
+							{user ? (
+								<>
+									<Link
+										to='/profile'
+										className='flex items-center space-x-2 text-white hover:text-[#E10600] font-semibold'
+									>
+										<User className='w-5 h-5' />
+										<span>{user.username}</span>
 									</Link>
-								</Button>
-								<Button
-									size='sm'
-									asChild
-									className='font-semibold text-black hover:text-[#E10600]'
-								>
-									<Link to='/signup'>Sign Up</Link>
-								</Button>
-							</>
-						)}
+									<button
+										onClick={logout}
+										className='flex items-center space-x-2 bg-[#E10600] hover:bg-[#b00500] text-white px-4 py-1.5 rounded-md font-semibold transition'
+									>
+										<LogOut className='w-5 h-5' />
+										<span>Logout</span>
+									</button>
+								</>
+							) : (
+								<>
+									<Link
+										to='/login'
+										className='flex items-center space-x-2 border border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white px-4 py-1.5 rounded-md font-semibold transition'
+									>
+										<LogIn className='w-5 h-5' />
+										<span>Login</span>
+									</Link>
+									<Link
+										to='/signup'
+										className='text-white font-semibold hover:text-[#E10600] transition'
+									>
+										Sign Up
+									</Link>
+								</>
+							)}
+						</div>
 					</div>
+				)}
+
+				{/* Live Status */}
+				<div
+					className={`ml-6 px-4 py-1 rounded-full text-sm font-bold select-none ${
+						isLive
+							? "bg-red-600 text-white shadow-lg animate-pulse"
+							: "bg-gray-700 text-gray-300"
+					}`}
+					title={isLive ? "Currently Live" : "Offline"}
+				>
+					{isLive ? (
+						<>
+							<span role='img' aria-label='Live'>
+								🔴
+							</span>{" "}
+							LIVE {viewerCount !== null ? `(${viewerCount})` : ""}
+						</>
+					) : (
+						"Offline"
+					)}
 				</div>
 
 				{/* Mobile Hamburger */}
 				{isMobile && (
 					<button
-						className='p-2 rounded-md hover:bg-[#D3D3D3] focus:outline-none focus:ring-2 focus:ring-[#000000]'
 						onClick={() => setIsOpen(!isOpen)}
 						aria-label='Toggle menu'
 						aria-expanded={isOpen}
+						className='relative z-50 w-8 h-8 flex flex-col justify-center items-center gap-1.5 focus:outline-none'
 					>
-						<div className='space-y-1.5'>
-							<span
-								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
-									isOpen ? "rotate-45 translate-y-2" : ""
-								}`}
-							/>
-							<span
-								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
-									isOpen ? "opacity-0" : "opacity-100"
-								}`}
-							/>
-							<span
-								className={`block h-0.5 w-6 bg-black transition-all duration-300 ${
-									isOpen ? "-rotate-45 -translate-y-2" : ""
-								}`}
-							/>
-						</div>
+						<span
+							className={`block w-8 h-1 bg-white rounded transition-transform duration-300 ${
+								isOpen ? "rotate-45 translate-y-2" : ""
+							}`}
+						/>
+						<span
+							className={`block w-8 h-1 bg-white rounded transition-opacity duration-300 ${
+								isOpen ? "opacity-0" : "opacity-100"
+							}`}
+						/>
+						<span
+							className={`block w-8 h-1 bg-white rounded transition-transform duration-300 ${
+								isOpen ? "-rotate-45 -translate-y-2" : ""
+							}`}
+						/>
 					</button>
 				)}
 			</div>
 
-			{/* Mobile Dropdown */}
+			{/* Mobile Dropdown Menu */}
 			{isMobile && (
 				<div
-					className={`container mx-auto overflow-hidden transition-all duration-300 ease-in-out ${
-						isOpen ? "max-h-screen py-3 border-t border-[#D3D3D3]" : "max-h-0"
+					className={`fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+						isOpen
+							? "opacity-100 pointer-events-auto"
+							: "opacity-0 pointer-events-none"
 					}`}
+					onClick={() => setIsOpen(false)}
 				>
-					<div className='flex flex-col gap-2 pb-4'>
-						{menuItems.map((item) => (
-							<Link
-								key={item.path}
-								to={item.path}
-								onClick={() => setIsOpen(false)}
-								className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-									location.pathname === item.path
-										? "bg-[#000000] text-white"
-										: "text-black hover:bg-[#D3D3D3] hover:text-black"
-								}`}
-							>
-								{item.icon}
-								{item.name}
-							</Link>
-						))}
+					<div
+						className={`absolute top-0 right-0 w-64 bg-[#111] h-full shadow-lg py-6 px-6 flex flex-col space-y-6 transform transition-transform duration-300 ${
+							isOpen ? "translate-x-0" : "translate-x-full"
+						}`}
+						onClick={(e) => e.stopPropagation()}
+					>
+						<ul className='flex flex-col space-y-4 font-semibold text-white'>
+							{menuItems.map((item) => (
+								<li key={item.path}>
+									<Link
+										to={item.path}
+										onClick={() => setIsOpen(false)}
+										className={`flex items-center space-x-3 text-lg px-2 py-2 rounded-md hover:bg-[#E10600] hover:text-white transition-colors ${
+											location.pathname === item.path ? "bg-[#E10600]" : ""
+										}`}
+									>
+										{item.icon}
+										<span>{item.name}</span>
+									</Link>
+								</li>
+							))}
+						</ul>
 
-						<div className='flex flex-col gap-2 mt-3'>
+						<div className='mt-auto space-y-4'>
 							{user ? (
 								<>
-									<Button variant='ghost' size='sm' className='w-full' asChild>
-										<Link
-											to='/profile'
-											onClick={() => setIsOpen(false)}
-											className='flex items-center font-semibold text-black'
-										>
-											<User className='w-4 h-4 mr-1' />
-											{user.username}
-										</Link>
-									</Button>
-									<Button
-										variant='outline'
-										size='sm'
-										className='w-full text-white border-[#000000] bg-[#E10600] hover:bg-[#000000] hover:text-white'
+									<Link
+										to='/profile'
+										onClick={() => setIsOpen(false)}
+										className='flex items-center space-x-3 text-white text-lg font-semibold hover:text-[#E10600] transition'
+									>
+										<User className='w-6 h-6' />
+										<span>{user.username}</span>
+									</Link>
+									<button
 										onClick={() => {
 											logout();
 											setIsOpen(false);
 										}}
+										className='w-full bg-[#E10600] hover:bg-[#b00500] text-white py-2 rounded-md font-semibold transition'
 									>
-										<LogOut className='w-4 h-4 mr-1' />
+										<LogOut className='inline w-5 h-5 mr-2' />
 										Logout
-									</Button>
+									</button>
 								</>
 							) : (
 								<>
-									<Button
-										variant='outline'
-										size='sm'
-										className='w-full text-white border-[#000000] bg-[#E10600] hover:bg-[#000000] hover:text-white'
-										asChild
+									<Link
+										to='/login'
+										onClick={() => setIsOpen(false)}
+										className='flex items-center space-x-3 bg-[#E10600] hover:bg-[#b00500] text-white py-2 px-4 rounded-md font-semibold transition'
 									>
-										<Link
-											to='/login'
-											onClick={() => setIsOpen(false)}
-											className='flex items-center'
-										>
-											<LogIn className='w-4 h-4 mr-1' />
-											Login
-										</Link>
-									</Button>
-									<Button
-										size='sm'
-										className='w-full font-semibold text-black hover:text-[#E10600]'
-										asChild
+										<LogIn className='w-5 h-5' />
+										<span>Login</span>
+									</Link>
+									<Link
+										to='/signup'
+										onClick={() => setIsOpen(false)}
+										className='block text-center text-white font-semibold hover:text-[#E10600] transition'
 									>
-										<Link to='/signup' onClick={() => setIsOpen(false)}>
-											Sign Up
-										</Link>
-									</Button>
+										Sign Up
+									</Link>
 								</>
 							)}
 						</div>

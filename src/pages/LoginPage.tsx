@@ -16,6 +16,7 @@ import { LogIn } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import GraphicalBackground from "@/components/GraphicalBackground";
 
 function LoginPage() {
 	const [username, setUsername] = useState("");
@@ -48,10 +49,15 @@ function LoginPage() {
 	};
 
 	return (
-		<div className='flex flex-col min-h-screen bg-[#FFFFFF] text-[#000000]'>
+		<div className='relative flex flex-col min-h-screen  text-[#000000]'>
+			{/* Background Canvas */}
+			<div className='fixed inset-0 -z-10'>
+				<GraphicalBackground />
+			</div>
+
 			<Navbar />
 
-			<main className='container flex items-center justify-center flex-grow py-12'>
+			<main className='container relative z-10 flex items-center justify-center flex-grow py-12'>
 				<Card className='w-full max-w-md bg-[#F5F5F5] border border-[#E0E0E0] text-[#000000] shadow-md rounded-xl'>
 					<CardHeader className='space-y-1'>
 						<div className='flex items-center justify-center gap-2 mb-2'>
