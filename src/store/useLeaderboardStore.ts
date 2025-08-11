@@ -18,7 +18,8 @@ interface LeaderboardState {
 	fetchLeaderboard: () => Promise<void>;
 }
 
-const API_URL = "https://misterteedata.onrender.com/api/affiliates";
+const API_URL =
+	"https://misterteedata-production.up.railway.app/api/affiliates";
 
 const getDateRange = (
 	period: LeaderboardPeriod
