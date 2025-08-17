@@ -65,7 +65,7 @@ export function Navbar() {
 				{/* Logo */}
 				<Link to='/' className='flex items-center space-x-3 select-none'>
 					<img
-						src='https://media.discordapp.net/attachments/1398864689559109784/1402771759824109619/48877C4C-038D-458E-B111-4B92E934384E.jpg?ex=68971ac1&is=6895c941&hm=4050594e1db8907b87742b68b80ea6184c0ce367744e30760e411ae42027a3b9&=&format=webp&width=686&height=845'
+						src='https://i.ibb.co/x8zPpn5p/Capture-d-cran-2025-08-08-180638.png'
 						alt='MisterTee Logo'
 						className='w-10 h-10 rounded-full border-2 border-[#E10600] shadow-sm object-cover'
 					/>
