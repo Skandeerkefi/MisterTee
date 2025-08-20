@@ -11,10 +11,6 @@ export interface LeaderboardPlayer {
 
 export interface LeaderboardResponse {
 	disclosure: string;
-	dateRange?: {
-		startDate: string;
-		endDate: string;
-	};
 	data: LeaderboardPlayer[];
 }
 
@@ -33,32 +29,22 @@ class RoobetStore {
 		makeAutoObservable(this);
 	}
 
-	// Fetch leaderboard data
-	async fetchLeaderboard(startDate?: string, endDate?: string): Promise<void> {
+	// Always fetch monthly leaderboard
+	async fetchLeaderboard(): Promise<void> {
 		this.isLoading = true;
 		this.error = null;
 
 		try {
-			let url = "/api/leaderboard";
-
-			if (startDate && endDate) {
-				url = `/api/leaderboard/${startDate}/${endDate}`;
-			} else if (startDate || endDate) {
-				console.warn(
-					"Both startDate and endDate must be provided for date filtering"
-				);
-			}
+			// Monthly leaderboard endpoint
+			const url = "/api/leaderboard/monthly";
 
 			const response = await fetch(url, {
 				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
+				headers: { "Content-Type": "application/json" },
 			});
 
-			if (!response.ok) {
+			if (!response.ok)
 				throw new Error(`HTTP error! status: ${response.status}`);
-			}
 
 			const data: LeaderboardResponse = await response.json();
 
@@ -78,17 +64,14 @@ class RoobetStore {
 		}
 	}
 
-	// Get top players
 	get topPlayers(): LeaderboardPlayer[] {
-		return this.leaderboard.slice(0, 10); // Top 10 players
+		return this.leaderboard.slice(0, 10);
 	}
 
-	// Get player by rank
 	getPlayerByRank(rank: number): LeaderboardPlayer | null {
 		return this.leaderboard[rank - 1] || null;
 	}
 
-	// Search players by username
 	searchPlayers(query: string): LeaderboardPlayer[] {
 		const searchTerm = query.toLowerCase();
 		return this.leaderboard.filter((player) =>
@@ -96,7 +79,6 @@ class RoobetStore {
 		);
 	}
 
-	// Get total weighted wagered amount
 	get totalWeightedWagered(): number {
 		return this.leaderboard.reduce(
 			(total, player) => total + player.weightedWagered,
@@ -104,18 +86,15 @@ class RoobetStore {
 		);
 	}
 
-	// Get average weighted wager
 	get averageWeightedWager(): number {
 		if (this.leaderboard.length === 0) return 0;
 		return this.totalWeightedWagered / this.leaderboard.length;
 	}
 
-	// Clear error
 	clearError(): void {
 		this.error = null;
 	}
 
-	// Reset store
 	reset(): void {
 		this.leaderboard = [];
 		this.isLoading = false;
@@ -124,6 +103,5 @@ class RoobetStore {
 	}
 }
 
-// Create and export singleton instance
 export const roobetStore = new RoobetStore();
 export default roobetStore;
