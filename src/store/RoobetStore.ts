@@ -1,107 +1,63 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { create } from "zustand";
+import axios from "axios";
 
-export interface LeaderboardPlayer {
+interface Player {
 	uid: string;
 	username: string;
 	wagered: number;
 	weightedWagered: number;
 	favoriteGameId: string;
 	favoriteGameTitle: string;
+	rankLevel: number; // optional if you want numeric rank level
 }
 
-export interface LeaderboardResponse {
+interface LeaderboardData {
 	disclosure: string;
-	data: LeaderboardPlayer[];
+	data: Player[];
 }
 
-export interface ApiError {
-	error: string;
-	details?: any;
+interface RoobetStore {
+	leaderboard: LeaderboardData | null;
+	loading: boolean;
+	error: string | null;
+	fetchLeaderboard: (startDate?: string, endDate?: string) => Promise<void>;
 }
 
-class RoobetStore {
-	leaderboard: LeaderboardPlayer[] = [];
-	isLoading: boolean = false;
-	error: ApiError | null = null;
-	disclosure: string = "";
+export const useRoobetStore = create<RoobetStore>((set) => ({
+	leaderboard: null,
+	loading: false,
+	error: null,
 
-	constructor() {
-		makeAutoObservable(this);
-	}
-
-	// Always fetch monthly leaderboard
-	async fetchLeaderboard(): Promise<void> {
-		this.isLoading = true;
-		this.error = null;
+	fetchLeaderboard: async (startDate?: string, endDate?: string) => {
+		set({ loading: true, error: null });
 
 		try {
-			// Monthly leaderboard endpoint
-			const url = "/api/leaderboard/monthly";
+			let url = "/api/leaderboard";
+			if (startDate && endDate) {
+				url += `/${startDate}/${endDate}`;
+			}
 
-			const response = await fetch(url, {
-				method: "GET",
-				headers: { "Content-Type": "application/json" },
-			});
+			const response = await axios.get(url);
 
-			if (!response.ok)
-				throw new Error(`HTTP error! status: ${response.status}`);
+			const updatedData: LeaderboardData = {
+				disclosure: response.data.disclosure,
+				data: response.data.data.map((player: any, index: number) => ({
+					uid: player.uid,
+					username: player.username,
+					wagered: player.wagered,
+					weightedWagered: player.weightedWagered,
+					favoriteGameId: player.favoriteGameId,
+					favoriteGameTitle: player.favoriteGameTitle,
+					rankLevel: index + 1, // numeric rank instead of image
+				})),
+			};
 
-			const data: LeaderboardResponse = await response.json();
-
-			runInAction(() => {
-				this.leaderboard = data.data;
-				this.disclosure = data.disclosure;
-				this.isLoading = false;
-			});
-		} catch (err) {
-			runInAction(() => {
-				this.error = {
-					error: "Failed to fetch leaderboard",
-					details: err instanceof Error ? err.message : "Unknown error",
-				};
-				this.isLoading = false;
+			set({ leaderboard: updatedData, loading: false });
+		} catch (err: any) {
+			set({
+				error: err.response?.data?.error || "Failed to fetch leaderboard",
+				loading: false,
 			});
 		}
-	}
-
-	get topPlayers(): LeaderboardPlayer[] {
-		return this.leaderboard.slice(0, 10);
-	}
-
-	getPlayerByRank(rank: number): LeaderboardPlayer | null {
-		return this.leaderboard[rank - 1] || null;
-	}
-
-	searchPlayers(query: string): LeaderboardPlayer[] {
-		const searchTerm = query.toLowerCase();
-		return this.leaderboard.filter((player) =>
-			player.username.toLowerCase().includes(searchTerm)
-		);
-	}
-
-	get totalWeightedWagered(): number {
-		return this.leaderboard.reduce(
-			(total, player) => total + player.weightedWagered,
-			0
-		);
-	}
-
-	get averageWeightedWager(): number {
-		if (this.leaderboard.length === 0) return 0;
-		return this.totalWeightedWagered / this.leaderboard.length;
-	}
-
-	clearError(): void {
-		this.error = null;
-	}
-
-	reset(): void {
-		this.leaderboard = [];
-		this.isLoading = false;
-		this.error = null;
-		this.disclosure = "";
-	}
-}
-
-export const roobetStore = new RoobetStore();
-export default roobetStore;
+	},
+}));

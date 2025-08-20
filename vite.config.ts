@@ -12,11 +12,11 @@ export default defineConfig({
 	},
 	server: {
 		proxy: {
-			// Proxy any request starting with /api to your backend server
 			"/api": {
-				target: "https://pnpplxprssdata.onrender.com", // your backend server port
+				target: "https://misterteedata-production.up.railway.app",
 				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/api/, ""),
+				// ❌ remove this line or fix it
+				// rewrite: (path) => path.replace(/^\/api/, ""),
 			},
 		},
 	},

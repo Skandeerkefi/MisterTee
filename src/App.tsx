@@ -12,7 +12,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuthStore } from "@/store/useAuthStore";
 import SlotOverlay from "@/pages/SlotOverlay";
 import BonusHuntPage from "@/pages/BonusHuntPage";
-import Leaderboard from "@/pages/Leaderboard";
+import RoobetPage from "@/pages/RoobetPage";
 function App() {
 	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 	const user = useAuthStore((state) => state.user);
@@ -43,7 +43,7 @@ function App() {
 					<Route path='*' element={<NotFoundPage />} />
 					<Route path='/slot-overlay' element={<SlotOverlay />} />
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
-					<Route path='/Leaderboards' element={<Leaderboard />} />
+					<Route path='/Leaderboards' element={<RoobetPage />} />
 				</Routes>
 			</BrowserRouter>
 			<Toaster />
