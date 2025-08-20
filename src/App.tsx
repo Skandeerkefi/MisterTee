@@ -43,7 +43,7 @@ function App() {
 					<Route path='*' element={<NotFoundPage />} />
 					<Route path='/slot-overlay' element={<SlotOverlay />} />
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
-					<Route path='/Leaderboard' element={<Leaderboard />} />
+					<Route path='/Leaderboards' element={<Leaderboard />} />
 				</Routes>
 			</BrowserRouter>
 			<Toaster />
