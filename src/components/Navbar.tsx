@@ -43,9 +43,12 @@ export function Navbar() {
 	const menuItems = [
 		{ path: "/", name: "Home", icon: <Dices className='w-5 h-5' /> },
 		{
-			path: "/leaderboards",
 			name: "Leaderboard",
 			icon: <Crown className='w-5 h-5' />,
+			subMenu: [
+				{ name: "Rain.gg", path: "/rain" },
+				{ name: "Roobet", path: "/leaderboards" },
+			],
 		},
 		{
 			path: "/slot-calls",
@@ -79,16 +82,38 @@ export function Navbar() {
 					<div className='flex items-center space-x-10'>
 						<ul className='flex space-x-8 font-medium text-white'>
 							{menuItems.map((item) => (
-								<li key={item.path}>
-									<Link
-										to={item.path}
-										className={`flex items-center space-x-2 text-lg px-1 border-b-2 border-transparent transition-all duration-300 hover:border-[#E10600] ${
-											location.pathname === item.path ? "border-[#E10600]" : ""
-										}`}
-									>
-										{item.icon}
-										<span>{item.name}</span>
-									</Link>
+								<li key={item.name} className='relative group'>
+									{item.subMenu ? (
+										<>
+											<span className='flex items-center space-x-2 text-lg px-1 cursor-pointer hover:border-[#E10600]'>
+												{item.icon} <span>{item.name}</span>
+											</span>
+											{/* Dropdown */}
+											<ul className='absolute left-0 w-40 mt-2 transition-opacity bg-black border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100'>
+												{item.subMenu.map((sub) => (
+													<li key={sub.path}>
+														<Link
+															to={sub.path}
+															className='block px-4 py-2 text-white hover:bg-[#E10600] hover:text-white transition-colors'
+														>
+															{sub.name}
+														</Link>
+													</li>
+												))}
+											</ul>
+										</>
+									) : (
+										<Link
+											to={item.path}
+											className={`flex items-center space-x-2 text-lg px-1 border-b-2 border-transparent transition-all duration-300 hover:border-[#E10600] ${
+												location.pathname === item.path
+													? "border-[#E10600]"
+													: ""
+											}`}
+										>
+											{item.icon} <span>{item.name}</span>
+										</Link>
+									)}
 								</li>
 							))}
 						</ul>
@@ -199,17 +224,35 @@ export function Navbar() {
 					>
 						<ul className='flex flex-col space-y-4 font-semibold text-white'>
 							{menuItems.map((item) => (
-								<li key={item.path}>
-									<Link
-										to={item.path}
-										onClick={() => setIsOpen(false)}
-										className={`flex items-center space-x-3 text-lg px-2 py-2 rounded-md hover:bg-[#E10600] hover:text-white transition-colors ${
-											location.pathname === item.path ? "bg-[#E10600]" : ""
-										}`}
-									>
-										{item.icon}
-										<span>{item.name}</span>
-									</Link>
+								<li key={item.name}>
+									{item.subMenu ? (
+										<>
+											<span className='flex items-center space-x-3 text-lg px-2 py-2 rounded-md cursor-pointer hover:bg-[#E10600] hover:text-white transition-colors'>
+												{item.icon} <span>{item.name}</span>
+											</span>
+											<ul className='pl-6 mt-1 space-y-1'>
+												{item.subMenu.map((sub) => (
+													<li key={sub.path}>
+														<Link
+															to={sub.path}
+															onClick={() => setIsOpen(false)}
+															className='block text-white hover:text-[#E10600] transition-colors'
+														>
+															{sub.name}
+														</Link>
+													</li>
+												))}
+											</ul>
+										</>
+									) : (
+										<Link
+											to={item.path}
+											onClick={() => setIsOpen(false)}
+											className='flex items-center space-x-3 text-lg px-2 py-2 rounded-md hover:bg-[#E10600] hover:text-white transition-colors'
+										>
+											{item.icon} <span>{item.name}</span>
+										</Link>
+									)}
 								</li>
 							))}
 						</ul>

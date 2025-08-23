@@ -17,7 +17,7 @@ export function Footer() {
 							Join MisterTee&apos;s community for exciting gambling streams,
 							giveaways, and more. Use affiliate code{" "}
 							<span className='font-semibold text-[#E10600]'>MisterTee</span> on
-							Rainbet.
+							Roobet, X.FUN, and Rain.gg.
 						</p>
 					</div>
 
@@ -52,10 +52,11 @@ export function Footer() {
 						</div>
 					</div>
 
-					{/* Social */}
+					{/* Social & Affiliates */}
 					<div>
 						<h3 className='mb-3 text-lg font-bold text-white'>Connect</h3>
-						<div className='flex gap-3'>
+						<div className='flex flex-wrap gap-3'>
+							{/* Social */}
 							<a
 								href='https://kick.com/MisterTee'
 								target='_blank'
@@ -80,15 +81,44 @@ export function Footer() {
 							>
 								<FaDiscord className='w-5 h-5' />
 							</a>
-							{/* Uncomment if you want Instagram
+
+							{/* Affiliates */}
 							<a
-								href='https://www.instagram.com/MisterTee'
+								href='https://roobet.com/?code=MisterTee'
 								target='_blank'
 								rel='noreferrer'
-								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] text-white'
+								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] p-1'
 							>
-								<FaInstagram className='w-5 h-5' />
-							</a> */}
+								<img
+									src='https://i.ibb.co/4w1vNNHT/65c0f428cc0de4676934f8d5-logob.png'
+									alt='Roobet'
+									className='object-contain w-full h-full'
+								/>
+							</a>
+							<a
+								href='https://x.fun/r/mistertee'
+								target='_blank'
+								rel='noreferrer'
+								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] p-1'
+							>
+								<img
+									src='https://i.ibb.co/d427PmcS/Capture-d-cran-2025-08-23-125905-removebg-preview.png'
+									alt='X.FUN'
+									className='object-contain w-full h-full'
+								/>
+							</a>
+							<a
+								href='https://rain.gg/r/MisterTee'
+								target='_blank'
+								rel='noreferrer'
+								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] p-1'
+							>
+								<img
+									src='https://i.ibb.co/N6jM15dg/raingg-logo.png'
+									alt='Rain.gg'
+									className='object-contain w-full h-full'
+								/>
+							</a>
 						</div>
 					</div>
 				</div>
