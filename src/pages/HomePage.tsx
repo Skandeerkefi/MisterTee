@@ -138,7 +138,7 @@ function HomePage() {
 						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
 							<div className='flex items-center justify-center mb-6'>
 								<img
-									src='https://i.ibb.co/4w1vNNHT/65c0f428cc0de4676934f8d5-logob.png'
+									src='https://i.postimg.cc/5NcLGnKn/Roobet-logo.png'
 									alt='Roobet'
 									className='object-contain h-20'
 								/>
