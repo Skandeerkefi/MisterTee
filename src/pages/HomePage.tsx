@@ -96,9 +96,89 @@ function HomePage() {
 						></iframe>
 					</div>
 				</section>
+				{/* 🌟 Affiliate Rewards Section */}
+				<section className='max-w-6xl px-6 py-16 mx-auto'>
+					<h2 className='mb-12 text-4xl font-bold text-center text-white'>
+						Affiliate Rewards with MisterTee ✨
+					</h2>
+
+					<div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
+						{/* X.FUN Card */}
+						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform'>
+							<div className='flex items-center justify-center mb-6'>
+								<img
+									src='https://i.ibb.co/d427PmcS/Capture-d-cran-2025-08-23-125905-removebg-preview.png'
+									alt='X.FUN'
+									className='object-contain h-20'
+								/>
+							</div>
+							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
+								🎰 X.FUN Rewards with MisterTee
+							</h3>
+							<ul className='space-y-3 text-base text-gray-300'>
+								<li>🎁 3 Free Cases when you sign up</li>
+								<li>⚡ +5% Deposit Bonus on your next top-up</li>
+								<li>🎟️ Exclusive Giveaways only for code users</li>
+								<li>🔒 More perks coming soon</li>
+							</ul>
+							<p className='mt-6 italic text-center text-gray-200'>
+								💎 Play smart. Win bigger. With MisterTee on X.FUN. 💎
+							</p>
+						</div>
+
+						{/* Rain.gg Card */}
+						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform'>
+							<div className='flex items-center justify-center mb-6'>
+								<img
+									src='https://i.ibb.co/N6jM15dg/raingg-logo.png'
+									alt='Rain.gg'
+									className='object-contain h-20'
+								/>
+							</div>
+							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
+								🌧️ Rain Rewards with MisterTee
+							</h3>
+							<ul className='space-y-3 text-base text-gray-300'>
+								<li>🎁 3 Free Cases when you sign up</li>
+								<li>
+									⚡ +5% on your next deposit – more balance, more playtime
+								</li>
+								<li>🥇 Bi-Weekly Leaderboard with 700c Prize Pool</li>
+								<li>🔒 More exclusive community perks coming soon</li>
+							</ul>
+							<p className='mt-6 italic text-center text-gray-200'>
+								✨ With MisterTee on Rain.gg, your deposits turn into cases,
+								bonuses, and exclusive prizes.
+							</p>
+						</div>
+
+						{/* Roobet Card */}
+						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform'>
+							<div className='flex items-center justify-center mb-6'>
+								<img
+									src='https://i.ibb.co/4w1vNNHT/65c0f428cc0de4676934f8d5-logob.png'
+									alt='Roobet'
+									className='object-contain h-20'
+								/>
+							</div>
+							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
+								🦘 Roobet Rewards with MisterTee
+							</h3>
+							<ul className='space-y-3 text-base text-gray-300'>
+								<li>🎁 Welcome Bonus on your first play</li>
+								<li>⚡ Exclusive MisterTee promotions & boosts</li>
+								<li>🎟️ Access to community giveaways</li>
+								<li>🔒 More rewards rolling out soon</li>
+							</ul>
+							<p className='mt-6 italic text-center text-gray-200'>
+								🚀 Hop into the action — play smarter with MisterTee on Roobet.
+							</p>
+						</div>
+					</div>
+				</section>
 
 				{/* Metric-style Countdown Section */}
-				<section className='max-w-4xl mx-auto px-6 py-10 rounded-3xl bg-black/70 border border-[#E10600] shadow-lg'>
+				{/* <section className='max-w-4xl mx-auto px-6 py-10 rounded-3xl bg-black/70 border border-[#E10600] shadow-lg'>
 					<h2 className='text-center text-3xl font-semibold mb-8 text-[#E10600] tracking-wide'>
 						⏳ Monthly Leaderboard Ends In
 					</h2>
@@ -124,10 +204,10 @@ function HomePage() {
 							);
 						})}
 					</div>
-				</section>
+				</section> */}
 
 				{/* Leaderboard */}
-				<section className='container py-16'>
+				{/*<section className='container py-16'>
 					<div className='flex items-center justify-between mb-8'>
 						<div className='flex items-center gap-2'>
 							<Crown className='w-6 h-6 text-[#E10600]' />
@@ -146,6 +226,7 @@ function HomePage() {
 					</div>
 					<LeaderboardTable period='monthly' data={topLeaderboard} />
 				</section>
+				 Leaderboard */}
 
 				{/* Redesigned Features Section */}
 				<section className='max-w-6xl px-6 py-16 mx-auto'>

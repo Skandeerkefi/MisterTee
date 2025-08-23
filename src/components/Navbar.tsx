@@ -43,7 +43,7 @@ export function Navbar() {
 	const menuItems = [
 		{ path: "/", name: "Home", icon: <Dices className='w-5 h-5' /> },
 		{
-			path: "/leaderboard",
+			path: "/leaderboards",
 			name: "Leaderboard",
 			icon: <Crown className='w-5 h-5' />,
 		},
