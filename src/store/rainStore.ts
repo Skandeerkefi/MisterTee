@@ -28,9 +28,12 @@ export const useRainStore = create<RainStore>((set) => ({
 	fetchLeaderboard: async (start_date, end_date, type) => {
 		try {
 			set({ loading: true, error: null });
-			const res = await axios.get("http://localhost:3000/rain", {
-				params: { start_date, end_date, type },
-			});
+			const res = await axios.get(
+				"https://misterteedata-production.up.railway.app/rain",
+				{
+					params: { start_date, end_date, type },
+				}
+			);
 			set({ leaderboard: res.data.results || [], loading: false });
 		} catch (err: any) {
 			set({ error: err.message, loading: false });
