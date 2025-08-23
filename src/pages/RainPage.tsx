@@ -6,61 +6,47 @@ import { Footer } from "@/components/Footer";
 
 export default function RainPage() {
 	const { leaderboard, loading, error, fetchLeaderboard } = useRainStore();
-	const [monthOffset, setMonthOffset] = useState(0);
+	const [weekOffset, setWeekOffset] = useState(0);
 
 	useEffect(() => {
-		const fetchMonthlyLeaderboard = async () => {
+		const fetchBiweeklyLeaderboard = async () => {
 			const now = new Date();
-			const startMonth = new Date(
-				now.getFullYear(),
-				now.getMonth() + monthOffset,
-				1
-			);
-			const endMonth = new Date(
-				now.getFullYear(),
-				now.getMonth() + monthOffset + 1,
-				0
-			);
+			// Calculate start of the biweekly period
+			const startOfWeek = new Date(now);
+			startOfWeek.setDate(now.getDate() + weekOffset * 14 - now.getDay()); // Start of first week in period
+			const endOfWeek = new Date(startOfWeek);
+			endOfWeek.setDate(startOfWeek.getDate() + 13); // End of 2-week period
 
 			await fetchLeaderboard(
-				startMonth.toISOString(),
-				endMonth.toISOString(),
+				startOfWeek.toISOString(),
+				endOfWeek.toISOString(),
 				"wagered"
 			);
 		};
-		fetchMonthlyLeaderboard();
-	}, [monthOffset, fetchLeaderboard]);
+		fetchBiweeklyLeaderboard();
+	}, [weekOffset, fetchLeaderboard]);
 
-	const handlePrevMonth = () => setMonthOffset((prev) => prev - 1);
-	const handleNextMonth = () => setMonthOffset((prev) => prev + 1);
+	const handlePrevPeriod = () => setWeekOffset((prev) => prev - 1);
+	const handleNextPeriod = () => setWeekOffset((prev) => prev + 1);
 
-	const monthNames = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
+	// Display biweekly label
 	const now = new Date();
-	const displayMonth = new Date(
-		now.getFullYear(),
-		now.getMonth() + monthOffset,
-		1
-	);
-	const monthName =
-		monthNames[displayMonth.getMonth()] + " " + displayMonth.getFullYear();
+	const startOfPeriod = new Date(now);
+	startOfPeriod.setDate(now.getDate() + weekOffset * 14 - now.getDay());
+	const endOfPeriod = new Date(startOfPeriod);
+	endOfPeriod.setDate(startOfPeriod.getDate() + 13);
+
+	const formatDate = (date: Date) =>
+		`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+	const periodLabel =
+		weekOffset === 0
+			? "This Week & Next Week"
+			: `Biweekly: ${formatDate(startOfPeriod)} - ${formatDate(endOfPeriod)}`;
 
 	return (
 		<div className='relative flex flex-col min-h-screen text-white '>
 			<GraphicalBackground />
-
 			<Navbar />
 
 			<main className='relative z-10 flex-1 w-full max-w-6xl p-6 mx-auto'>
@@ -68,21 +54,21 @@ export default function RainPage() {
 					🌧 Rain.gg Leaderboard
 				</h1>
 				<h2 className='mb-6 text-xl text-center text-yellow-400'>
-					{monthName}
+					{periodLabel}
 				</h2>
 
 				<div className='flex justify-center gap-4 mb-6'>
 					<button
-						onClick={handlePrevMonth}
+						onClick={handlePrevPeriod}
 						className='px-5 py-2 transition bg-red-600 rounded hover:bg-red-700'
 					>
-						Previous Month
+						Previous Period
 					</button>
 					<button
-						onClick={handleNextMonth}
+						onClick={handleNextPeriod}
 						className='px-5 py-2 text-black transition bg-yellow-400 rounded hover:bg-yellow-500'
 					>
-						Next Month
+						Next Period
 					</button>
 				</div>
 
