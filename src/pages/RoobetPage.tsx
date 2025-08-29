@@ -11,6 +11,18 @@ const RoobetPage: React.FC = () => {
 		fetchLeaderboard();
 	}, [fetchLeaderboard]);
 
+	// Prize mapping by rank
+	const prizeMap: Record<number, string> = {
+		1: "$450",
+		2: "$250",
+		3: "$100",
+		4: "$75",
+		5: "$50",
+		6: "$25",
+		7: "$25",
+		8: "$25",
+	};
+
 	return (
 		<div className='relative flex flex-col min-h-screen'>
 			<GraphicalBackground />
@@ -18,7 +30,7 @@ const RoobetPage: React.FC = () => {
 
 			<main className='relative z-10 flex-grow w-full max-w-6xl px-6 py-10 mx-auto'>
 				<h1 className='mb-8 text-4xl font-extrabold text-center text-[#fefefe] drop-shadow-lg'>
-					🎰 Roobet Leaderboard
+					🎰 Roobet Leaderboard – $1,000 Prize Pool
 				</h1>
 
 				{loading && (
@@ -49,6 +61,13 @@ const RoobetPage: React.FC = () => {
 									<p className='text-2xl md:text-3xl font-extrabold text-[#fefefe] mb-2 drop-shadow-lg'>
 										{player.username}
 									</p>
+
+									{/* Prize */}
+									{prizeMap[player.rankLevel] && (
+										<p className='text-lg font-bold text-[#ffd01f] drop-shadow-md'>
+											🏆 Prize: {prizeMap[player.rankLevel]}
+										</p>
+									)}
 
 									{/* Stats */}
 									<div className='flex flex-col items-center gap-1 mt-2'>
@@ -85,6 +104,7 @@ const RoobetPage: React.FC = () => {
 											<th className='p-3'>Wagered</th>
 											<th className='p-3'>Weighted Wagered</th>
 											<th className='p-3'>Favorite Game</th>
+											<th className='p-3'>Prize</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -102,6 +122,9 @@ const RoobetPage: React.FC = () => {
 													{player.weightedWagered.toLocaleString()}
 												</td>
 												<td className='p-3'>{player.favoriteGameTitle}</td>
+												<td className='p-3 font-bold text-[#ffd01f]'>
+													{prizeMap[player.rankLevel] ?? "-"}
+												</td>
 											</tr>
 										))}
 									</tbody>
