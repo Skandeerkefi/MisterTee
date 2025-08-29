@@ -29,9 +29,15 @@ const RoobetPage: React.FC = () => {
 			<Navbar />
 
 			<main className='relative z-10 flex-grow w-full max-w-6xl px-6 py-10 mx-auto'>
-				<h1 className='mb-8 text-4xl font-extrabold text-center text-[#fefefe] drop-shadow-lg'>
+				<h1 className='mb-4 text-4xl font-extrabold text-center text-[#fefefe] drop-shadow-lg'>
 					🎰 Roobet Leaderboard – $1,000 Prize Pool
 				</h1>
+
+				{/* Event Date Range */}
+				<p className='mb-8 text-center text-lg font-medium text-[#ffd01f] drop-shadow-md'>
+					Event Duration:{" "}
+					<span className='font-bold'>September 1 - September 30</span>
+				</p>
 
 				{loading && (
 					<p className='text-center text-[#fefefe]'>Loading leaderboard...</p>
