@@ -104,7 +104,7 @@ function HomePage() {
 
 					<div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
 						{/* X.FUN Card */}
-						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
+						{/* <div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
 							<div className='flex items-center justify-center mb-6'>
 								<img
 									src='https://i.ibb.co/d427PmcS/Capture-d-cran-2025-08-23-125905-removebg-preview.png'
@@ -132,7 +132,7 @@ function HomePage() {
 							>
 								Join X.FUN
 							</a>
-						</div>
+						</div> */}
 
 						{/* Roobet Card */}
 						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
@@ -166,7 +166,7 @@ function HomePage() {
 						</div>
 
 						{/* Rain.gg Card */}
-						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
+						{/* <div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
 							<div className='flex items-center justify-center mb-6'>
 								<img
 									src='https://i.ibb.co/N6jM15dg/raingg-logo.png'
@@ -197,7 +197,7 @@ function HomePage() {
 							>
 								Join Rain.gg
 							</a>
-						</div>
+						</div> */}
 					</div>
 				</section>
 

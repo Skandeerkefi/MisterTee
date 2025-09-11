@@ -17,7 +17,7 @@ export function Footer() {
 							Join MisterTee&apos;s community for exciting gambling streams,
 							giveaways, and more. Use affiliate code{" "}
 							<span className='font-semibold text-[#E10600]'>MisterTee</span> on
-							Roobet, X.FUN, and Rain.gg.
+							Roobet.
 						</p>
 					</div>
 
