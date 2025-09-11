@@ -102,40 +102,9 @@ function HomePage() {
 						Affiliate Rewards with MisterTee ✨
 					</h2>
 
-					<div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
-						{/* X.FUN Card */}
-						{/* <div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
-							<div className='flex items-center justify-center mb-6'>
-								<img
-									src='https://i.ibb.co/d427PmcS/Capture-d-cran-2025-08-23-125905-removebg-preview.png'
-									alt='X.FUN'
-									className='object-contain h-20'
-								/>
-							</div>
-							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🎰 X.FUN Rewards with MisterTee
-							</h3>
-							<ul className='mb-6 space-y-3 text-base text-gray-300'>
-								<li>🎁 3 Free Cases when you sign up</li>
-								<li>⚡ +5% Deposit Bonus on your next top-up</li>
-								<li>🎟️ Exclusive Giveaways only for code users</li>
-								<li>🔒 More perks coming soon</li>
-							</ul>
-							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								💎 Play smart. Win bigger. With MisterTee on X.FUN. 💎
-							</p>
-							<a
-								href='https://x.fun/r/mistertee'
-								target='_blank'
-								rel='noreferrer'
-								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
-							>
-								Join X.FUN
-							</a>
-						</div> */}
-
+					<div className='flex justify-center'>
 						{/* Roobet Card */}
-						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
+						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-full sm:w-[400px]'>
 							<div className='flex items-center justify-center mb-6'>
 								<img
 									src='https://i.postimg.cc/5NcLGnKn/Roobet-logo.png'
@@ -164,40 +133,6 @@ function HomePage() {
 								Join Roobet
 							</a>
 						</div>
-
-						{/* Rain.gg Card */}
-						{/* <div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col'>
-							<div className='flex items-center justify-center mb-6'>
-								<img
-									src='https://i.ibb.co/N6jM15dg/raingg-logo.png'
-									alt='Rain.gg'
-									className='object-contain h-20'
-								/>
-							</div>
-							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🌧️ Rain Rewards with MisterTee
-							</h3>
-							<ul className='mb-6 space-y-3 text-base text-gray-300'>
-								<li>🎁 3 Free Cases when you sign up</li>
-								<li>
-									⚡ +5% on your next deposit – more balance, more playtime
-								</li>
-								<li>🥇 Bi-Weekly Leaderboard with 700c Prize Pool</li>
-								<li>🔒 More exclusive community perks coming soon</li>
-							</ul>
-							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								✨ With MisterTee on Rain.gg, your deposits turn into cases,
-								bonuses, and exclusive prizes.
-							</p>
-							<a
-								href='https://rain.gg/r/MisterTee'
-								target='_blank'
-								rel='noreferrer'
-								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
-							>
-								Join Rain.gg
-							</a>
-						</div> */}
 					</div>
 				</section>
 
