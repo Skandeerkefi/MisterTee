@@ -133,6 +133,47 @@ function HomePage() {
 								Join Roobet
 							</a>
 						</div>
+						{/* CSGOWIN Card */}
+						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-full sm:w-[400px]'>
+							<div className='flex items-center justify-center mb-6'>
+								<img
+									src='https://cdn.csgowin.com/img/logos/icon_csgowin.webp'
+									alt='Roobet'
+									className='object-contain h-20'
+								/>
+							</div>
+							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
+								🦘 CSGOWIN Rewards with MisterTee
+							</h3>
+							<ul className='mb-6 space-y-3 text-base text-gray-300'>
+								<li>🎁 Claim 3 Free cases upon sign up</li>
+								<li>
+									💸 5% Deposit Bonuses – boost your balance and get extra to
+									play.
+								</li>
+								<li>
+									💰 EXTRA Deposit Bonuses on top of the 5% for code users.
+								</li>
+								<li>
+									🎟️ Exclusive Giveaways – free battles for our community.
+								</li>
+								<li>
+									🏆 Get VIP rewards instantly – climb the ranks and win big.
+								</li>
+								<li>🔒 And even more surprises on the way!</li>
+							</ul>
+							<p className='mt-auto mb-6 italic text-center text-gray-200'>
+								🚀 Hop into the action — play smarter with MisterTee on Roobet.
+							</p>
+							<a
+								href='https://csgowin.com/r/mistertee'
+								target='_blank'
+								rel='noreferrer'
+								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
+							>
+								Join Roobet
+							</a>
+						</div>
 					</div>
 				</section>
 

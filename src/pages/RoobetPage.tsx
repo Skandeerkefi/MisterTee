@@ -3,15 +3,22 @@ import { useRoobetStore } from "../store/RoobetStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import dayjs from "dayjs"; // npm install dayjs
 
 const RoobetPage: React.FC = () => {
 	const { leaderboard, loading, error, fetchLeaderboard } = useRoobetStore();
 
 	useEffect(() => {
-		fetchLeaderboard();
+		fetchLeaderboard(); // will auto-load current month's data from store logic
 	}, [fetchLeaderboard]);
 
-	// Prize mapping by rank
+	// 🗓️ Get current month range dynamically
+	const now = dayjs();
+	const currentMonth = now.format("MMMM"); // e.g., "October"
+	const startOfMonth = now.startOf("month").format("MMMM D"); // e.g., "October 1"
+	const endOfMonth = now.endOf("month").format("MMMM D"); // e.g., "October 31"
+
+	// 💰 Prize mapping by rank
 	const prizeMap: Record<number, string> = {
 		1: "$450",
 		2: "$250",
@@ -33,10 +40,12 @@ const RoobetPage: React.FC = () => {
 					🎰 Roobet Leaderboard – $1,000 Prize Pool
 				</h1>
 
-				{/* Event Date Range */}
+				{/* 🗓️ Dynamic Event Date Range */}
 				<p className='mb-8 text-center text-lg font-medium text-[#ffd01f] drop-shadow-md'>
 					Event Duration:{" "}
-					<span className='font-bold'>September 1 - September 30</span>
+					<span className='font-bold'>
+						{startOfMonth} - {endOfMonth}
+					</span>
 				</p>
 
 				{loading && (
@@ -50,7 +59,7 @@ const RoobetPage: React.FC = () => {
 							{leaderboard.disclosure}
 						</p>
 
-						{/* Top 3 Players as Cards */}
+						{/* 🏆 Top 3 Players */}
 						<div className='grid grid-cols-1 gap-6 mb-10 md:grid-cols-3'>
 							{leaderboard.data.slice(0, 3).map((player) => (
 								<div
@@ -99,7 +108,7 @@ const RoobetPage: React.FC = () => {
 							))}
 						</div>
 
-						{/* Remaining Players in Table */}
+						{/* 📋 Remaining Players */}
 						{leaderboard.data.length > 3 && (
 							<div className='overflow-x-auto p-6 shadow-lg bg-[#030303]/80 backdrop-blur-md rounded-2xl'>
 								<table className='w-full text-left border-collapse'>

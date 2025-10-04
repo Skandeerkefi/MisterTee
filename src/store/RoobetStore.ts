@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import dayjs from "dayjs"; // lightweight date library (npm install dayjs)
 
 interface Player {
 	uid: string;
@@ -8,7 +9,7 @@ interface Player {
 	weightedWagered: number;
 	favoriteGameId: string;
 	favoriteGameTitle: string;
-	rankLevel: number; // optional if you want numeric rank level
+	rankLevel: number;
 }
 
 interface LeaderboardData {
@@ -32,11 +33,14 @@ export const useRoobetStore = create<RoobetStore>((set) => ({
 		set({ loading: true, error: null });
 
 		try {
-			let url =
-				"https://misterteedata-production.up.railway.app/api/leaderboard";
-			if (startDate && endDate) {
-				url += `/${startDate}/${endDate}`;
+			// If no startDate/endDate provided → use current month's range
+			if (!startDate || !endDate) {
+				const now = dayjs();
+				startDate = now.startOf("month").format("YYYY-MM-DD");
+				endDate = now.endOf("month").format("YYYY-MM-DD");
 			}
+
+			let url = `https://misterteedata-production.up.railway.app/api/leaderboard/${startDate}/${endDate}`;
 
 			const response = await axios.get(url);
 
@@ -49,7 +53,7 @@ export const useRoobetStore = create<RoobetStore>((set) => ({
 					weightedWagered: player.weightedWagered,
 					favoriteGameId: player.favoriteGameId,
 					favoriteGameTitle: player.favoriteGameTitle,
-					rankLevel: index + 1, // numeric rank instead of image
+					rankLevel: index + 1,
 				})),
 			};
 
