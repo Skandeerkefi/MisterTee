@@ -143,7 +143,7 @@ function HomePage() {
 								/>
 							</div>
 							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🦘 CSGOWIN Rewards with MisterTee
+								🔫 CSGOWIN Rewards with MisterTee
 							</h3>
 							<ul className='mb-6 space-y-3 text-base text-gray-300'>
 								<li>🎁 Claim 3 Free cases upon sign up</li>
@@ -171,7 +171,7 @@ function HomePage() {
 								rel='noreferrer'
 								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
 							>
-								Join Roobet
+								Join Csgowin
 							</a>
 						</div>
 					</div>
