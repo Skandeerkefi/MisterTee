@@ -14,6 +14,7 @@ import SlotOverlay from "@/pages/SlotOverlay";
 import BonusHuntPage from "@/pages/BonusHuntPage";
 import RoobetPage from "@/pages/RoobetPage";
 import RainPage from "@/pages/RainPage";
+import CSGOLeadPage from "./pages/CSGOLead";
 function App() {
 	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 	const user = useAuthStore((state) => state.user);
@@ -46,6 +47,7 @@ function App() {
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
 					<Route path='/Leaderboards' element={<RoobetPage />} />
 					<Route path='/rain' element={<RainPage />} />
+					<Route path='/csgo' element={<CSGOLeadPage />} />
 				</Routes>
 			</BrowserRouter>
 			<Toaster />
