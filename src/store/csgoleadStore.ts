@@ -24,10 +24,13 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 			const res = await fetch(
 				`/api/leaderboard/csgowin?take=${take}&skip=${skip}`
 			);
-			if (!res.ok) throw new Error("Failed to fetch leaderboard");
-			const data = await res.json();
-			console.log("API response:", data);
-			// FIX: use the `data` array inside the API response
+			const text = await res.text();
+			let data;
+			try {
+				data = JSON.parse(text);
+			} catch {
+				throw new Error("Invalid JSON response: " + text);
+			}
 			set({ leaderboard: data.data || [], loading: false });
 		} catch (err: any) {
 			set({ error: err.message || "Unknown error", loading: false });
