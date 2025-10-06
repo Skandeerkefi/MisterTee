@@ -53,7 +53,7 @@ const CSGOLeadPage = () => {
 											index % 2 === 0 ? "bg-gray-50" : "bg-white"
 										}`}
 									>
-										<td className='p-3'>{index + 1}</td>
+										<td className='p-3 text-gray-700'>{index + 1}</td>
 										<td className='p-3 font-medium text-gray-700'>
 											{entry.name}
 										</td>
