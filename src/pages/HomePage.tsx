@@ -163,7 +163,7 @@ function HomePage() {
 								<li>🔒 And even more surprises on the way!</li>
 							</ul>
 							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								🚀 Hop into the action — play smarter with MisterTee on Roobet.
+								🚀 Hop into the action — play smarter with MisterTee on CSGOWIN.
 							</p>
 							<a
 								href='https://csgowin.com/r/mistertee'
