@@ -14,25 +14,29 @@ interface CSGOLeadState {
 	fetchLeaderboard: (take?: number, skip?: number) => Promise<void>;
 }
 
-// Automatically calculate the current week (Sunday -> Saturday)
-function getCurrentWeekRange() {
+// ✅ Automatically calculate the current week in UTC (Saturday → Friday)
+function getCurrentWeekRangeUTC() {
 	const now = new Date();
 
-	// Get the most recent Sunday
-	const day = now.getDay(); // 0 = Sunday and yes
-	const diffToSunday = -day;
-	const sunday = new Date(now);
-	sunday.setDate(now.getDate() + diffToSunday);
-	sunday.setHours(0, 0, 0, 0);
+	// Get current day in UTC (0 = Sunday, 6 = Saturday)
+	const day = now.getUTCDay();
 
-	// Saturday (6 days later)
-	const saturday = new Date(sunday);
-	saturday.setDate(sunday.getDate() + 6);
-	saturday.setHours(23, 59, 59, 999);
+	// Calculate how many days to go back to reach Saturday
+	// If today is Saturday (6), diff = 0 → start today
+	const diffToSaturday = day === 6 ? 0 : -((day + 1) % 7);
+
+	// Start of the week (Saturday 00:00 UTC)
+	const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diffToSaturday));
+	start.setUTCHours(0, 0, 0, 0);
+
+	// End of the week (Friday 23:59:59.999 UTC)
+	const end = new Date(start);
+	end.setUTCDate(start.getUTCDate() + 6);
+	end.setUTCHours(23, 59, 59, 999);
 
 	return {
-		startDate: sunday.getTime(),
-		endDate: saturday.getTime(),
+		startDate: start.getTime(),
+		endDate: end.getTime(),
 	};
 }
 
@@ -44,9 +48,8 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 	fetchLeaderboard: async (take = 10, skip = 0) => {
 		set({ loading: true, error: null });
 		try {
-			const { startDate, endDate } = getCurrentWeekRange();
+			const { startDate, endDate } = getCurrentWeekRangeUTC();
 
-			// 👇 This matches your backend route perfectly
 			const res = await fetch(
 				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin?take=${take}&skip=${skip}&startDate=${startDate}&endDate=${endDate}`
 			);
@@ -60,4 +63,3 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 		}
 	},
 }));
-//
