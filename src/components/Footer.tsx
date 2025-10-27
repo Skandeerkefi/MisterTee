@@ -74,7 +74,7 @@ export function Footer() {
 								<FaXTwitter className='w-5 h-5' />
 							</a>
 							<a
-								href='https://discord.gg/YmvDexVt'
+								href='https://discord.gg/uUtsNgqbgS'
 								target='_blank'
 								rel='noreferrer'
 								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] text-white'
@@ -96,29 +96,18 @@ export function Footer() {
 								/>
 							</a>
 							<a
-								href='https://x.fun/r/mistertee'
+								href='https://csgowin.com/r/mistertee'
 								target='_blank'
 								rel='noreferrer'
 								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] p-1'
 							>
 								<img
-									src='https://i.ibb.co/d427PmcS/Capture-d-cran-2025-08-23-125905-removebg-preview.png'
-									alt='X.FUN'
+									src='https://i.ibb.co/nMcmgFTc/Screenshot-2025-10-27-183032-removebg-preview.png'
+									alt='CSGOWIN'
 									className='object-contain w-full h-full'
 								/>
 							</a>
-							<a
-								href='https://rain.gg/r/MisterTee'
-								target='_blank'
-								rel='noreferrer'
-								className='flex items-center justify-center transition-colors bg-[#111] rounded-full w-9 h-9 hover:bg-[#E10600] p-1'
-							>
-								<img
-									src='https://i.ibb.co/N6jM15dg/raingg-logo.png'
-									alt='Rain.gg'
-									className='object-contain w-full h-full'
-								/>
-							</a>
+							
 						</div>
 					</div>
 				</div>
