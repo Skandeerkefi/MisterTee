@@ -85,20 +85,21 @@ const RoobetPage: React.FC = () => {
 									)}
 
 									{/* Stats */}
-									<div className='flex flex-col items-center gap-1 mt-2'>
-										<p className='text-md md:text-lg font-semibold text-[#fefefe]'>
-											🎲 Wagered:{" "}
-											<span className='text-[#e10600]'>
-												{player.wagered.toLocaleString()}
-											</span>
-										</p>
-										<p className='text-md md:text-lg font-semibold text-[#fefefe]'>
-											⚡ Weighted:{" "}
-											<span className='text-[#e10600]'>
-												{player.weightedWagered.toLocaleString()}
-											</span>
-										</p>
-									</div>
+<div className="flex flex-col items-center gap-1 mt-2">
+  <p className="text-md md:text-lg font-semibold text-[#fefefe]">
+    🎲 Wagered:{" "}
+    <span className="text-[#e10600]">
+      {player.wagered.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+    </span>
+  </p>
+  <p className="text-md md:text-lg font-semibold text-[#fefefe]">
+    ⚡ Weighted:{" "}
+    <span className="text-[#ffd01f]">
+      {player.weightedWagered.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+    </span>
+  </p>
+</div>
+
 
 									{/* Favorite Game */}
 									<p className='mt-3 text-sm md:text-base font-medium text-[#fefefe] italic'>
