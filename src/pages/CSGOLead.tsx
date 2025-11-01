@@ -5,14 +5,18 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 const prizeMap: Record<number, string> = {
-	1: "125 C 🥇",
-	2: "55 C 🥈",
-	3: "25 C 🥉",
-	4: "15 C",
-	5: "10 C",
-	6: "10 C",
-	7: "1 C",
+  1: "250 C 🥇",
+  2: "100 C 🥈",
+  3: "50 C 🥉",
+  4: "25 C",
+  5: "20 C",
+  6: "15 C",
+  7: "10 C",
+  8: "10 C",
+  9: "10 C",
+  10: "10 C",
 };
+
 
 // 🗓️ Helper to get current week range in UTC (Saturday → Friday)
 function getCurrentWeekRangeUTC() {
