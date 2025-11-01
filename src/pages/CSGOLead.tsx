@@ -75,7 +75,7 @@ const CSGOLeadPage = () => {
 				{/* 💰 Prize pool info */}
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 250 C 💰
+						Total Prize Pool: 500 C 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span> to
