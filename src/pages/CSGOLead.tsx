@@ -1,9 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCSGOLeadStore } from "@/store/csgoleadStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration"; // ⬅️ important
+dayjs.extend(duration); // ⬅️ enable duration plugin
+import utc from "dayjs/plugin/utc";
 const prizeMap: Record<number, string> = {
   1: "250 C 🥇",
   2: "100 C 🥈",
@@ -22,7 +25,7 @@ function getCurrentWeekRangeUTC() {
   const now = new Date();
   const day = now.getUTCDay();
   const diffToSaturday = day === 6 ? 0 : -((day + 1) % 7);
-
+dayjs.extend(utc);
   const saturday = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diffToSaturday)
   );
@@ -35,26 +38,45 @@ function getCurrentWeekRangeUTC() {
   return { startOfWeek: saturday, endOfWeek: friday };
 }
 
-const COOLDOWN_MS = 5 * 60 * 1000; // 🕒 5 minutes
-
 const CSGOLeadPage = () => {
   const { leaderboard, loading, error, fetchLeaderboard } = useCSGOLeadStore();
+  const [timeLeft, setTimeLeft] = useState("");
 
-  // ✅ Fetch leaderboard with cooldown
   useEffect(() => {
-    const lastFetched = localStorage.getItem("csgo_lead_last_fetch");
-    const now = Date.now();
-
-    if (lastFetched && now - parseInt(lastFetched) < COOLDOWN_MS) {
-      console.log("⏳ Cooldown active, skipping fetch...");
-      return;
-    }
-
     fetchLeaderboard(10, 0);
-    localStorage.setItem("csgo_lead_last_fetch", now.toString());
   }, [fetchLeaderboard]);
 
   const { startOfWeek, endOfWeek } = getCurrentWeekRangeUTC();
+
+  // ⏳ Weekly countdown to next Saturday 00:00 UTC
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = dayjs.utc(); // Use UTC time for consistency
+      let nextReset = dayjs.utc().day(6).hour(0).minute(0).second(0).millisecond(0); // Saturday 00:00 UTC
+
+      if (now.isAfter(nextReset)) {
+        nextReset = nextReset.add(1, "week");
+      }
+
+      const diff = nextReset.diff(now);
+      if (diff <= 0) {
+        setTimeLeft("Leaderboard Resetting...");
+        return;
+      }
+
+      const d = dayjs.duration(diff);
+      const days = Math.floor(d.asDays());
+      const hours = d.hours();
+      const minutes = d.minutes();
+      const seconds = d.seconds();
+
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-black">
@@ -67,7 +89,7 @@ const CSGOLeadPage = () => {
         </h1>
 
         {/* 🗓️ Week Range */}
-        <p className="text-center text-gray-400 mb-6">
+        <p className="text-center text-gray-400 mb-2">
           Week:{" "}
           <span className="text-red-400">
             {startOfWeek.toUTCString().split(" ").slice(0, 4).join(" ")} →{" "}
@@ -75,7 +97,13 @@ const CSGOLeadPage = () => {
           </span>
         </p>
 
-        {/* 💰 Prize Pool */}
+        {/* ⏳ Cooldown Countdown */}
+        <p className="text-center text-md font-semibold text-gray-300 mb-6">
+          ⏳ Next Reset In:{" "}
+          <span className="text-yellow-400 font-bold">{timeLeft}</span>
+        </p>
+
+        {/* 💰 Prize pool info */}
         <div className="mt-2 text-center text-gray-400">
           <p className="text-lg font-semibold text-red-400">
             Total Prize Pool: 500 C 💰
@@ -89,7 +117,7 @@ const CSGOLeadPage = () => {
         {loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
         {error && <p className="mt-10 text-center text-red-500">{error}</p>}
 
-        {/* 🏆 Leaderboard */}
+        {/* 🏆 Leaderboard table */}
         {!loading && !error && leaderboard.length > 0 && (
           <div className="mt-8 overflow-x-auto">
             <table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
@@ -102,6 +130,7 @@ const CSGOLeadPage = () => {
                   <th className="p-3 text-left uppercase">Prize</th>
                 </tr>
               </thead>
+
               <tbody>
                 {leaderboard.map((entry, index) => {
                   const rank = index + 1;
