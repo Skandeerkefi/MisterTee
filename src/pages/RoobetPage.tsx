@@ -1,22 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRoobetStore } from "../store/RoobetStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import dayjs from "dayjs"; // npm install dayjs
 
+const COOLDOWN_MS = 5 * 60 * 1000; // 🕒 5 minutes cooldown
+
 const RoobetPage: React.FC = () => {
 	const { leaderboard, loading, error, fetchLeaderboard } = useRoobetStore();
+	const [cooldownRemaining, setCooldownRemaining] = useState<number>(0);
 
+	// 🧠 Helper: start cooldown countdown
 	useEffect(() => {
-		fetchLeaderboard(); // will auto-load current month's data from store logic
+		const interval = setInterval(() => {
+			const lastFetch = localStorage.getItem("roobet_leaderboard_last_fetch");
+			if (lastFetch) {
+				const elapsed = Date.now() - parseInt(lastFetch);
+				const remaining = Math.max(0, COOLDOWN_MS - elapsed);
+				setCooldownRemaining(remaining);
+			} else {
+				setCooldownRemaining(0);
+			}
+		}, 1000);
+		return () => clearInterval(interval);
+	}, []);
+
+	// 🧊 Fetch leaderboard with cooldown
+	useEffect(() => {
+		const lastFetched = localStorage.getItem("roobet_leaderboard_last_fetch");
+		const now = Date.now();
+
+		if (lastFetched && now - parseInt(lastFetched) < COOLDOWN_MS) {
+			console.log("⏳ Cooldown active — skipping fetch...");
+			return;
+		}
+
+		fetchLeaderboard();
+		localStorage.setItem("roobet_leaderboard_last_fetch", now.toString());
 	}, [fetchLeaderboard]);
 
-	// 🗓️ Get current month range dynamically
+	// 🗓️ Dynamic month range
 	const now = dayjs();
-	const currentMonth = now.format("MMMM"); // e.g., "October"
-	const startOfMonth = now.startOf("month").format("MMMM D"); // e.g., "October 1"
-	const endOfMonth = now.endOf("month").format("MMMM D"); // e.g., "October 31"
+	const startOfMonth = now.startOf("month").format("MMMM D");
+	const endOfMonth = now.endOf("month").format("MMMM D");
 
 	// 💰 Prize mapping by rank
 	const prizeMap: Record<number, string> = {
@@ -30,6 +57,14 @@ const RoobetPage: React.FC = () => {
 		8: "$25",
 	};
 
+	// 🕒 Convert remaining ms → mm:ss
+	const formatCooldown = (ms: number) => {
+		const totalSeconds = Math.floor(ms / 1000);
+		const minutes = Math.floor(totalSeconds / 60);
+		const seconds = totalSeconds % 60;
+		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+	};
+
 	return (
 		<div className='relative flex flex-col min-h-screen'>
 			<GraphicalBackground />
@@ -40,13 +75,23 @@ const RoobetPage: React.FC = () => {
 					🎰 Roobet Leaderboard – $1,000 Prize Pool
 				</h1>
 
-				{/* 🗓️ Dynamic Event Date Range */}
+				{/* 🗓️ Event Range */}
 				<p className='mb-8 text-center text-lg font-medium text-[#ffd01f] drop-shadow-md'>
 					Event Duration:{" "}
 					<span className='font-bold'>
 						{startOfMonth} - {endOfMonth}
 					</span>
 				</p>
+
+				{/* 🧊 Cooldown Notice */}
+				{cooldownRemaining > 0 && (
+					<p className='text-center text-sm text-gray-300 mb-4'>
+						Next refresh available in{" "}
+						<span className='text-[#ffd01f] font-bold'>
+							{formatCooldown(cooldownRemaining)}
+						</span>
+					</p>
+				)}
 
 				{loading && (
 					<p className='text-center text-[#fefefe]'>Loading leaderboard...</p>
@@ -59,49 +104,48 @@ const RoobetPage: React.FC = () => {
 							{leaderboard.disclosure}
 						</p>
 
-						{/* 🏆 Top 3 Players */}
+						{/* 🏆 Top 3 */}
 						<div className='grid grid-cols-1 gap-6 mb-10 md:grid-cols-3'>
 							{leaderboard.data.slice(0, 3).map((player) => (
 								<div
 									key={player.uid}
-									className='relative p-6 rounded-3xl shadow-2xl border-4 border-[#e10600] flex flex-col items-center justify-center
-                              bg-gradient-to-br from-[#e10600] to-[#030303] hover:scale-105 transform transition-all duration-300'
+									className='relative p-6 rounded-3xl shadow-2xl border-4 border-[#e10600]
+                        flex flex-col items-center justify-center bg-gradient-to-br
+                        from-[#e10600] to-[#030303] hover:scale-105 transform transition-all duration-300'
 								>
-									{/* Rank Badge */}
 									<div className='absolute -top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-[#fefefe] text-[#e10600] font-bold text-lg shadow-lg'>
 										#{player.rankLevel}
 									</div>
 
-									{/* Username */}
 									<p className='text-2xl md:text-3xl font-extrabold text-[#fefefe] mb-2 drop-shadow-lg'>
 										{player.username}
 									</p>
 
-									{/* Prize */}
 									{prizeMap[player.rankLevel] && (
 										<p className='text-lg font-bold text-[#ffd01f] drop-shadow-md'>
 											🏆 Prize: {prizeMap[player.rankLevel]}
 										</p>
 									)}
 
-									{/* Stats */}
-<div className="flex flex-col items-center gap-1 mt-2">
-  <p className="text-md md:text-lg font-semibold text-[#fefefe]">
-    🎲 Wagered:{" "}
-    <span className="text-[#e10600]">
-      {player.wagered.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-    </span>
-  </p>
-  <p className="text-md md:text-lg font-semibold text-[#fefefe]">
-    ⚡ Weighted:{" "}
-    <span className="text-[#ffd01f]">
-      {player.weightedWagered.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-    </span>
-  </p>
-</div>
+									<div className='flex flex-col items-center gap-1 mt-2'>
+										<p className='text-md md:text-lg font-semibold text-[#fefefe]'>
+											🎲 Wagered:{" "}
+											<span className='text-[#e10600]'>
+												{player.wagered.toLocaleString(undefined, {
+													maximumFractionDigits: 2,
+												})}
+											</span>
+										</p>
+										<p className='text-md md:text-lg font-semibold text-[#fefefe]'>
+											⚡ Weighted:{" "}
+											<span className='text-[#ffd01f]'>
+												{player.weightedWagered.toLocaleString(undefined, {
+													maximumFractionDigits: 2,
+												})}
+											</span>
+										</p>
+									</div>
 
-
-									{/* Favorite Game */}
 									<p className='mt-3 text-sm md:text-base font-medium text-[#fefefe] italic'>
 										Favorite: {player.favoriteGameTitle}
 									</p>
@@ -109,7 +153,7 @@ const RoobetPage: React.FC = () => {
 							))}
 						</div>
 
-						{/* 📋 Remaining Players */}
+						{/* 📋 Rest of the leaderboard */}
 						{leaderboard.data.length > 3 && (
 							<div className='overflow-x-auto p-6 shadow-lg bg-[#030303]/80 backdrop-blur-md rounded-2xl'>
 								<table className='w-full text-left border-collapse'>
@@ -131,9 +175,7 @@ const RoobetPage: React.FC = () => {
 											>
 												<td className='p-3 font-bold'>{player.rankLevel}</td>
 												<td className='p-3 font-semibold'>{player.username}</td>
-												<td className='p-3'>
-													{player.wagered.toLocaleString()}
-												</td>
+												<td className='p-3'>{player.wagered.toLocaleString()}</td>
 												<td className='p-3'>
 													{player.weightedWagered.toLocaleString()}
 												</td>
