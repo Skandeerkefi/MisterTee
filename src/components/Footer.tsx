@@ -108,7 +108,7 @@ export function Footer() {
 					</div>
 
 					{/* Gambling Warning */}
-					<div className='md:text-right'>
+					<div className='md:pl-6 border-l border-[#333]'>
 						<h4 className='text-lg font-bold text-[#E10600] mb-2'>
 							BEWARE GAMBLING
 						</h4>
