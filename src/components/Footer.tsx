@@ -107,17 +107,33 @@ export function Footer() {
 									className='object-contain w-full h-full'
 								/>
 							</a>
-							
 						</div>
 					</div>
 				</div>
 
+				{/* Gambling Awareness Section */}
+				<div className='mt-10 p-4 text-center border-t border-[#333] bg-[#111] rounded-xl'>
+					<h4 className='text-lg font-bold text-[#E10600] mb-2'>
+						BEWARE GAMBLING
+					</h4>
+					<p className='text-sm text-white/80 leading-relaxed max-w-2xl mx-auto'>
+						We are not responsible for illegal gambling activities.
+						<br />
+						Play responsibly — gambling involves financial risks.
+						<br />
+						Ensure compliance with your local laws before engaging in any
+						activities.
+						<br />
+						Seek help if you experience issues related to gambling.
+					</p>
+				</div>
+
 				{/* Bottom Bar */}
-				<div className='pt-4 mt-8 text-sm text-center text-white/70 border-t border-[#333]'>
+				<div className='pt-4 mt-6 text-sm text-center text-white/70 border-t border-[#333]'>
 					<p className='flex flex-wrap items-center justify-center gap-1 text-sm'>
 						© {currentYear} MisterTee. Made with
 						<Heart className='w-3 h-3 mx-1 text-[#E10600]' />
-						for the community by
+						for the community by{" "}
 						<a
 							href='https://www.linkedin.com/in/skander-kefi/'
 							target='_blank'
