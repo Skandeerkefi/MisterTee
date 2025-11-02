@@ -1,7 +1,7 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { FaKickstarterK } from "react-icons/fa"; // Kick icon approximation
-import { FaInstagram, FaDiscord, FaXTwitter } from "react-icons/fa6"; // Instagram, Discord, X
+import { FaKickstarterK } from "react-icons/fa";
+import { FaInstagram, FaDiscord, FaXTwitter } from "react-icons/fa6";
 
 export function Footer() {
 	const currentYear = new Date().getFullYear();
@@ -9,7 +9,7 @@ export function Footer() {
 	return (
 		<footer className='py-6 mt-16 border-t border-[#333] bg-black text-white'>
 			<div className='container mx-auto'>
-				<div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
+				<div className='grid grid-cols-1 gap-8 md:grid-cols-4'>
 					{/* About */}
 					<div>
 						<h3 className='mb-3 text-lg font-bold text-white'>MisterTee</h3>
@@ -56,7 +56,6 @@ export function Footer() {
 					<div>
 						<h3 className='mb-3 text-lg font-bold text-white'>Connect</h3>
 						<div className='flex flex-wrap gap-3'>
-							{/* Social */}
 							<a
 								href='https://kick.com/MisterTee'
 								target='_blank'
@@ -81,8 +80,6 @@ export function Footer() {
 							>
 								<FaDiscord className='w-5 h-5' />
 							</a>
-
-							{/* Affiliates */}
 							<a
 								href='https://roobet.com/?code=MisterTee'
 								target='_blank'
@@ -109,27 +106,26 @@ export function Footer() {
 							</a>
 						</div>
 					</div>
-				</div>
 
-				{/* Gambling Awareness Section */}
-				<div className='mt-10 p-4 text-center border-t border-[#333] bg-[#111] rounded-xl'>
-					<h4 className='text-lg font-bold text-[#E10600] mb-2'>
-						BEWARE GAMBLING
-					</h4>
-					<p className='text-sm text-white/80 leading-relaxed max-w-2xl mx-auto'>
-						We are not responsible for illegal gambling activities.
-						<br />
-						Play responsibly — gambling involves financial risks.
-						<br />
-						Ensure compliance with your local laws before engaging in any
-						activities.
-						<br />
-						Seek help if you experience issues related to gambling.
-					</p>
+					{/* Gambling Warning */}
+					<div className='md:text-right'>
+						<h4 className='text-lg font-bold text-[#E10600] mb-2'>
+							BEWARE GAMBLING
+						</h4>
+						<p className='text-sm text-white/80 leading-relaxed'>
+							We are not responsible for illegal gambling activities.
+							<br />
+							Play responsibly — gambling involves financial risks.
+							<br />
+							Ensure compliance with your local laws.
+							<br />
+							Seek help if you experience gambling issues.
+						</p>
+					</div>
 				</div>
 
 				{/* Bottom Bar */}
-				<div className='pt-4 mt-6 text-sm text-center text-white/70 border-t border-[#333]'>
+				<div className='pt-4 mt-8 text-sm text-center text-white/70 border-t border-[#333]'>
 					<p className='flex flex-wrap items-center justify-center gap-1 text-sm'>
 						© {currentYear} MisterTee. Made with
 						<Heart className='w-3 h-3 mx-1 text-[#E10600]' />
