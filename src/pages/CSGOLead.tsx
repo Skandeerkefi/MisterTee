@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration"; // ⬅️ important
 dayjs.extend(duration); // ⬅️ enable duration plugin
 import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 const prizeMap: Record<number, string> = {
   1: "250 C 🥇",
   2: "100 C 🥈",
@@ -21,21 +22,13 @@ const prizeMap: Record<number, string> = {
 };
 
 // 🗓️ Helper to get current week range in UTC (Saturday → Friday)
+// 🗓️ Fixed Week: 2 Nov → 8 Nov (UTC)
 function getCurrentWeekRangeUTC() {
-  const now = new Date();
-  const day = now.getUTCDay();
-  const diffToSaturday = day === 6 ? 0 : -((day + 1) % 7);
-dayjs.extend(utc);
-  const saturday = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diffToSaturday)
-  );
-  saturday.setUTCHours(0, 0, 0, 0);
+  // Month index starts from 0 → November = 10
+  const startOfWeek = new Date(Date.UTC(2025, 10, 2, 0, 0, 0, 0)); 
+  const endOfWeek = new Date(Date.UTC(2025, 10, 8, 23, 59, 59, 999));
 
-  const friday = new Date(saturday);
-  friday.setUTCDate(saturday.getUTCDate() + 6);
-  friday.setUTCHours(23, 59, 59, 999);
-
-  return { startOfWeek: saturday, endOfWeek: friday };
+  return { startOfWeek, endOfWeek };
 }
 
 const CSGOLeadPage = () => {
@@ -49,34 +42,31 @@ const CSGOLeadPage = () => {
   const { startOfWeek, endOfWeek } = getCurrentWeekRangeUTC();
 
   // ⏳ Weekly countdown to next Saturday 00:00 UTC
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = dayjs.utc(); // Use UTC time for consistency
-      let nextReset = dayjs.utc().day(6).hour(0).minute(0).second(0).millisecond(0); // Saturday 00:00 UTC
+ useEffect(() => {
+  const updateCountdown = () => {
+    const now = dayjs.utc();
+    const nextReset = dayjs.utc("2025-11-08T23:59:59Z"); // or 2024 if this year
 
-      if (now.isAfter(nextReset)) {
-        nextReset = nextReset.add(1, "week");
-      }
+    const diff = nextReset.diff(now);
+    if (diff <= 0) {
+      setTimeLeft("Leaderboard Ended");
+      return;
+    }
 
-      const diff = nextReset.diff(now);
-      if (diff <= 0) {
-        setTimeLeft("Leaderboard Resetting...");
-        return;
-      }
+    const d = dayjs.duration(diff);
+    const days = Math.floor(d.asDays());
+    const hours = d.hours();
+    const minutes = d.minutes();
+    const seconds = d.seconds();
 
-      const d = dayjs.duration(diff);
-      const days = Math.floor(d.asDays());
-      const hours = d.hours();
-      const minutes = d.minutes();
-      const seconds = d.seconds();
+    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+  };
 
-      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-    };
+  updateCountdown();
+  const interval = setInterval(updateCountdown, 1000);
+  return () => clearInterval(interval);
+}, []);
 
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-black">
