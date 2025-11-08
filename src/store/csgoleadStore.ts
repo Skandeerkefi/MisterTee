@@ -14,31 +14,16 @@ interface CSGOLeadState {
 	fetchLeaderboard: (take?: number, skip?: number) => Promise<void>;
 }
 
-function getCurrentWeekRangeUTC() {
-	const now = new Date();
-
-	// Sunday (0) as start of the week in UTC
-	const day = now.getUTCDay(); 
-	const diffToSunday = -day;
-
-	const start = new Date(Date.UTC(
-		now.getUTCFullYear(),
-		now.getUTCMonth(),
-		now.getUTCDate() + diffToSunday
-	));
-	start.setUTCHours(0, 0, 0, 0);
-
-	const end = new Date(start);
-	end.setUTCDate(start.getUTCDate() + 6);
-	end.setUTCHours(23, 59, 59, 999);
+// ✅ Fixed range: November 1 → November 8
+function getFixedWeekRange() {
+	const start = Date.UTC(2025, 10, 1, 0, 0, 0, 0);
+	const end = Date.UTC(2025, 10, 8, 23, 59, 59, 999);
 
 	return {
-		startDate: start.getTime(),
-		endDate: end.getTime(),
+		startDate: start,
+		endDate: end,
 	};
 }
-
-
 
 export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 	leaderboard: [],
@@ -48,7 +33,7 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 	fetchLeaderboard: async (take = 10, skip = 0) => {
 		set({ loading: true, error: null });
 		try {
-			const { startDate, endDate } = getCurrentWeekRangeUTC();
+			const { startDate, endDate } = getFixedWeekRange();
 
 			const res = await fetch(
 				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin?take=${take}&skip=${skip}&startDate=${startDate}&endDate=${endDate}`
