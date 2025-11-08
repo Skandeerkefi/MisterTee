@@ -26,7 +26,7 @@ const prizeMap: Record<number, string> = {
 function getCurrentWeekRangeUTC() {
   // Month index starts from 0 → November = 10
   const startOfWeek = new Date(Date.UTC(2025, 10, 2, 0, 0, 0, 0)); 
-  const endOfWeek = new Date(Date.UTC(2025, 10, 8, 23, 59, 59, 999));
+  const endOfWeek = new Date(Date.UTC(2025, 10, 9, 23, 59, 59, 999));
 
   return { startOfWeek, endOfWeek };
 }
