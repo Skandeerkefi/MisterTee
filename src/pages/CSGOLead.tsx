@@ -24,12 +24,25 @@ const prizeMap: Record<number, string> = {
 // 🗓️ Helper to get current week range in UTC (Saturday → Friday)
 // 🗓️ Fixed Week: 2 Nov → 8 Nov (UTC)
 function getCurrentWeekRangeUTC() {
-  // Month index starts from 0 → November = 10
-  const startOfWeek = new Date(Date.UTC(2025, 10, 2, 0, 0, 0, 0)); 
-  const endOfWeek = new Date(Date.UTC(2025, 10, 9, 23, 59, 59, 999));
+  const now = new Date();
 
-  return { startOfWeek, endOfWeek };
+  const day = now.getUTCDay(); 
+  const diffToSunday = -day; 
+
+  const start = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + diffToSunday
+  ));
+  start.setUTCHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setUTCDate(start.getUTCDate() + 6);
+  end.setUTCHours(23, 59, 59, 999);
+
+  return { startOfWeek: start, endOfWeek: end };
 }
+
 
 const CSGOLeadPage = () => {
   const { leaderboard, loading, error, fetchLeaderboard } = useCSGOLeadStore();

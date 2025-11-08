@@ -17,10 +17,15 @@ interface CSGOLeadState {
 function getCurrentWeekRangeUTC() {
 	const now = new Date();
 
-	const day = now.getUTCDay();
-	const diffToSaturday = day === 6 ? 0 : -((day + 1) % 7);
+	// Sunday (0) as start of the week in UTC
+	const day = now.getUTCDay(); 
+	const diffToSunday = -day;
 
-	const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + diffToSaturday));
+	const start = new Date(Date.UTC(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate() + diffToSunday
+	));
 	start.setUTCHours(0, 0, 0, 0);
 
 	const end = new Date(start);
@@ -32,6 +37,7 @@ function getCurrentWeekRangeUTC() {
 		endDate: end.getTime(),
 	};
 }
+
 
 
 export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
