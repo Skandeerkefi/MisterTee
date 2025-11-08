@@ -4,10 +4,11 @@ import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration"; // ⬅️ important
-dayjs.extend(duration); // ⬅️ enable duration plugin
+import duration from "dayjs/plugin/duration";
+dayjs.extend(duration);
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
+
 const prizeMap: Record<number, string> = {
   1: "250 C 🥇",
   2: "100 C 🥈",
@@ -21,28 +22,37 @@ const prizeMap: Record<number, string> = {
   10: "10 C",
 };
 
-// 🗓️ Helper to get current week range in UTC (Saturday → Friday)
-// 🗓️ Fixed Week: 2 Nov → 8 Nov (UTC)
 function getCurrentWeekRangeUTC() {
   const now = new Date();
-
-  const day = now.getUTCDay(); 
-  const diffToSunday = -day; 
-
+  const day = now.getUTCDay();
+  const diffToSunday = -day;
   const start = new Date(Date.UTC(
     now.getUTCFullYear(),
     now.getUTCMonth(),
     now.getUTCDate() + diffToSunday
   ));
   start.setUTCHours(0, 0, 0, 0);
-
   const end = new Date(start);
   end.setUTCDate(start.getUTCDate() + 6);
   end.setUTCHours(23, 59, 59, 999);
-
   return { startOfWeek: start, endOfWeek: end };
 }
 
+// Display special fixed week (1 Nov → 8 Nov), else normal weeks
+function getDisplayWeekRange() {
+  const now = dayjs.utc();
+  const specialStart = dayjs.utc("2025-11-01T00:00:00Z");
+  const specialEnd = dayjs.utc("2025-11-08T23:59:59Z");
+
+  if (now.isAfter(specialStart) && now.isBefore(specialEnd)) {
+    return "1 Nov → 8 Nov";
+  }
+
+  const { startOfWeek, endOfWeek } = getCurrentWeekRangeUTC();
+  const s = dayjs.utc(startOfWeek).format("D MMM");
+  const e = dayjs.utc(endOfWeek).format("D MMM");
+  return `${s} → ${e}`;
+}
 
 const CSGOLeadPage = () => {
   const { leaderboard, loading, error, fetchLeaderboard } = useCSGOLeadStore();
@@ -52,34 +62,29 @@ const CSGOLeadPage = () => {
     fetchLeaderboard(10, 0);
   }, [fetchLeaderboard]);
 
-  const { startOfWeek, endOfWeek } = getCurrentWeekRangeUTC();
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = dayjs.utc();
+      const nextReset = dayjs.utc("2025-11-08T23:59:59Z");
+      const diff = nextReset.diff(now);
 
-  // ⏳ Weekly countdown to next Saturday 00:00 UTC
- useEffect(() => {
-  const updateCountdown = () => {
-    const now = dayjs.utc();
-    const nextReset = dayjs.utc("2025-11-08T23:59:59Z"); // or 2024 if this year
+      if (diff <= 0) {
+        setTimeLeft("Leaderboard Ended");
+        return;
+      }
 
-    const diff = nextReset.diff(now);
-    if (diff <= 0) {
-      setTimeLeft("Leaderboard Ended");
-      return;
-    }
+      const d = dayjs.duration(diff);
+      const days = Math.floor(d.asDays());
+      const hours = d.hours();
+      const minutes = d.minutes();
+      const seconds = d.seconds();
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    };
 
-    const d = dayjs.duration(diff);
-    const days = Math.floor(d.asDays());
-    const hours = d.hours();
-    const minutes = d.minutes();
-    const seconds = d.seconds();
-
-    setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-  };
-
-  updateCountdown();
-  const interval = setInterval(updateCountdown, 1000);
-  return () => clearInterval(interval);
-}, []);
-
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-black">
@@ -91,36 +96,22 @@ const CSGOLeadPage = () => {
           🔥 CSGOWin Weekly Leaderboard 🔥
         </h1>
 
-        {/* 🗓️ Week Range */}
         <p className="text-center text-gray-400 mb-2">
-          Week:{" "}
-          <span className="text-red-400">
-            {startOfWeek.toUTCString().split(" ").slice(0, 4).join(" ")} →{" "}
-            {endOfWeek.toUTCString().split(" ").slice(0, 4).join(" ")}
-          </span>
+          Week: <span className="text-red-400">{getDisplayWeekRange()}</span>
         </p>
 
-        {/* ⏳ Cooldown Countdown */}
         <p className="text-center text-md font-semibold text-gray-300 mb-6">
-          ⏳ Next Reset In:{" "}
-          <span className="text-yellow-400 font-bold">{timeLeft}</span>
+          ⏳ Next Reset In: <span className="text-yellow-400 font-bold">{timeLeft}</span>
         </p>
 
-        {/* 💰 Prize pool info */}
         <div className="mt-2 text-center text-gray-400">
-          <p className="text-lg font-semibold text-red-400">
-            Total Prize Pool: 500 C 💰
-          </p>
-          <p>
-            Use code <span className="font-bold text-white">"MisterTee"</span> to participate!
-          </p>
+          <p className="text-lg font-semibold text-red-400">Total Prize Pool: 500 C 💰</p>
+          <p>Use code <span className="font-bold text-white">"MisterTee"</span> to participate!</p>
         </div>
 
-        {/* Status messages */}
         {loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
         {error && <p className="mt-10 text-center text-red-500">{error}</p>}
 
-        {/* 🏆 Leaderboard table */}
         {!loading && !error && leaderboard.length > 0 && (
           <div className="mt-8 overflow-x-auto">
             <table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
@@ -167,7 +158,6 @@ const CSGOLeadPage = () => {
           </div>
         )}
 
-        {/* 🚫 No data fallback */}
         {!loading && !error && leaderboard.length === 0 && (
           <p className="mt-10 text-center text-gray-500">
             No leaderboard data available for this week.
