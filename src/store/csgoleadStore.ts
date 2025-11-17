@@ -15,24 +15,29 @@ interface CSGOLeadState {
 }
 
 // ✅ Dynamic weekly range generator — starts from Nov 10, 2025
-function getDynamicWeekRangeUTC() {
+function getDynamicRangeUTC() {
+	const PERIOD_DAYS = 9;
+	const GAP_DAYS = 1;
+	const TOTAL_CYCLE = PERIOD_DAYS + GAP_DAYS; // 10 days
+
 	const baseDate = Date.UTC(2025, 10, 10, 0, 0, 0, 0); // Nov 10, 2025 UTC
 	const now = Date.now();
 
-	// Calculate number of 7-day periods since base date
-	const diffWeeks = Math.floor((now - baseDate) / (8 * 24 * 60 * 60 * 1000));
+	// How many completed cycles passed?
+	const cyclesPassed = Math.floor((now - baseDate) / (TOTAL_CYCLE * 24 * 60 * 60 * 1000));
 
-	// Start date of current week
-	const startDate = baseDate + diffWeeks * 8 * 24 * 60 * 60 * 1000;
+	// Start date of the current period
+	const startDate = baseDate + cyclesPassed * TOTAL_CYCLE * 24 * 60 * 60 * 1000;
 
-	// End date (7 days later)
-	const endDate = startDate + 8 * 24 * 60 * 60 * 1000 - 1;
+	// End date: 9 days later (period length)
+	const endDate = startDate + PERIOD_DAYS * 24 * 60 * 60 * 1000 - 1;
 
 	return {
 		startDate,
 		endDate,
 	};
 }
+
 
 export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 	leaderboard: [],
@@ -42,7 +47,7 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 	fetchLeaderboard: async (take = 10, skip = 0) => {
 		set({ loading: true, error: null });
 		try {
-			const { startDate, endDate } = getDynamicWeekRangeUTC();
+			const { startDate, endDate } = getDynamicRangeUTC();
 
 			const res = await fetch(
 				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin?take=${take}&skip=${skip}&startDate=${startDate}&endDate=${endDate}`

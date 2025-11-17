@@ -23,21 +23,27 @@ const prizeMap: Record<number, string> = {
 	10: "10 C",
 };
 
-// ✅ Matches the store logic — rolling 7-day periods starting Nov 10, 2025
-function getDynamicWeekRangeUTC() {
+// ✅ New rolling 9-day period with 1-day gap (10→19, 21→28, 30→8...)
+function getDynamicRangeUTC() {
+	const PERIOD_DAYS = 10;
+	const GAP_DAYS = 1;
+	const TOTAL_CYCLE = PERIOD_DAYS + GAP_DAYS; // 10-day cycle
+
 	const baseDate = dayjs.utc("2025-11-10T00:00:00Z");
 	const now = dayjs.utc();
 
-	const diffWeeks = Math.floor(now.diff(baseDate, "week"));
-	const start = baseDate.add(diffWeeks, "week");
-	const end = start.add(8, "day").subtract(1, "millisecond");
+	// Full cycles passed
+	const cyclesPassed = Math.floor(now.diff(baseDate, "day") / TOTAL_CYCLE);
+
+	const start = baseDate.add(cyclesPassed * TOTAL_CYCLE, "day");
+	const end = start.add(PERIOD_DAYS, "day").subtract(1, "millisecond");
 
 	return { start, end };
 }
 
-// ✅ Helper for display like “10 Nov → 17 Nov”
-function getDisplayWeekRange() {
-	const { start, end } = getDynamicWeekRangeUTC();
+// Display range ex: "10 Nov → 19 Nov"
+function getDisplayRange() {
+	const { start, end } = getDynamicRangeUTC();
 	return `${start.format("D MMM")} → ${end.format("D MMM")}`;
 }
 
@@ -49,10 +55,10 @@ const CSGOLeadPage = () => {
 		fetchLeaderboard(10, 0);
 	}, [fetchLeaderboard]);
 
-	// ⏳ Auto countdown until next reset
+	// ⏳ Auto countdown
 	useEffect(() => {
 		const updateCountdown = () => {
-			const { end } = getDynamicWeekRangeUTC();
+			const { end } = getDynamicRangeUTC();
 			const now = dayjs.utc();
 			const diff = end.diff(now);
 
@@ -62,11 +68,9 @@ const CSGOLeadPage = () => {
 			}
 
 			const d = dayjs.duration(diff);
-			const days = Math.floor(d.asDays());
-			const hours = d.hours();
-			const minutes = d.minutes();
-			const seconds = d.seconds();
-			setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+			setTimeLeft(
+				`${Math.floor(d.asDays())}d ${d.hours()}h ${d.minutes()}m ${d.seconds()}s`
+			);
 		};
 
 		updateCountdown();
@@ -81,11 +85,12 @@ const CSGOLeadPage = () => {
 
 			<main className="container flex-grow p-4 mx-auto">
 				<h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
-					🔥 CSGOWin Weekly Leaderboard 🔥
+					🔥 CSGOWin Leaderboard 🔥
 				</h1>
 
 				<p className="text-center text-gray-400 mb-2">
-					Week: <span className="text-red-400">{getDisplayWeekRange()}</span>
+					Range:{" "}
+					<span className="text-red-400">{getDisplayRange()}</span>
 				</p>
 
 				<p className="text-center text-md font-semibold text-gray-300 mb-6">
@@ -154,7 +159,7 @@ const CSGOLeadPage = () => {
 
 				{!loading && !error && leaderboard.length === 0 && (
 					<p className="mt-10 text-center text-gray-500">
-						No leaderboard data available for this week.
+						No leaderboard data available for this period.
 					</p>
 				)}
 			</main>
