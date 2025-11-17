@@ -16,7 +16,7 @@ interface CSGOLeadState {
 
 // ✅ Dynamic weekly range generator — starts from Nov 10, 2025
 function getDynamicRangeUTC() {
-	const PERIOD_DAYS = 9;
+	const PERIOD_DAYS = 10;
 	const GAP_DAYS = 1;
 	const TOTAL_CYCLE = PERIOD_DAYS + GAP_DAYS; // 10 days
 
