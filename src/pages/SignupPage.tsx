@@ -109,7 +109,7 @@ function SignupPage() {
 							{/* Rainbet Username */}
 							<div className='space-y-2'>
 								<Label htmlFor='rainbetUsername' className='text-[#000000]'>
-									Rainbet Username
+									ROOBET Username
 								</Label>
 								<Input
 									id='rainbetUsername'
