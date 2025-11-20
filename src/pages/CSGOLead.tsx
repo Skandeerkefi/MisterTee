@@ -11,39 +11,28 @@ dayjs.extend(duration);
 dayjs.extend(utc);
 
 const prizeMap: Record<number, string> = {
-	1: "250 C 🥇",
-	2: "100 C 🥈",
-	3: "50 C 🥉",
-	4: "25 C",
-	5: "20 C",
-	6: "15 C",
-	7: "10 C",
-	8: "10 C",
+	1: "500 C 🥇",
+	2: "200 C 🥈",
+	3: "100 C 🥉",
+	4: "75 C",
+	5: "50 C",
+	6: "25 C",
+	7: "20 C",
+	8: "15 C",
 	9: "10 C",
-	10: "10 C",
+	10: "5 C",
 };
 
-// ✅ New rolling 9-day period with 1-day gap (10→19, 21→28, 30→8...)
-function getDynamicRangeUTC() {
-	const PERIOD_DAYS = 10;
-	const GAP_DAYS = 1;
-	const TOTAL_CYCLE = PERIOD_DAYS + GAP_DAYS; // 10-day cycle
-
-	const baseDate = dayjs.utc("2025-11-10T00:00:00Z");
-	const now = dayjs.utc();
-
-	// Full cycles passed
-	const cyclesPassed = Math.floor(now.diff(baseDate, "day") / TOTAL_CYCLE);
-
-	const start = baseDate.add(cyclesPassed * TOTAL_CYCLE, "day");
-	const end = start.add(PERIOD_DAYS, "day").subtract(1, "millisecond");
-
+// ✅ FIXED DATE RANGE (UTC)
+function getFixedRangeUTC() {
+	const start = dayjs.utc("2025-11-20T00:00:00Z");
+	const end = dayjs.utc("2025-12-03T23:59:59Z");
 	return { start, end };
 }
 
-// Display range ex: "10 Nov → 19 Nov"
+// Display example: "20 Nov → 3 Dec"
 function getDisplayRange() {
-	const { start, end } = getDynamicRangeUTC();
+	const { start, end } = getFixedRangeUTC();
 	return `${start.format("D MMM")} → ${end.format("D MMM")}`;
 }
 
@@ -58,7 +47,7 @@ const CSGOLeadPage = () => {
 	// ⏳ Auto countdown
 	useEffect(() => {
 		const updateCountdown = () => {
-			const { end } = getDynamicRangeUTC();
+			const { end } = getFixedRangeUTC();
 			const now = dayjs.utc();
 			const diff = end.diff(now);
 
