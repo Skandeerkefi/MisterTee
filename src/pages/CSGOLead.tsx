@@ -74,7 +74,7 @@ const CSGOLeadPage = () => {
 
 			<main className="container flex-grow p-4 mx-auto">
 				<h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
-					🔥 CSGOWin Leaderboard 🔥
+					🔥 CSGOWin 1K Leaderboard 🔥
 				</h1>
 
 				<p className="text-center text-gray-400 mb-2">
@@ -89,7 +89,7 @@ const CSGOLeadPage = () => {
 
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 500 C 💰
+						Total Prize Pool: 1000 C 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
