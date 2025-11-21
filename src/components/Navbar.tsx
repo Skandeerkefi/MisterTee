@@ -48,6 +48,7 @@ export function Navbar() {
 			subMenu: [
 				{ name: "CSGO", path: "/csgo" },
 				{ name: "Roobet", path: "/leaderboards" },
+				{ name: "Packdraw", path:"/packdraw"},
 			],
 		},
 		{
