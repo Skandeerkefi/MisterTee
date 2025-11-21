@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePackdrawStore } from "@/store/packdrawStore"; // ⬅️ NEW STORE
+import { usePackdrawStore } from "@/store/packdrawStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -15,18 +15,30 @@ const prizeMap: Record<number, string> = {
 	2: "50 C 🥈",
 	3: "25 C 🥉",
 	4: "25 C",
-	
 };
 
-// Fixed cycle: Nov 20 → Dec 3
-function getFixedRangeUTC() {
-	const start = dayjs.utc("2025-11-20T00:00:00Z");
-	const end = dayjs.utc("2025-12-03T23:59:59Z");
+// ✅ Monthly cycle: 21 → 20
+function getMonthlyCycleRangeUTC() {
+	const now = dayjs.utc();
+	const day = now.date();
+
+	let start, end;
+
+	if (day >= 21) {
+		// Current cycle: 21 THIS month → 20 NEXT month
+		start = now.date(21).startOf("day");
+		end = now.add(1, "month").date(20).endOf("day");
+	} else {
+		// Current cycle: 21 LAST month → 20 THIS month
+		start = now.subtract(1, "month").date(21).startOf("day");
+		end = now.date(20).endOf("day");
+	}
+
 	return { start, end };
 }
 
 function getDisplayRange() {
-	const { start, end } = getFixedRangeUTC();
+	const { start, end } = getMonthlyCycleRangeUTC();
 	return `${start.format("D MMM")} → ${end.format("D MMM")}`;
 }
 
@@ -34,16 +46,19 @@ const PackdrawPage = () => {
 	const { monthlyData, loading, error, fetchMonthly } = usePackdrawStore();
 	const [timeLeft, setTimeLeft] = useState("");
 
-	// ⬅️ Fetch Packdraw monthly leaderboard
+	// Fetch data for the START month of cycle
 	useEffect(() => {
-		// For example: Fetch NOVEMBER 2025
-		fetchMonthly("11", "2025");
+		const { start } = getMonthlyCycleRangeUTC();
+		const month = start.format("MM");
+		const year = start.format("YYYY");
+
+		fetchMonthly(month, year);
 	}, [fetchMonthly]);
 
-	// Countdown timer
+	// Countdown until end of cycle
 	useEffect(() => {
 		const updateCountdown = () => {
-			const { end } = getFixedRangeUTC();
+			const { end } = getMonthlyCycleRangeUTC();
 			const now = dayjs.utc();
 			const diff = end.diff(now);
 
