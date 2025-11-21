@@ -11,10 +11,10 @@ dayjs.extend(duration);
 dayjs.extend(utc);
 
 const prizeMap: Record<number, string> = {
-	1: "100 C 🥇",
-	2: "50 C 🥈",
-	3: "25 C 🥉",
-	4: "25 C",
+	1: "100 $ 🥇",
+	2: "50 $ 🥈",
+	3: "25 $ 🥉",
+	4: "25 $",
 };
 
 // ✅ Monthly cycle: 21 → 20
@@ -99,7 +99,7 @@ const PackdrawPage = () => {
 
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 300 C 💰
+						Total Prize Pool: 300 $ 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
