@@ -99,7 +99,7 @@ const PackdrawPage = () => {
 
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 1000 C 💰
+						Total Prize Pool: 300 C 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
