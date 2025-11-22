@@ -25,11 +25,9 @@ function getMonthlyCycleRangeUTC() {
 	let start, end;
 
 	if (day >= 21) {
-		// Current cycle: 21 THIS month → 20 NEXT month
 		start = now.date(21).startOf("day");
 		end = now.add(1, "month").date(20).endOf("day");
 	} else {
-		// Current cycle: 21 LAST month → 20 THIS month
 		start = now.subtract(1, "month").date(21).startOf("day");
 		end = now.date(20).endOf("day");
 	}
@@ -46,7 +44,7 @@ const PackdrawPage = () => {
 	const { monthlyData, loading, error, fetchMonthly } = usePackdrawStore();
 	const [timeLeft, setTimeLeft] = useState("");
 
-	// Fetch data for the START month of cycle
+	// Fetch leaderboard for month of cycle start
 	useEffect(() => {
 		const { start } = getMonthlyCycleRangeUTC();
 		const month = start.format("MM");
@@ -55,7 +53,7 @@ const PackdrawPage = () => {
 		fetchMonthly(month, year);
 	}, [fetchMonthly]);
 
-	// Countdown until end of cycle
+	// Countdown
 	useEffect(() => {
 		const updateCountdown = () => {
 			const { end } = getMonthlyCycleRangeUTC();
@@ -110,6 +108,7 @@ const PackdrawPage = () => {
 				{loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
 				{error && <p className="mt-10 text-center text-red-500">{error}</p>}
 
+				{/* ✅ FIXED LEADERBOARD */}
 				{!loading && !error && monthlyData.length > 0 && (
 					<div className="mt-8 overflow-x-auto">
 						<table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
@@ -118,7 +117,6 @@ const PackdrawPage = () => {
 									<th className="p-3 text-left uppercase">#</th>
 									<th className="p-3 text-left uppercase">Name</th>
 									<th className="p-3 text-left uppercase">Wagered</th>
-									<th className="p-3 text-left uppercase">Deposited</th>
 									<th className="p-3 text-left uppercase">Prize</th>
 								</tr>
 							</thead>
@@ -140,12 +138,14 @@ const PackdrawPage = () => {
 										>
 											<td className="p-3 font-bold text-red-500">#{rank}</td>
 											<td className="p-3 font-medium">{entry.username}</td>
+
+											{/* ✔ Correct field from API: wagerAmount */}
 											<td className="p-3 font-semibold text-red-400">
-												{entry.wagered.toLocaleString()}
+												{entry.wagerAmount.toLocaleString(undefined, {
+													maximumFractionDigits: 2,
+												})}
 											</td>
-											<td className="p-3 font-semibold text-green-400">
-												{entry.deposited.toLocaleString()}
-											</td>
+
 											<td className="p-3 font-semibold text-yellow-400">
 												{prizeMap[rank] || "—"}
 											</td>

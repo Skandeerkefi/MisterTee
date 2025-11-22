@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import api from "@/lib/api";
 
 interface PackdrawEntry {
   username: string;
-  wagered: number;
-  deposited: number;
-  createdAt: string;
+  wagerAmount: number;
+  image?: string;
+  userId?: string;
+  isActive?: boolean;
 }
 
 interface PackdrawState {
@@ -15,11 +15,9 @@ interface PackdrawState {
   fetchMonthly: (month: string, year: string) => Promise<void>;
 }
 
-// Utility to get month range
-function getMonthRange(month: string, year: string) {
-  const start = `${year}-${month}-01`;
-  const end = `${year}-${month}-31`;
-  return { start, end };
+// Utility to get correct month start
+function getMonthStart(month: string, year: string) {
+  return `${year}-${month}-01T00:00:00.000Z`;
 }
 
 export const usePackdrawStore = create<PackdrawState>((set) => ({
@@ -31,17 +29,24 @@ export const usePackdrawStore = create<PackdrawState>((set) => ({
     try {
       set({ loading: true, error: null });
 
-      const { start } = getMonthRange(month, year);
+      const start = getMonthStart(month, year);
 
       const res = await fetch(
-    `https://misterteedata-production.up.railway.app/api/packdraw?after=${start}`
-);
+        `https://misterteedata-production.up.railway.app/api/packdraw?after=${start}`
+      );
 
       const data = await res.json();
 
-      set({ monthlyData: data || [], loading: false });
+      // API RETURNS: { leaderboard: [...] }
+      set({
+        monthlyData: data.leaderboard || [],
+        loading: false,
+      });
     } catch (err: any) {
-      set({ error: err.message || "Failed to fetch data", loading: false });
+      set({
+        error: err.message || "Failed to fetch data",
+        loading: false,
+      });
     }
   },
 }));
