@@ -13,9 +13,23 @@ dayjs.extend(utc);
 const CSGOLeadPage = () => {
   const { leaderboard, loading, error, fetchLeaderboard, dateStart, dateEnd } = useCSGOLeadStore();
   const [timeLeft, setTimeLeft] = useState("");
+  const [prizes, setPrizes] = useState<number[]>([]);
 
   useEffect(() => {
-    fetchLeaderboard(10);
+    const fetchData = async () => {
+      await fetchLeaderboard(10);
+
+      // fetch leaderboard again to get prizes
+      const res = await fetch(`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`);
+      const data = await res.json();
+      const currentLB = data.leaderboards?.[0];
+      if (currentLB) {
+        // convert prizes to real values (remove last 2 zeros)
+        const realPrizes = currentLB.prizes.map((p: number) => Math.floor(p / 100));
+        setPrizes(realPrizes);
+      }
+    };
+    fetchData();
   }, [fetchLeaderboard]);
 
   // Countdown to current leaderboard end
@@ -49,8 +63,8 @@ const CSGOLeadPage = () => {
       ? `${dayjs.utc(dateStart).format("D MMM")} → ${dayjs.utc(dateEnd).format("D MMM")}`
       : "";
 
-  // Total prize pool
-  const totalPrize = leaderboard.reduce((acc, u) => acc + u.prize, 0);
+  // Total prize pool from prizes array
+  const totalPrize = prizes.reduce((acc, p) => acc + p, 0);
 
   return (
     <div className="relative flex flex-col min-h-screen text-white bg-black">
@@ -96,7 +110,7 @@ const CSGOLeadPage = () => {
 
               <tbody>
                 {leaderboard.length > 0 ? (
-                  leaderboard.map((entry) => (
+                  leaderboard.map((entry, idx) => (
                     <tr
                       key={entry.rank}
                       className={`transition-all ${
@@ -113,16 +127,29 @@ const CSGOLeadPage = () => {
                         {entry.wagered.toLocaleString()}
                       </td>
                       <td className="p-3 font-semibold text-yellow-400">
-                        {entry.prize.toLocaleString()} C
+                        {prizes[idx] ? prizes[idx].toLocaleString() : "—"} C
                       </td>
                     </tr>
                   ))
                 ) : (
-                  <tr className="bg-gray-900">
-                    <td colSpan={4} className="p-3 text-center text-gray-500">
-                      No users yet for this leaderboard.
-                    </td>
-                  </tr>
+                  // Show all prizes even if no users
+                  prizes.map((p, idx) => (
+                    <tr
+                      key={idx}
+                      className={`transition-all ${
+                        idx < 3
+                          ? "bg-red-800/60 hover:bg-red-700"
+                          : idx % 2 === 0
+                          ? "bg-gray-800"
+                          : "bg-gray-900"
+                      } hover:text-white`}
+                    >
+                      <td className="p-3 font-bold text-red-500">#{idx + 1}</td>
+                      <td className="p-3 font-medium">—</td>
+                      <td className="p-3 font-semibold text-red-400">0</td>
+                      <td className="p-3 font-semibold text-yellow-400">{p.toLocaleString()} C</td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
