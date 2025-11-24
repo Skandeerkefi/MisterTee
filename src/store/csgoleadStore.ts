@@ -35,12 +35,10 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 
       const data = await res.json();
 
-      // Pick active leaderboard with users OR fallback to latest with users
-      const lb =
-        data.leaderboards?.find((l: any) => l.active && l.users?.length > 0) ||
-        data.leaderboards?.find((l: any) => l.users?.length > 0);
+      // Use the **last leaderboard in the array** (current)
+      const lb = data.leaderboards?.[0]; // or data.leaderboards?.[data.leaderboards.length - 1];
 
-      if (!lb) throw new Error("No leaderboard with users found");
+      if (!lb) throw new Error("No leaderboard found");
 
       const users = lb.users || [];
       const prizes = lb.prizes || [];
@@ -53,7 +51,7 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
       }));
 
       set({
-        leaderboard: mapped.slice(0, take),
+        leaderboard: mapped.slice(0, take), // may be empty if no users
         loading: false,
         dateStart: lb.dateStart,
         dateEnd: lb.dateEnd,

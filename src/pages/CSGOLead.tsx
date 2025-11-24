@@ -11,141 +11,128 @@ dayjs.extend(duration);
 dayjs.extend(utc);
 
 const CSGOLeadPage = () => {
-	const { leaderboard, loading, error, fetchLeaderboard } = useCSGOLeadStore();
-	const [timeLeft, setTimeLeft] = useState("");
-	const [dateRange, setDateRange] = useState({ start: "", end: "" });
+  const { leaderboard, loading, error, fetchLeaderboard, dateStart, dateEnd } = useCSGOLeadStore();
+  const [timeLeft, setTimeLeft] = useState("");
 
-	useEffect(() => {
-		const fetchData = async () => {
-			// fetch leaderboard via store
-			await fetchLeaderboard(10);
+  useEffect(() => {
+    fetchLeaderboard(10);
+  }, [fetchLeaderboard]);
 
-			// fetch active leaderboard to get date range
-			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`
-			);
-			const data = await res.json();
-			const activeLB = data.leaderboards?.find((lb: any) => lb.active);
-			if (activeLB) {
-				setDateRange({
-					start: dayjs.utc(activeLB.dateStart).format("D MMM"),
-					end: dayjs.utc(activeLB.dateEnd).format("D MMM"),
-				});
-			}
-		};
+  // Countdown to current leaderboard end
+  useEffect(() => {
+    const updateCountdown = () => {
+      if (!dateEnd) return;
 
-		fetchData();
-	}, [fetchLeaderboard]);
+      const end = dayjs.utc(dateEnd);
+      const now = dayjs.utc();
+      const diff = end.diff(now);
 
-	// countdown to active leaderboard end
-	useEffect(() => {
-		const interval = setInterval(async () => {
-			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`
-			);
-			const data = await res.json();
-			const activeLB = data.leaderboards?.find((lb: any) => lb.active);
-			if (!activeLB) return;
+      if (diff <= 0) {
+        setTimeLeft("Leaderboard resetting...");
+        return;
+      }
 
-			const end = dayjs.utc(activeLB.dateEnd);
-			const now = dayjs.utc();
-			const diff = end.diff(now);
+      const d = dayjs.duration(diff);
+      setTimeLeft(
+        `${Math.floor(d.asDays())}d ${d.hours()}h ${d.minutes()}m ${d.seconds()}s`
+      );
+    };
 
-			if (diff <= 0) {
-				setTimeLeft("Leaderboard resetting...");
-			} else {
-				const d = dayjs.duration(diff);
-				setTimeLeft(
-					`${Math.floor(d.asDays())}d ${d.hours()}h ${d.minutes()}m ${d.seconds()}s`
-				);
-			}
-		}, 1000);
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [dateEnd]);
 
-		return () => clearInterval(interval);
-	}, []);
+  // Display range formatted
+  const displayRange =
+    dateStart && dateEnd
+      ? `${dayjs.utc(dateStart).format("D MMM")} → ${dayjs.utc(dateEnd).format("D MMM")}`
+      : "";
 
-	return (
-		<div className="relative flex flex-col min-h-screen text-white bg-black">
-			<GraphicalBackground />
-			<Navbar />
+  // Total prize pool
+  const totalPrize = leaderboard.reduce((acc, u) => acc + u.prize, 0);
 
-			<main className="container flex-grow p-4 mx-auto">
-				<h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
-					🔥 CSGOWin 1K Leaderboard 🔥
-				</h1>
+  return (
+    <div className="relative flex flex-col min-h-screen text-white bg-black">
+      <GraphicalBackground />
+      <Navbar />
 
-				<p className="text-center text-gray-400 mb-2">
-					Range:{" "}
-					<span className="text-red-400">{`${dateRange.start} → ${dateRange.end}`}</span>
-				</p>
+      <main className="container flex-grow p-4 mx-auto">
+        <h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
+          🔥 CSGOWin 1K Leaderboard 🔥
+        </h1>
 
-				<p className="text-center text-md font-semibold text-gray-300 mb-6">
-					⏳ Next Reset In:{" "}
-					<span className="text-yellow-400 font-bold">{timeLeft}</span>
-				</p>
+        <p className="text-center text-gray-400 mb-2">
+          Range: <span className="text-red-400">{displayRange}</span>
+        </p>
 
-				<div className="mt-2 text-center text-gray-400">
-					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: {leaderboard.reduce((acc, u) => acc + u.prize, 0).toLocaleString()} C 💰
-					</p>
-					<p>
-						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
-						to participate!
-					</p>
-				</div>
+        <p className="text-center text-md font-semibold text-gray-300 mb-6">
+          ⏳ Next Reset In: <span className="text-yellow-400 font-bold">{timeLeft}</span>
+        </p>
 
-				{loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
-				{error && <p className="mt-10 text-center text-red-500">{error}</p>}
+        <div className="mt-2 text-center text-gray-400">
+          <p className="text-lg font-semibold text-red-400">
+            Total Prize Pool: {totalPrize.toLocaleString()} C 💰
+          </p>
+          <p>
+            Use code <span className="font-bold text-white">"MisterTee"</span> to participate!
+          </p>
+        </div>
 
-				{!loading && !error && leaderboard.length > 0 && (
-					<div className="mt-8 overflow-x-auto">
-						<table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
-							<thead className="text-white bg-gradient-to-r from-red-700 to-black">
-								<tr>
-									<th className="p-3 text-left uppercase">#</th>
-									<th className="p-3 text-left uppercase">Name</th>
-									<th className="p-3 text-left uppercase">Wagered</th>
-									<th className="p-3 text-left uppercase">Prize</th>
-								</tr>
-							</thead>
+        {loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
+        {error && <p className="mt-10 text-center text-red-500">{error}</p>}
 
-							<tbody>
-								{leaderboard.map((entry) => (
-									<tr
-										key={entry.rank}
-										className={`transition-all ${
-											entry.rank <= 3
-												? "bg-red-800/60 hover:bg-red-700"
-												: entry.rank % 2 === 0
-												? "bg-gray-800"
-												: "bg-gray-900"
-										} hover:text-white`}
-									>
-										<td className="p-3 font-bold text-red-500">#{entry.rank}</td>
-										<td className="p-3 font-medium">{entry.name}</td>
-										<td className="p-3 font-semibold text-red-400">
-											{entry.wagered.toLocaleString()}
-										</td>
-										<td className="p-3 font-semibold text-yellow-400">
-											{entry.prize.toLocaleString()} C
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
+        {!loading && !error && (
+          <div className="mt-8 overflow-x-auto">
+            <table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
+              <thead className="text-white bg-gradient-to-r from-red-700 to-black">
+                <tr>
+                  <th className="p-3 text-left uppercase">#</th>
+                  <th className="p-3 text-left uppercase">Name</th>
+                  <th className="p-3 text-left uppercase">Wagered</th>
+                  <th className="p-3 text-left uppercase">Prize</th>
+                </tr>
+              </thead>
 
-				{!loading && !error && leaderboard.length === 0 && (
-					<p className="mt-10 text-center text-gray-500">
-						No leaderboard data available for this period.
-					</p>
-				)}
-			</main>
+              <tbody>
+                {leaderboard.length > 0 ? (
+                  leaderboard.map((entry) => (
+                    <tr
+                      key={entry.rank}
+                      className={`transition-all ${
+                        entry.rank <= 3
+                          ? "bg-red-800/60 hover:bg-red-700"
+                          : entry.rank % 2 === 0
+                          ? "bg-gray-800"
+                          : "bg-gray-900"
+                      } hover:text-white`}
+                    >
+                      <td className="p-3 font-bold text-red-500">#{entry.rank}</td>
+                      <td className="p-3 font-medium">{entry.name}</td>
+                      <td className="p-3 font-semibold text-red-400">
+                        {entry.wagered.toLocaleString()}
+                      </td>
+                      <td className="p-3 font-semibold text-yellow-400">
+                        {entry.prize.toLocaleString()} C
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className="bg-gray-900">
+                    <td colSpan={4} className="p-3 text-center text-gray-500">
+                      No users yet for this leaderboard.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </main>
 
-			<Footer />
-		</div>
-	);
+      <Footer />
+    </div>
+  );
 };
 
 export default CSGOLeadPage;
