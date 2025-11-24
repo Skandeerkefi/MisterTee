@@ -1,53 +1,65 @@
 import { create } from "zustand";
 
 interface LeaderboardEntry {
-	name: string;
-	wagered: number;
-	deposited: number;
-	createdAt: string;
+  rank: number;
+  name: string;
+  wagered: number;
+  prize: number;
 }
 
 interface CSGOLeadState {
-	leaderboard: LeaderboardEntry[];
-	loading: boolean;
-	error: string | null;
-	fetchLeaderboard: (take?: number, skip?: number) => Promise<void>;
-}
-
-// ✅ Fixed UTC date range: 20 Nov → 3 Dec
-function getFixedRangeUTC() {
-	// Months are 0-based → 10 = November, 11 = December
-	const startDate = Date.UTC(2025, 10, 20, 0, 0, 0, 0); // 20 Nov 2025 UTC
-	const endDate = Date.UTC(2025, 11, 3, 23, 59, 59, 999); // 3 Dec 2025 UTC end of day
-
-	return {
-		startDate,
-		endDate,
-	};
+  leaderboard: LeaderboardEntry[];
+  loading: boolean;
+  error: string | null;
+  dateStart: string;
+  dateEnd: string;
+  fetchLeaderboard: (take?: number) => Promise<void>;
 }
 
 export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
-	leaderboard: [],
-	loading: false,
-	error: null,
+  leaderboard: [],
+  loading: false,
+  error: null,
+  dateStart: "",
+  dateEnd: "",
 
-	fetchLeaderboard: async (take = 10, skip = 0) => {
-		set({ loading: true, error: null });
+  fetchLeaderboard: async (take = 10) => {
+    set({ loading: true, error: null });
 
-		try {
-			const { startDate, endDate } = getFixedRangeUTC();
+    try {
+      const res = await fetch(
+        `https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`
+      );
 
-			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin?take=${take}&skip=${skip}&startDate=${startDate}&endDate=${endDate}`
-			);
+      if (!res.ok) throw new Error("Failed to fetch leaderboard");
 
-			if (!res.ok) throw new Error("Failed to fetch leaderboard");
+      const data = await res.json();
 
-			const data = await res.json();
-			set({ leaderboard: data.data || [], loading: false });
+      // Pick active leaderboard with users OR fallback to latest with users
+      const lb =
+        data.leaderboards?.find((l: any) => l.active && l.users?.length > 0) ||
+        data.leaderboards?.find((l: any) => l.users?.length > 0);
 
-		} catch (err: any) {
-			set({ error: err.message || "Unknown error", loading: false });
-		}
-	},
+      if (!lb) throw new Error("No leaderboard with users found");
+
+      const users = lb.users || [];
+      const prizes = lb.prizes || [];
+
+      const mapped: LeaderboardEntry[] = users.map((u: any, idx: number) => ({
+        rank: u.rank || idx + 1,
+        name: u.username || u.name || "Unknown",
+        wagered: u.wagered || 0,
+        prize: prizes[idx] || 0,
+      }));
+
+      set({
+        leaderboard: mapped.slice(0, take),
+        loading: false,
+        dateStart: lb.dateStart,
+        dateEnd: lb.dateEnd,
+      });
+    } catch (err: any) {
+      set({ error: err.message || "Unknown error", loading: false });
+    }
+  },
 }));

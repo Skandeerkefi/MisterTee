@@ -10,60 +10,57 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(duration);
 dayjs.extend(utc);
 
-const prizeMap: Record<number, string> = {
-	1: "500 C 🥇",
-	2: "200 C 🥈",
-	3: "100 C 🥉",
-	4: "75 C",
-	5: "50 C",
-	6: "25 C",
-	7: "20 C",
-	8: "15 C",
-	9: "10 C",
-	10: "5 C",
-};
-
-// ✅ FIXED DATE RANGE (UTC)
-function getFixedRangeUTC() {
-	const start = dayjs.utc("2025-11-20T00:00:00Z");
-	const end = dayjs.utc("2025-12-03T23:59:59Z");
-	return { start, end };
-}
-
-// Display example: "20 Nov → 3 Dec"
-function getDisplayRange() {
-	const { start, end } = getFixedRangeUTC();
-	return `${start.format("D MMM")} → ${end.format("D MMM")}`;
-}
-
 const CSGOLeadPage = () => {
 	const { leaderboard, loading, error, fetchLeaderboard } = useCSGOLeadStore();
 	const [timeLeft, setTimeLeft] = useState("");
+	const [dateRange, setDateRange] = useState({ start: "", end: "" });
 
 	useEffect(() => {
-		fetchLeaderboard(10, 0);
+		const fetchData = async () => {
+			// fetch leaderboard via store
+			await fetchLeaderboard(10);
+
+			// fetch active leaderboard to get date range
+			const res = await fetch(
+				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`
+			);
+			const data = await res.json();
+			const activeLB = data.leaderboards?.find((lb: any) => lb.active);
+			if (activeLB) {
+				setDateRange({
+					start: dayjs.utc(activeLB.dateStart).format("D MMM"),
+					end: dayjs.utc(activeLB.dateEnd).format("D MMM"),
+				});
+			}
+		};
+
+		fetchData();
 	}, [fetchLeaderboard]);
 
-	// ⏳ Auto countdown
+	// countdown to active leaderboard end
 	useEffect(() => {
-		const updateCountdown = () => {
-			const { end } = getFixedRangeUTC();
+		const interval = setInterval(async () => {
+			const res = await fetch(
+				`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`
+			);
+			const data = await res.json();
+			const activeLB = data.leaderboards?.find((lb: any) => lb.active);
+			if (!activeLB) return;
+
+			const end = dayjs.utc(activeLB.dateEnd);
 			const now = dayjs.utc();
 			const diff = end.diff(now);
 
 			if (diff <= 0) {
 				setTimeLeft("Leaderboard resetting...");
-				return;
+			} else {
+				const d = dayjs.duration(diff);
+				setTimeLeft(
+					`${Math.floor(d.asDays())}d ${d.hours()}h ${d.minutes()}m ${d.seconds()}s`
+				);
 			}
+		}, 1000);
 
-			const d = dayjs.duration(diff);
-			setTimeLeft(
-				`${Math.floor(d.asDays())}d ${d.hours()}h ${d.minutes()}m ${d.seconds()}s`
-			);
-		};
-
-		updateCountdown();
-		const interval = setInterval(updateCountdown, 1000);
 		return () => clearInterval(interval);
 	}, []);
 
@@ -79,7 +76,7 @@ const CSGOLeadPage = () => {
 
 				<p className="text-center text-gray-400 mb-2">
 					Range:{" "}
-					<span className="text-red-400">{getDisplayRange()}</span>
+					<span className="text-red-400">{`${dateRange.start} → ${dateRange.end}`}</span>
 				</p>
 
 				<p className="text-center text-md font-semibold text-gray-300 mb-6">
@@ -89,7 +86,7 @@ const CSGOLeadPage = () => {
 
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 1000 C 💰
+						Total Prize Pool: {leaderboard.reduce((acc, u) => acc + u.prize, 0).toLocaleString()} C 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
@@ -108,39 +105,32 @@ const CSGOLeadPage = () => {
 									<th className="p-3 text-left uppercase">#</th>
 									<th className="p-3 text-left uppercase">Name</th>
 									<th className="p-3 text-left uppercase">Wagered</th>
-									<th className="p-3 text-left uppercase">Deposited</th>
 									<th className="p-3 text-left uppercase">Prize</th>
 								</tr>
 							</thead>
 
 							<tbody>
-								{leaderboard.map((entry, index) => {
-									const rank = index + 1;
-									return (
-										<tr
-											key={index}
-											className={`transition-all ${
-												rank <= 3
-													? "bg-red-800/60 hover:bg-red-700"
-													: rank % 2 === 0
-													? "bg-gray-800"
-													: "bg-gray-900"
-											} hover:text-white`}
-										>
-											<td className="p-3 font-bold text-red-500">#{rank}</td>
-											<td className="p-3 font-medium">{entry.name}</td>
-											<td className="p-3 font-semibold text-red-400">
-												{entry.wagered.toLocaleString()}
-											</td>
-											<td className="p-3 font-semibold text-green-400">
-												{entry.deposited.toLocaleString()}
-											</td>
-											<td className="p-3 font-semibold text-yellow-400">
-												{prizeMap[rank] || "—"}
-											</td>
-										</tr>
-									);
-								})}
+								{leaderboard.map((entry) => (
+									<tr
+										key={entry.rank}
+										className={`transition-all ${
+											entry.rank <= 3
+												? "bg-red-800/60 hover:bg-red-700"
+												: entry.rank % 2 === 0
+												? "bg-gray-800"
+												: "bg-gray-900"
+										} hover:text-white`}
+									>
+										<td className="p-3 font-bold text-red-500">#{entry.rank}</td>
+										<td className="p-3 font-medium">{entry.name}</td>
+										<td className="p-3 font-semibold text-red-400">
+											{entry.wagered.toLocaleString()}
+										</td>
+										<td className="p-3 font-semibold text-yellow-400">
+											{entry.prize.toLocaleString()} C
+										</td>
+									</tr>
+								))}
 							</tbody>
 						</table>
 					</div>
