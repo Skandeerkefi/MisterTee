@@ -19,20 +19,18 @@ const CSGOLeadPage = () => {
     const fetchData = async () => {
       await fetchLeaderboard(10);
 
-      // fetch leaderboard again to get prizes
       const res = await fetch(`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`);
       const data = await res.json();
       const currentLB = data.leaderboards?.[0];
+
       if (currentLB) {
-        // convert prizes to real values (remove last 2 zeros)
-        const realPrizes = currentLB.prizes.map((p: number) => Math.floor(p / 100));
-        setPrizes(realPrizes);
+        // ⛔ NO MORE REMOVING ZEROS — USE RAW VALUES
+        setPrizes(currentLB.prizes);
       }
     };
     fetchData();
   }, [fetchLeaderboard]);
 
-  // Countdown to current leaderboard end
   useEffect(() => {
     const updateCountdown = () => {
       if (!dateEnd) return;
@@ -57,13 +55,11 @@ const CSGOLeadPage = () => {
     return () => clearInterval(interval);
   }, [dateEnd]);
 
-  // Display range formatted
   const displayRange =
     dateStart && dateEnd
       ? `${dayjs.utc(dateStart).format("D MMM")} → ${dayjs.utc(dateEnd).format("D MMM")}`
       : "";
 
-  // Total prize pool from prizes array
   const totalPrize = prizes.reduce((acc, p) => acc + p, 0);
 
   return (
@@ -132,7 +128,6 @@ const CSGOLeadPage = () => {
                     </tr>
                   ))
                 ) : (
-                  // Show all prizes even if no users
                   prizes.map((p, idx) => (
                     <tr
                       key={idx}
@@ -147,7 +142,9 @@ const CSGOLeadPage = () => {
                       <td className="p-3 font-bold text-red-500">#{idx + 1}</td>
                       <td className="p-3 font-medium">—</td>
                       <td className="p-3 font-semibold text-red-400">0</td>
-                      <td className="p-3 font-semibold text-yellow-400">{p.toLocaleString()} C</td>
+                      <td className="p-3 font-semibold text-yellow-400">
+                        {p.toLocaleString()} C
+                      </td>
                     </tr>
                   ))
                 )}
