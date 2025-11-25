@@ -117,7 +117,8 @@ const CSGOLeadPage = () => {
                           : "bg-gray-900"
                       } hover:text-white`}
                     >
-                      <td className="p-3 font-bold text-red-500">#{entry.rank}</td>
+                      <td className="p-3 font-bold text-red-500">#{idx + 1}</td>
+
                       <td className="p-3 font-medium">{entry.name}</td>
                       <td className="p-3 font-semibold text-red-400">
                         {entry.wagered.toLocaleString()}
