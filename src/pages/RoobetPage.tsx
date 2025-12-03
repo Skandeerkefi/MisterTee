@@ -5,6 +5,11 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(duration);
+dayjs.extend(utc);
+
 const RoobetPage: React.FC = () => {
   const { leaderboard, loading, error, fetchLeaderboard } = useRoobetStore();
   const [timeLeft, setTimeLeft] = useState("");
@@ -13,11 +18,11 @@ const RoobetPage: React.FC = () => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
 
-  // 🗓️ Current month & event dates
-  const now = dayjs();
-  const startOfMonth = now.startOf("month").format("MMMM D");
-  const endOfMonth = now.endOf("month").format("MMMM D");
-dayjs.extend(duration);
+  // 🗓️ Force UTC month range
+  const nowUTC = dayjs().utc();
+  const startOfMonth = nowUTC.startOf("month").format("MMMM D");
+  const endOfMonth = nowUTC.endOf("month").format("MMMM D");
+
   // 💰 Prize mapping
   const prizeMap: Record<number, string> = {
     1: "$450",
@@ -30,10 +35,10 @@ dayjs.extend(duration);
     8: "$25",
   };
 
-  // 🧭 Countdown logic
+  // ⏳ Countdown (UTC-based)
   useEffect(() => {
     const updateCountdown = () => {
-      const now = dayjs();
+      const now = dayjs().utc();
       const nextMonth = now.add(1, "month").startOf("month");
       const diff = nextMonth.diff(now);
 
@@ -42,19 +47,17 @@ dayjs.extend(duration);
         return;
       }
 
-      const duration = dayjs.duration(diff);
+      const d = dayjs.duration(diff);
 
-      const days = Math.floor(duration.asDays());
-      const hours = duration.hours();
-      const minutes = duration.minutes();
-      const seconds = duration.seconds();
+      const days = Math.floor(d.asDays());
+      const hours = d.hours();
+      const minutes = d.minutes();
+      const seconds = d.seconds();
 
-      setTimeLeft(
-        `${days}d ${hours}h ${minutes}m ${seconds}s`
-      );
+      setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
     };
 
-    updateCountdown(); // Initial call
+    updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
     return () => clearInterval(interval);
   }, []);
@@ -73,11 +76,11 @@ dayjs.extend(duration);
         <p className="mb-2 text-center text-lg font-medium text-[#ffd01f] drop-shadow-md">
           Event Duration:{" "}
           <span className="font-bold">
-            {startOfMonth} - {endOfMonth}
+            {startOfMonth} - {endOfMonth} (UTC)
           </span>
         </p>
 
-        {/* ⏳ Cooldown / Countdown */}
+        {/* ⏳ Countdown */}
         <p className="mb-8 text-center text-md font-semibold text-[#fefefe]">
           ⏳ Time Remaining Until Next Reset:{" "}
           <span className="text-[#ffd01f] font-bold">{timeLeft}</span>
@@ -101,24 +104,20 @@ dayjs.extend(duration);
                   key={player.uid}
                   className="relative p-6 rounded-3xl shadow-2xl border-4 border-[#e10600] flex flex-col items-center justify-center bg-gradient-to-br from-[#e10600] to-[#030303] hover:scale-105 transform transition-all duration-300"
                 >
-                  {/* Rank Badge */}
                   <div className="absolute -top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-[#fefefe] text-[#e10600] font-bold text-lg shadow-lg">
                     #{player.rankLevel}
                   </div>
 
-                  {/* Username */}
                   <p className="text-2xl md:text-3xl font-extrabold text-[#fefefe] mb-2 drop-shadow-lg">
                     {player.username}
                   </p>
 
-                  {/* Prize */}
                   {prizeMap[player.rankLevel] && (
                     <p className="text-lg font-bold text-[#ffd01f] drop-shadow-md">
                       🏆 Prize: {prizeMap[player.rankLevel]}
                     </p>
                   )}
 
-                  {/* Stats */}
                   <div className="flex flex-col items-center gap-1 mt-2">
                     <p className="text-md md:text-lg font-semibold text-[#fefefe]">
                       🎲 Wagered:{" "}
@@ -138,7 +137,6 @@ dayjs.extend(duration);
                     </p>
                   </div>
 
-                  {/* Favorite Game */}
                   <p className="mt-3 text-sm md:text-base font-medium text-[#fefefe] italic">
                     Favorite: {player.favoriteGameTitle}
                   </p>
@@ -146,7 +144,7 @@ dayjs.extend(duration);
               ))}
             </div>
 
-            {/* 📋 Remaining Players */}
+            {/* Remaining players */}
             {leaderboard.data.length > 3 && (
               <div className="overflow-x-auto p-6 shadow-lg bg-[#030303]/80 backdrop-blur-md rounded-2xl">
                 <table className="w-full text-left border-collapse">

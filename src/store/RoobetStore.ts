@@ -2,6 +2,9 @@ import { create } from "zustand";
 import axios from "axios";
 import dayjs from "dayjs"; // lightweight date library (npm install dayjs)
 
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 interface Player {
 	uid: string;
 	username: string;
@@ -35,10 +38,11 @@ export const useRoobetStore = create<RoobetStore>((set) => ({
 		try {
 			// If no startDate/endDate provided → use current month's range
 			if (!startDate || !endDate) {
-				const now = dayjs();
-				startDate = now.startOf("month").format("YYYY-MM-DD");
-				endDate = now.endOf("month").format("YYYY-MM-DD");
-			}
+    const now = dayjs().utc(); // Use UTC time
+    startDate = now.startOf("month").format("YYYY-MM-DD");
+    endDate = now.endOf("month").format("YYYY-MM-DD");
+}
+
 
 			let url = `https://misterteedata-production.up.railway.app/api/leaderboard/${startDate}/${endDate}`;
 
