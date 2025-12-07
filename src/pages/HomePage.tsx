@@ -137,7 +137,7 @@ function HomePage() {
 						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-full sm:w-[400px]'>
 							<div className='flex items-center justify-center mb-6'>
 								<img
-									src='https://cdn.csgowin.com/img/logos/icon_csgowin.webp'
+									src='https://i.ibb.co/bg3HvN4k/IMG-0398.png'
 									alt='Roobet'
 									className='object-contain h-20'
 								/>
@@ -163,7 +163,7 @@ function HomePage() {
 								<li>🔒 And even more surprises on the way!</li>
 							</ul>
 							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								🚀 Hop into the action — play smarter with MisterTee on CSGOWIN.
+								🚀 Hop into the action — play smarter with MisterTee on Clash.gg.
 							</p>
 							<a
 								href='https://csgowin.com/r/mistertee'

@@ -16,6 +16,7 @@ import RoobetPage from "@/pages/RoobetPage";
 import RainPage from "@/pages/RainPage";
 import CSGOLeadPage from "./pages/CSGOLead";
 import PackdrawPage from "./pages/PackdrawPage";
+import ClashLeaderboardPage from "./pages/ClashLeaderboardPage";
 function App() {
 	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 	const user = useAuthStore((state) => state.user);
@@ -48,7 +49,7 @@ function App() {
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
 					<Route path='/Leaderboards' element={<RoobetPage />} />
 					<Route path='/rain' element={<RainPage />} />
-					<Route path='/csgo' element={<CSGOLeadPage />} />
+					<Route path='/clash' element={<ClashLeaderboardPage />} />
 					<Route path='/packdraw' element={<PackdrawPage />} />
 				</Routes>
 			</BrowserRouter>

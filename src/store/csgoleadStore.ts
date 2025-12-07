@@ -20,8 +20,10 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
   leaderboard: [],
   loading: false,
   error: null,
-  dateStart: "",
-  dateEnd: "",
+
+  // NEW LEADERBOARD PERIOD
+  dateStart: "2025-12-05T00:00:00Z",
+  dateEnd: "2025-12-20T00:00:00Z",
 
   fetchLeaderboard: async (take = 10) => {
     set({ loading: true, error: null });
@@ -35,8 +37,8 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
 
       const data = await res.json();
 
-      // Use the **last leaderboard in the array** (current)
-      const lb = data.leaderboards?.[0]; // or data.leaderboards?.[data.leaderboards.length - 1];
+      // use LAST leaderboard (current active)
+      const lb = data.leaderboards?.[0];
 
       if (!lb) throw new Error("No leaderboard found");
 
@@ -51,10 +53,12 @@ export const useCSGOLeadStore = create<CSGOLeadState>((set) => ({
       }));
 
       set({
-        leaderboard: mapped.slice(0, take), // may be empty if no users
+        leaderboard: mapped.slice(0, take),
         loading: false,
-        dateStart: lb.dateStart,
-        dateEnd: lb.dateEnd,
+
+        // API > fallback
+        dateStart: lb.dateStart || "2025-12-05T00:00:00Z",
+        dateEnd: lb.dateEnd || "2025-12-20T00:00:00Z",
       });
     } catch (err: any) {
       set({ error: err.message || "Unknown error", loading: false });
