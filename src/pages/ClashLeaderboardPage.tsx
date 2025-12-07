@@ -4,6 +4,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { useClashStore } from "@/store/clashStore";
 
+const prizes = [500, 200, 100, 75, 50, 25, 20, 15, 10, 5]; // Prizes for ranks 1-10
+
 const ClashLeaderboardPage = () => {
   const { players, loading, error, fetchLeaderboard } = useClashStore();
 
@@ -31,6 +33,7 @@ const ClashLeaderboardPage = () => {
                   <th className="p-2 border border-gray-700">Username</th>
                   <th className="p-2 border border-gray-700">Wagered (Gems)</th>
                   <th className="p-2 border border-gray-700">Deposits (Gems)</th>
+                  <th className="p-2 border border-gray-700">Prize (C)</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,6 +43,9 @@ const ClashLeaderboardPage = () => {
                     <td className="p-2 border border-gray-700">{player.username}</td>
                     <td className="p-2 border border-gray-700">{player.wageredGems?.toFixed(2)}</td>
                     <td className="p-2 border border-gray-700">{player.depositsGems?.toFixed(2)}</td>
+                    <td className="p-2 border border-gray-700">
+                      {index < prizes.length ? prizes[index] : 0}
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -143,7 +143,7 @@ function HomePage() {
 								/>
 							</div>
 							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🔫 CSGOWIN Rewards with MisterTee
+								🔫 Clash.GG Rewards with MisterTee
 							</h3>
 							<ul className='mb-6 space-y-3 text-base text-gray-300'>
 								<li>🎁 Claim 3 Free cases upon sign up</li>
