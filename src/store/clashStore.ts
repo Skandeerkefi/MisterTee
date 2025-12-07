@@ -26,7 +26,7 @@ export const useClashStore = create<ClashState>((set) => ({
     set({ loading: true, error: null });
 
     try {
-      const response = await axios.get(`/api/leaderboard/clash/${sinceDate}`);
+      const response = await axios.get(`https://misterteedata-production.up.railway.app/api/leaderboard/clash/${sinceDate}`);
       const data = response.data;
 
       // Optional: convert gem cents to gems
