@@ -46,9 +46,10 @@ export function Navbar() {
 			name: "Leaderboard",
 			icon: <Crown className='w-5 h-5' />,
 			subMenu: [
-				{ name: "clash", path: "/clash" },
+				{ name: "Clash", path: "/clash" },
 				{ name: "Roobet", path: "/leaderboards" },
 				{ name: "Packdraw", path:"/packdraw"},
+				{ name: "Csgo", path:"/leaderboard"},
 			],
 		},
 		{

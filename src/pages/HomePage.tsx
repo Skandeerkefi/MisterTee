@@ -96,86 +96,152 @@ function HomePage() {
 						></iframe>
 					</div>
 				</section>
-				{/* 🌟 Affiliate Rewards Section */}
-				<section className='max-w-6xl px-6 py-16 mx-auto'>
-					<h2 className='mb-12 text-4xl font-bold text-center text-white'>
-						Affiliate Rewards with MisterTee ✨
-					</h2>
+				{/* cards */}
+				<section className="w-full px-4 py-16 flex flex-col items-center">
+  <h2 className="mb-12 text-4xl font-bold text-center text-white">
+    Affiliate Rewards with MisterTee ✨
+  </h2>
 
-					<div className='flex justify-center'>
-						{/* Roobet Card */}
-						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-full sm:w-[400px]'>
-							<div className='flex items-center justify-center mb-6'>
-								<img
-									src='https://i.postimg.cc/5NcLGnKn/Roobet-logo.png'
-									alt='Roobet'
-									className='object-contain h-20'
-								/>
-							</div>
-							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🦘 Roobet Rewards with MisterTee
-							</h3>
-							<ul className='mb-6 space-y-3 text-base text-gray-300'>
-								<li>🎁 Welcome Bonus on your first play</li>
-								<li>⚡ Exclusive MisterTee promotions & boosts</li>
-								<li>🎟️ Access to community giveaways</li>
-								<li>🔒 More rewards rolling out soon</li>
-							</ul>
-							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								🚀 Hop into the action — play smarter with MisterTee on Roobet.
-							</p>
-							<a
-								href='https://roobet.com/?ref=mistertee'
-								target='_blank'
-								rel='noreferrer'
-								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
-							>
-								Join Roobet
-							</a>
-						</div>
-						{/* CSGOWIN Card */}
-						<div className='bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-full sm:w-[400px]'>
-							<div className='flex items-center justify-center mb-6'>
-								<img
-									src='https://i.ibb.co/bg3HvN4k/IMG-0398.png'
-									alt='Roobet'
-									className='object-contain h-20'
-								/>
-							</div>
-							<h3 className='text-2xl font-semibold text-center text-[#E10600] mb-6'>
-								🔫 Clash.GG Rewards with MisterTee
-							</h3>
-							<ul className='mb-6 space-y-3 text-base text-gray-300'>
-								<li>🎁 Claim 3 Free cases upon sign up</li>
-								<li>
-									💸 5% Deposit Bonuses – boost your balance and get extra to
-									play.
-								</li>
-								<li>
-									💰 EXTRA Deposit Bonuses on top of the 5% for code users.
-								</li>
-								<li>
-									🎟️ Exclusive Giveaways – free battles for our community.
-								</li>
-								<li>
-									🏆 Get VIP rewards instantly – climb the ranks and win big.
-								</li>
-								<li>🔒 And even more surprises on the way!</li>
-							</ul>
-							<p className='mt-auto mb-6 italic text-center text-gray-200'>
-								🚀 Hop into the action — play smarter with MisterTee on Clash.gg.
-							</p>
-							<a
-								href='https://csgowin.com/r/mistertee'
-								target='_blank'
-								rel='noreferrer'
-								className='w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition'
-							>
-								Join Csgowin
-							</a>
-						</div>
-					</div>
-				</section>
+  <div className="
+    flex flex-wrap md:flex-nowrap
+    justify-center 
+    gap-8 
+    w-full 
+    max-w-[1600px]
+  ">
+
+    {/* Roobet */}
+    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+      <div className="flex items-center justify-center mb-6">
+        <img
+          src="https://i.postimg.cc/5NcLGnKn/Roobet-logo.png"
+          alt="Roobet"
+          className="object-contain h-20"
+        />
+      </div>
+
+      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
+        🦘 Roobet Rewards with MisterTee
+      </h3>
+
+      <ul className="mb-6 space-y-3 text-base text-gray-300">
+        <li>🎁 Welcome Bonus on your first play</li>
+        <li>⚡ Exclusive MisterTee promotions & boosts</li>
+        <li>🎟️ Access to community giveaways</li>
+        <li>🔒 More rewards rolling out soon</li>
+      </ul>
+
+      <a
+        href="https://roobet.com/?ref=mistertee"
+        target="_blank"
+        rel="noreferrer"
+        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
+      >
+        Join Roobet
+      </a>
+    </div>
+
+    {/* Clash.GG */}
+    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+      <div className="flex items-center justify-center mb-6">
+        <img
+          src="https://i.ibb.co/gbXh90jd/IMG-0402.webp"
+          alt="Clash GG"
+          className="object-contain h-20"
+        />
+      </div>
+
+      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
+        🔫 Clash.GG Rewards with MisterTee
+      </h3>
+
+      <ul className="mb-6 space-y-3 text-base text-gray-300">
+        <li>🎁 Claim 3 Free cases upon sign up</li>
+        <li>💸 5% Deposit Bonuses + extra bonus for code users</li>
+        <li>🎟️ Exclusive free battles & community giveaways</li>
+        <li>🏆 Instant VIP Rewards</li>
+        <li>🔒 More surprises coming soon!</li>
+      </ul>
+
+      <a
+        href="https://clash.gg/r/mistertee"
+        target="_blank"
+        rel="noreferrer"
+        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
+      >
+        Join Clash.GG
+      </a>
+    </div>
+
+    {/* CSGOWIN */}
+    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+      <div className="flex items-center justify-center mb-6">
+        <img
+          src="https://i.ibb.co/2YjY0XSt/Screenshot-2025-12-07-224214-removebg-preview.png"
+          alt="CSGOWIN"
+          className="object-contain h-20"
+        />
+      </div>
+
+      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
+        🔥 CSGOWIN Rewards with MisterTee
+      </h3>
+
+      <ul className="mb-6 space-y-3 text-base text-gray-300">
+        <li>🎁 Claim 3 FREE cases when signing up</li>
+        <li>💵 5% Deposit Bonus + EXTRA bonuses for code users</li>
+        <li>🎟️ Free battles & daily rewards</li>
+        <li>🏆 VIP bonuses & rank rewards</li>
+        <li>🔒 More exclusive perks coming soon</li>
+      </ul>
+
+      <a
+        href="https://csgowin.com/r/mistertee"
+        target="_blank"
+        rel="noreferrer"
+        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
+      >
+        Join CSGOWIN
+      </a>
+    </div>
+
+    {/* PACKDRAW */}
+    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+      <div className="flex items-center justify-center mb-4">
+        <img
+          src="https://i.ibb.co/cXZbz0cy/IMG-0404-removebg-preview.png"
+          alt="Packdraw"
+          className="object-contain h-24"
+        />
+      </div>
+
+      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
+        🎉 Packdraw Rewards with MisterTee
+      </h3>
+
+      <ul className="mb-6 space-y-3 text-base text-gray-300">
+        <li>💵 5% Deposit Bonus + Extra 5% (10% Total)</li>
+        <li>🎁 +$20 on your first deposit over $100</li>
+        <li>🏆 $200 Monthly Leaderboard</li>
+        <li>🔔 Free Battles</li>
+        <li>😎 VIP Bonuses & More</li>
+      </ul>
+
+      <a
+        href="https://packdraw.com/?ref=MisterTee"
+        target="_blank"
+        rel="noreferrer"
+        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
+      >
+        Join Packdraw
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+
 
 				{/* Metric-style Countdown Section */}
 				{/* <section className='max-w-4xl mx-auto px-6 py-10 rounded-3xl bg-black/70 border border-[#E10600] shadow-lg'>

@@ -39,11 +39,11 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path='/' element={<HomePage />} />
-					<Route path='/leaderboard' element={<LeaderboardPage />} />
+					<Route path='/leaderboard' element={<CSGOLeadPage />} />
 					<Route path='/slot-calls' element={<SlotCallsPage />} />
 					<Route path='/giveaways' element={<GiveawaysPage />} />
 					<Route path='/login' element={<LoginPage />} />
-					<Route path='/signup' element={<SignupPage />} />
+					<Route path='/signup' element={<SignupPage />} />s
 					<Route path='*' element={<NotFoundPage />} />
 					<Route path='/slot-overlay' element={<SlotOverlay />} />
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
