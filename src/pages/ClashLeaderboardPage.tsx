@@ -78,31 +78,45 @@ const ClashLeaderboardPage = () => {
         {/* Leaderboard table */}
         {!loading && !error && players.length > 0 && (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse border border-red-700 text-white">
-              <thead className="bg-red-800">
-                <tr>
-                  <th className="p-2 border border-gray-700">Rank</th>
-                  <th className="p-2 border border-gray-700">Username</th>
-                  <th className="p-2 border border-gray-700">Wagered (Gems)</th>
-                  <th className="p-2 border border-gray-700">Prize (Gems)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {players.map((player, index) => (
-                  <tr key={player.uid} className="hover:bg-gray-700">
-                    <td className="p-2 border border-gray-700">{index + 1}</td>
-                    <td className="p-2 border border-gray-700">{player.name}</td>
-                    <td className="p-2 border border-gray-700">
-                      {(player.wageredGems || 0).toFixed(2)}
-                    </td>
-                    <td className="p-2 border border-gray-700">
-                      {index < prizes.length ? prizes[index] : 0}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+  <table className="w-full text-left border-separate border-spacing-0 text-white shadow-xl rounded-xl overflow-hidden backdrop-blur-xl bg-white/5">
+    <thead>
+      <tr className="bg-gradient-to-r from-red-700 to-red-900 text-white">
+        <th className="p-3 border-b border-red-600 font-semibold text-center">Rank</th>
+        <th className="p-3 border-b border-red-600 font-semibold">Username</th>
+        <th className="p-3 border-b border-red-600 font-semibold text-center">Wagered (Gems)</th>
+        <th className="p-3 border-b border-red-600 font-semibold text-center">Prize (Gems)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {players.map((player, index) => (
+        <tr
+          key={player.uid}
+          className={`transition duration-200 hover:bg-red-900/40 ${
+            index % 2 === 0 ? "bg-white/5" : "bg-white/10"
+          }`}
+        >
+          <td className="p-3 border-b border-gray-700 text-center font-semibold text-red-400">
+            #{index + 1}
+          </td>
+
+          <td className="p-3 border-b border-gray-700 font-medium">
+            {player.name}
+          </td>
+
+          <td className="p-3 border-b border-gray-700 text-center font-mono">
+            {(player.wageredGems || 0).toFixed(2)}
+          </td>
+
+          <td className="p-3 border-b border-gray-700 text-center font-semibold text-yellow-300">
+            {index < prizes.length ? prizes[index] : 0}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
         )}
 
         {/* Empty state */}
