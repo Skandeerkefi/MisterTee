@@ -10,6 +10,7 @@ const ClashLeaderboardPage = () => {
   const { players, loading, error, fetchLeaderboard } = useClashStore();
 
   useEffect(() => {
+    // Fetch leaderboard for a specific date
     fetchLeaderboard("2025-11-01");
   }, [fetchLeaderboard]);
 
@@ -19,11 +20,17 @@ const ClashLeaderboardPage = () => {
       <Navbar />
 
       <main className="flex-grow container mx-auto p-4 relative z-10">
-        <h1 className="text-3xl font-bold mb-6 text-center text-white">Clash Leaderboard</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">
+          Clash Leaderboard
+        </h1>
 
+        {/* Loading state */}
         {loading && <p className="text-center text-white">Loading leaderboard...</p>}
+
+        {/* Error state */}
         {error && <p className="text-center text-red-500">Error: {error}</p>}
 
+        {/* Leaderboard table */}
         {!loading && !error && players.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse border border-gray-700 text-white">
@@ -32,17 +39,17 @@ const ClashLeaderboardPage = () => {
                   <th className="p-2 border border-gray-700">Rank</th>
                   <th className="p-2 border border-gray-700">Username</th>
                   <th className="p-2 border border-gray-700">Wagered (Gems)</th>
-                  <th className="p-2 border border-gray-700">Deposits (Gems)</th>
-                  <th className="p-2 border border-gray-700">Prize (C)</th>
+                  <th className="p-2 border border-gray-700">Prize (Gems)</th>
                 </tr>
               </thead>
               <tbody>
                 {players.map((player, index) => (
                   <tr key={player.uid} className="hover:bg-gray-700">
                     <td className="p-2 border border-gray-700">{index + 1}</td>
-                    <td className="p-2 border border-gray-700">{player.username}</td>
-                    <td className="p-2 border border-gray-700">{player.wageredGems?.toFixed(2)}</td>
-                    <td className="p-2 border border-gray-700">{player.depositsGems?.toFixed(2)}</td>
+                    <td className="p-2 border border-gray-700">{player.name}</td>
+                    <td className="p-2 border border-gray-700">
+                      {(player.wageredGems || 0).toFixed(2)}
+                    </td>
                     <td className="p-2 border border-gray-700">
                       {index < prizes.length ? prizes[index] : 0}
                     </td>
@@ -53,6 +60,7 @@ const ClashLeaderboardPage = () => {
           </div>
         )}
 
+        {/* Empty state */}
         {!loading && !error && players.length === 0 && (
           <p className="text-center text-white">No players found for this period.</p>
         )}

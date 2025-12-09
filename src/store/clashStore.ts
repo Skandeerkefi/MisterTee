@@ -3,7 +3,7 @@ import axios from "axios";
 
 interface Player {
   uid: string;
-  username: string;
+  name: string;
   wagered: number;
   deposits: number;
   wageredGems?: number; // optional converted field
@@ -22,23 +22,25 @@ export const useClashStore = create<ClashState>((set) => ({
   loading: false,
   error: null,
 
-  fetchLeaderboard: async (sinceDate: string) => {
-    set({ loading: true, error: null });
+ fetchLeaderboard: async (sinceDate: string) => {
+  set({ loading: true, error: null });
 
-    try {
-      const response = await axios.get(`https://misterteedata-production.up.railway.app/api/leaderboard/clash/${sinceDate}`);
-      const data = response.data;
+  try {
+    const response = await axios.get(
+      `https://misterteedata-production.up.railway.app/api/leaderboard/clash/${sinceDate}`
+    );
 
-      // Optional: convert gem cents to gems
-      const players = data.players?.map((player: Player) => ({
-        ...player,
-        wageredGems: player.wagered / 100,
-        depositsGems: player.deposits / 100,
-      })) || [];
+    const data = response.data; // API returns an array
 
-      set({ players, loading: false });
-    } catch (err: any) {
-      set({ error: err.message || "Failed to fetch leaderboard", loading: false });
-    }
-  },
+    const players = data.map((player: Player) => ({
+      ...player,
+      wageredGems: player.wagered / 100, // Convert cents to gems
+    }));
+
+    set({ players, loading: false });
+  } catch (err: any) {
+    set({ error: err.message || "Failed to fetch leaderboard", loading: false });
+  }
+}
+
 }));
