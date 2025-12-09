@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -8,11 +8,50 @@ const prizes = [500, 200, 100, 75, 50, 25, 20, 15, 10, 5]; // Prizes for ranks 1
 
 const ClashLeaderboardPage = () => {
   const { players, loading, error, fetchLeaderboard } = useClashStore();
+  const [periodStart, setPeriodStart] = useState<Date | null>(null);
+  const [periodEnd, setPeriodEnd] = useState<Date | null>(null);
+  const [countdown, setCountdown] = useState<string>("");
+
+  // Calculate current 14-day period
+  const calculatePeriod = () => {
+    const baseDate = new Date("2025-12-07");
+    const today = new Date();
+    const diffDays = Math.floor((today.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24));
+    const intervals = Math.floor(diffDays / 14);
+    const start = new Date(baseDate.getTime() + intervals * 14 * 24 * 60 * 60 * 1000);
+    const end = new Date(start.getTime() + 15 * 24 * 60 * 60 * 1000 - 1000); // minus 1 sec to avoid overlap
+    setPeriodStart(start);
+    setPeriodEnd(end);
+    return start;
+  };
 
   useEffect(() => {
-    // Fetch leaderboard for a specific date
-    fetchLeaderboard("2025-11-01");
+    const startDate = calculatePeriod();
+    fetchLeaderboard(); // fetchLeaderboard now calculates date internally
   }, [fetchLeaderboard]);
+
+  // Countdown timer
+  useEffect(() => {
+    if (!periodEnd) return;
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = periodEnd.getTime() - now;
+      if (distance <= 0) {
+        setCountdown("Leaderboard period ended");
+        clearInterval(timer);
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [periodEnd]);
+
+  const formatDate = (date: Date | null) => date?.toISOString().split("T")[0] || "";
 
   return (
     <div className="relative min-h-screen flex flex-col">
@@ -20,9 +59,15 @@ const ClashLeaderboardPage = () => {
       <Navbar />
 
       <main className="flex-grow container mx-auto p-4 relative z-10">
-        <h1 className="text-3xl font-bold mb-6 text-center text-white">
+        <h1 className="text-3xl font-bold mb-2 text-center text-white">
           Clash Leaderboard
         </h1>
+
+        {periodStart && periodEnd && (
+          <p className="text-center text-white mb-4">
+            Period: {formatDate(periodStart)} → {formatDate(periodEnd)} | Next update in: {countdown}
+          </p>
+        )}
 
         {/* Loading state */}
         {loading && <p className="text-center text-white">Loading leaderboard...</p>}
@@ -33,8 +78,8 @@ const ClashLeaderboardPage = () => {
         {/* Leaderboard table */}
         {!loading && !error && players.length > 0 && (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse border border-gray-700 text-white">
-              <thead className="bg-gray-800">
+            <table className="w-full text-left border-collapse border border-red-700 text-white">
+              <thead className="bg-red-800">
                 <tr>
                   <th className="p-2 border border-gray-700">Rank</th>
                   <th className="p-2 border border-gray-700">Username</th>
