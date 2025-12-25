@@ -86,7 +86,7 @@ const ClashLeaderboardPage = () => {
       </td>
       <td className="p-3 border-b border-gray-700 font-medium">{player.name}</td>
       <td className="p-3 border-b border-gray-700 text-center font-mono">
-        {(player.xp / 100).toFixed(2)}
+        {(player.wagered / 100).toFixed(2)}
       </td>
       <td className="p-3 border-b border-gray-700 text-center font-semibold text-yellow-300">
         {(rewards && rewards[index] ? rewards[index].amount / 100 : 0).toFixed(2)}

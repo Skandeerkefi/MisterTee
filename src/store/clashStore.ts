@@ -10,10 +10,11 @@ interface Player {
   name: string;
   userId: number;
   xp: number;
-  wageredGems: number;  // Use the property from your API
+   // Use the property from your API
   depositsGems: number;
   avatar?: string;
   earned?: number;
+  wagered?: number;
 }
 
 interface ClashState {
