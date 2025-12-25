@@ -49,7 +49,7 @@ export function Navbar() {
 				{ name: "Clash", path: "/clash" },
 				{ name: "Roobet", path: "/leaderboards" },
 				{ name: "Packdraw", path:"/packdraw"},
-				{ name: "Csgo", path:"/leaderboard"},
+				{ name: "CSGOWin", path:"/leaderboard"},
 			],
 		},
 		{
