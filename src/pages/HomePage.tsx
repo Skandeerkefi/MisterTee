@@ -206,7 +206,7 @@ function HomePage() {
     </div>
 
     {/* PACKDRAW */}
-    {/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
       <div className="flex items-center justify-center mb-4">
         <img
           src="https://i.ibb.co/cXZbz0cy/IMG-0404-removebg-preview.png"
@@ -235,7 +235,7 @@ function HomePage() {
       >
         Join Packdraw
       </a>
-    </div> */}
+    </div>
 
   </div>
 </section>

@@ -11,29 +11,31 @@ dayjs.extend(duration);
 dayjs.extend(utc);
 
 const prizeMap: Record<number, string> = {
-	1: "100 $ 🥇",
-	2: "50 $ 🥈",
-	3: "25 $ 🥉",
-	4: "25 $",
+	1: "$250 🥇",
+	2: "$125 🥈",
+	3: "$75 🥉",
+	4: "$30",
+	5: "$20",
 };
 
-// ✅ Monthly cycle: 21 → 20
+// ✅ Monthly cycle: 27 → 27 (e.g. Dec 27 → Jan 27)
 function getMonthlyCycleRangeUTC() {
 	const now = dayjs.utc();
 	const day = now.date();
 
 	let start, end;
 
-	if (day >= 21) {
-		start = now.date(21).startOf("day");
-		end = now.add(1, "month").date(20).endOf("day");
+	if (day >= 27) {
+		start = now.date(27).startOf("day");
+		end = now.add(1, "month").date(27).endOf("day");
 	} else {
-		start = now.subtract(1, "month").date(21).startOf("day");
-		end = now.date(20).endOf("day");
+		start = now.subtract(1, "month").date(27).startOf("day");
+		end = now.date(27).endOf("day");
 	}
 
 	return { start, end };
 }
+
 
 function getDisplayRange() {
 	const { start, end } = getMonthlyCycleRangeUTC();
@@ -86,18 +88,18 @@ const PackdrawPage = () => {
 					🔥 Packdraw Monthly Leaderboard 🔥
 				</h1>
 
-				<p className="text-center text-gray-400 mb-2">
+				<p className="mb-2 text-center text-gray-400">
 					Range: <span className="text-red-400">{getDisplayRange()}</span>
 				</p>
 
-				<p className="text-center text-md font-semibold text-gray-300 mb-6">
+				<p className="mb-6 font-semibold text-center text-gray-300 text-md">
 					⏳ Next Reset In:{" "}
-					<span className="text-yellow-400 font-bold">{timeLeft}</span>
+					<span className="font-bold text-yellow-400">{timeLeft}</span>
 				</p>
 
 				<div className="mt-2 text-center text-gray-400">
 					<p className="text-lg font-semibold text-red-400">
-						Total Prize Pool: 200 $ 💰
+						Total Prize Pool: 500 $ 💰
 					</p>
 					<p>
 						Use code <span className="font-bold text-white">"MisterTee"</span>{" "}
