@@ -49,10 +49,7 @@ const PackdrawPage = () => {
 	// Fetch leaderboard for month of cycle start
 	useEffect(() => {
 		const { start } = getMonthlyCycleRangeUTC();
-		const month = start.format("MM");
-		const year = start.format("YYYY");
-
-		fetchMonthly(month, year);
+		fetchMonthly(start.toISOString());
 	}, [fetchMonthly]);
 
 	// Countdown
