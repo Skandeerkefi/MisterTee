@@ -18,19 +18,19 @@ const prizeMap: Record<number, string> = {
 	5: "$20",
 };
 
-// ✅ Monthly cycle: 27 → 27 (e.g. Dec 27 → Jan 27)
+// ✅ Monthly cycle: 28 → 28 (e.g. Dec 28 → Jan 28)
 function getMonthlyCycleRangeUTC() {
 	const now = dayjs.utc();
 	const day = now.date();
 
 	let start, end;
 
-	if (day >= 27) {
-		start = now.date(27).startOf("day");
-		end = now.add(1, "month").date(27).endOf("day");
+	if (day >= 28) {
+		start = now.date(28).startOf("day");
+		end = now.add(1, "month").date(28).endOf("day");
 	} else {
-		start = now.subtract(1, "month").date(27).startOf("day");
-		end = now.date(27).endOf("day");
+		start = now.subtract(1, "month").date(28).startOf("day");
+		end = now.date(28).endOf("day");
 	}
 
 	return { start, end };
