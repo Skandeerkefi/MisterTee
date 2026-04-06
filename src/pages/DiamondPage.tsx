@@ -81,7 +81,7 @@ export default function DiamondPage() {
 						<span className='text-sm font-semibold uppercase tracking-[0.3em]'>500 Coins</span>
 					</div>
 					<h1 className='mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl'>
-						Diamonds Bi-Weekly Leaderboard
+						CsgoDiamonds Bi-Weekly Leaderboard
 					</h1>
 					<p className='mt-3 text-sm text-slate-300'>
 						Period: {periodLabel}
