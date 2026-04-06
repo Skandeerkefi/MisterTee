@@ -53,10 +53,21 @@ export default function DiamondPage() {
 		return () => window.clearInterval(timer);
 	}, [period.end]);
 
-	const topFive = leaderboard
+	const topTen = leaderboard
 		.slice()
 		.sort((a, b) => getDiamondDisplayValue(b) - getDiamondDisplayValue(a))
-		.slice(0, 5);
+		.slice(0, 10);
+
+	const podiumPlayers = topTen.slice(0, 3);
+	const tablePlayers = topTen.slice(3);
+
+	const prizeMap: Record<number, number> = {
+		1: 250,
+		2: 120,
+		3: 70,
+		4: 30,
+		5: 30,
+	};
 
 	return (
 		<div className='relative flex flex-col min-h-screen text-white'>
@@ -78,21 +89,36 @@ export default function DiamondPage() {
 					<p className='mt-1 text-sm text-red-200'>{countdown}</p>
 				</div>
 
-				<div className='grid gap-4 mb-10 md:grid-cols-5'>
+				<div className='grid gap-4 mb-10 md:grid-cols-3'>
 					{[
-						{ place: "1st", reward: 250 },
-						{ place: "2nd", reward: 120 },
-						{ place: "3rd", reward: 70 },
-						{ place: "4th", reward: 30 },
-						{ place: "5th", reward: 30 },
+						{ label: "Top 2", place: 2, reward: 120, player: podiumPlayers[1] },
+						{ label: "Top 1", place: 1, reward: 250, player: podiumPlayers[0] },
+						{ label: "Top 3", place: 3, reward: 70, player: podiumPlayers[2] },
 					].map((item) => (
 						<div
-							key={item.place}
-							className='p-4 text-center border shadow-xl rounded-2xl border-red-500/20 bg-white/5 shadow-black/20 backdrop-blur'
+							key={item.label}
+							className='p-6 text-center border shadow-xl rounded-2xl border-red-500/20 bg-white/5 shadow-black/20 backdrop-blur'
 						>
-							<p className='text-sm uppercase tracking-[0.2em] text-red-200'>{item.place}</p>
-							<p className='mt-2 text-3xl font-bold text-white'>{item.reward}</p>
+							<p className='text-sm uppercase tracking-[0.2em] text-red-200'>{item.label}</p>
+							<p className='mt-2 text-3xl font-bold text-white'>
+								{item.reward}
+							</p>
 							<p className='mt-1 text-sm text-slate-300'>coins</p>
+							<div className='px-4 py-3 mt-4 border rounded-xl border-white/10 bg-black/20'>
+								{item.player ? (
+									<>
+										<p className='text-sm uppercase tracking-[0.2em] text-slate-400'>Rank #{item.place}</p>
+										<p className='mt-2 text-lg font-semibold text-white'>
+											{getDiamondDisplayName(item.player)}
+										</p>
+										<p className='mt-1 text-sm text-red-200'>
+											{getDiamondDisplayValue(item.player).toLocaleString()}
+										</p>
+									</>
+								) : (
+									<p className='text-sm text-slate-400'>Waiting for leaderboard data</p>
+								)}
+							</div>
 						</div>
 					))}
 				</div>
@@ -107,14 +133,14 @@ export default function DiamondPage() {
 
 				<section className='border shadow-2xl rounded-2xl border-red-500/20 bg-white/5 shadow-black/30 backdrop-blur'>
 					<div className='px-6 py-4 border-b border-white/10'>
-						<h2 className='text-xl font-semibold text-white'>Top 5</h2>
+						<h2 className='text-xl font-semibold text-white'>Top 10</h2>
 					</div>
 
 					{loading ? (
 						<div className='flex items-center justify-center h-64'>
 							<Loader2 className='w-10 h-10 text-red-300 animate-spin' />
 						</div>
-					) : topFive.length > 0 ? (
+					) : topTen.length > 0 ? (
 						<div className='overflow-x-auto'>
 							<table className='w-full text-left'>
 								<thead className='bg-white/5 text-sm uppercase tracking-[0.2em] text-slate-300'>
@@ -122,15 +148,19 @@ export default function DiamondPage() {
 										<th className='px-6 py-4'>Place</th>
 										<th className='px-6 py-4'>User</th>
 										<th className='px-6 py-4'>Value</th>
+										<th className='px-6 py-4'>Prize</th>
 									</tr>
 								</thead>
 								<tbody>
-									{topFive.map((entry, index) => (
+									{tablePlayers.map((entry, index) => (
 										<tr key={`${getDiamondDisplayName(entry)}-${index}`} className='border-t border-white/10'>
-											<td className='px-6 py-4 font-semibold text-red-200'>#{index + 1}</td>
+											<td className='px-6 py-4 font-semibold text-red-200'>#{index + 4}</td>
 											<td className='px-6 py-4 text-white'>{getDiamondDisplayName(entry)}</td>
 											<td className='px-6 py-4 text-slate-200'>
 												{getDiamondDisplayValue(entry).toLocaleString()}
+											</td>
+											<td className='px-6 py-4 text-slate-200'>
+												{prizeMap[index + 4] ? `$${prizeMap[index + 4]}` : "-"}
 											</td>
 										</tr>
 									))}
