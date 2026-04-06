@@ -25,14 +25,15 @@ const RoobetPage: React.FC = () => {
 
   // 💰 Prize mapping
   const prizeMap: Record<number, string> = {
-    1: "$450",
-    2: "$250",
-    3: "$100",
-    4: "$75",
-    5: "$50",
-    6: "$25",
-    7: "$25",
+    1: "$675",
+    2: "$300",
+    3: "$175",
+    4: "$100",
+    5: "$80",
+    6: "$70",
+    7: "$50",
     8: "$25",
+    9: "$25",
   };
 
   // ⏳ Countdown (UTC-based)
@@ -69,7 +70,7 @@ const RoobetPage: React.FC = () => {
 
       <main className="relative z-10 flex-grow w-full max-w-6xl px-6 py-10 mx-auto">
         <h1 className="mb-4 text-4xl font-extrabold text-center text-[#fefefe] drop-shadow-lg">
-          🎰 Roobet Leaderboard – $1,000 Prize Pool
+          🎰 Roobet Leaderboard – $1,500 Monthly Prize Pool
         </h1>
 
         {/* 🗓️ Event Duration */}

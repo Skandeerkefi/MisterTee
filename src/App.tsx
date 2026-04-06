@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
-import LeaderboardPage from "@/pages/LeaderboardPage";
 import SlotCallsPage from "@/pages/SlotCallsPage";
 import GiveawaysPage from "@/pages/GiveawaysPage";
 import LoginPage from "@/pages/LoginPage";
@@ -17,6 +16,7 @@ import RainPage from "@/pages/RainPage";
 import CSGOLeadPage from "./pages/CSGOLead";
 import PackdrawPage from "./pages/PackdrawPage";
 import ClashLeaderboardPage from "./pages/ClashLeaderboardPage";
+import DiamondPage from "@/pages/DiamondPage";
 function App() {
 	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 	const user = useAuthStore((state) => state.user);
@@ -43,7 +43,7 @@ function App() {
 					<Route path='/slot-calls' element={<SlotCallsPage />} />
 					<Route path='/giveaways' element={<GiveawaysPage />} />
 					<Route path='/login' element={<LoginPage />} />
-					<Route path='/signup' element={<SignupPage />} />s
+					<Route path='/signup' element={<SignupPage />} />
 					<Route path='*' element={<NotFoundPage />} />
 					<Route path='/slot-overlay' element={<SlotOverlay />} />
 					<Route path='/bonus-hunt' element={<BonusHuntPage />} />
@@ -51,6 +51,7 @@ function App() {
 					<Route path='/rain' element={<RainPage />} />
 					<Route path='/clash' element={<ClashLeaderboardPage />} />
 					<Route path='/packdraw' element={<PackdrawPage />} />
+					<Route path='/diamonds' element={<DiamondPage />} />
 				</Routes>
 			</BrowserRouter>
 			<Toaster />
