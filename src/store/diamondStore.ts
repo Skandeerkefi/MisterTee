@@ -9,7 +9,10 @@ export type DiamondEntry = {
 	wagered?: number;
 	referrals?: number;
 	count?: number;
+	totalAmount?: string | number;
 	prize?: number;
+	avatar?: string;
+	isAnon?: boolean;
 	[key: string]: unknown;
 };
 
@@ -57,7 +60,11 @@ function getDisplayAmount(entry: DiamondEntry) {
 					? entry.referrals
 					: typeof entry.count === "number"
 						? entry.count
-						: 0;
+						: typeof entry.totalAmount === "string"
+							? parseFloat(entry.totalAmount)
+							: typeof entry.totalAmount === "number"
+								? entry.totalAmount
+								: 0;
 
 	return Number(rawValue);
 }
