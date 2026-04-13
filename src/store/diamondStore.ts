@@ -79,19 +79,9 @@ export function getDiamondDisplayValue(entry: DiamondEntry) {
 
 function getCurrentBiweeklyPeriod() {
 	const now = new Date();
-	const utcDay = now.getUTCDay();
-	const daysSinceMonday = (utcDay + 6) % 7;
-	const start = new Date(Date.UTC(
-		now.getUTCFullYear(),
-		now.getUTCMonth(),
-		now.getUTCDate() - daysSinceMonday,
-		0,
-		0,
-		0,
-		0
-	));
-	const end = new Date(start);
-	end.setUTCDate(end.getUTCDate() + 13);
+	const year = now.getUTCFullYear();
+	const start = new Date(Date.UTC(year, 3, 6, 0, 0, 0, 0));
+	const end = new Date(Date.UTC(year, 3, 20, 23, 59, 59, 999));
 
 	return { start, end };
 }
