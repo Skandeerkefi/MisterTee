@@ -175,6 +175,38 @@ function HomePage() {
       </a>
     </div>
 
+		{/* CSGODiamonds */}
+		<div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+			<div className="flex items-center justify-center mb-6">
+				<img
+					src="https://i.ibb.co/93fsMNPh/Screenshot-2026-04-21-002032.png"
+					alt="CSGODiamonds"
+					className="object-contain h-20"
+				/>
+			</div>
+
+			<h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
+				💎 CSGODiamonds Rewards with MisterTee
+			</h3>
+
+			<ul className="mb-6 space-y-3 text-base text-gray-300">
+				<li>💎 10% Deposit Bonus from MisterTee rewards</li>
+				<li>🏆 500 Coins Bi-Weekly Leaderboard</li>
+				<li>🎁 Exclusive giveaways and community rewards</li>
+				<li>👑 VIP perks</li>
+				<li>🔒 More surprises coming soon</li>
+			</ul>
+
+			<a
+				href="https://csgodiamonds.com/r/MisterTee"
+				target="_blank"
+				rel="noreferrer"
+				className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
+			>
+				Join CSGODiamonds
+			</a>
+		</div>
+
     {/* PACKDRAW */}
     {/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
       <div className="flex items-center justify-center mb-4">
