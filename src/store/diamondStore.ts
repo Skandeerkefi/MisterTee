@@ -78,10 +78,8 @@ export function getDiamondDisplayValue(entry: DiamondEntry) {
 }
 
 function getCurrentBiweeklyPeriod() {
-	const now = new Date();
-	const year = now.getUTCFullYear();
-	const start = new Date(Date.UTC(year, 3, 6, 0, 0, 0, 0));
-	const end = new Date(Date.UTC(year, 3, 20, 23, 59, 59, 999));
+	const start = new Date(Date.UTC(2026, 3, 21, 0, 0, 0, 0));
+	const end = new Date(Date.UTC(2026, 4, 5, 23, 59, 59, 999));
 
 	return { start, end };
 }
