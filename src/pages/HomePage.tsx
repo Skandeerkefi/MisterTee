@@ -190,7 +190,7 @@ function HomePage() {
 			</h3>
 
 			<ul className="mb-6 space-y-3 text-base text-gray-300">
-				<li>🏆 $1,200 leaderboard — cash prizes for top 7</li>
+				<li>🏆 1,200 C leaderboard — prizes for top 7</li>
 				<li>📊 Ranked by wager on the affiliate board</li>
 				<li>
 					<Link to="/csbattle" className="text-[#E10600] underline-offset-2 hover:underline">

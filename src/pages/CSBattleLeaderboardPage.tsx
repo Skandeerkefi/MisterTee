@@ -16,6 +16,11 @@ const FALLBACK_CSBATTLE_PRIZES: Record<number, number> = {
 	7: 25,
 };
 
+/** Display prizes as site currency “C” (frontend only). */
+function formatPrizeC(amount: number): string {
+	return `${amount.toLocaleString()} C`;
+}
+
 function parsePeriodEnd(to: string): dayjs.Dayjs | null {
 	const trimmed = to.trim();
 	const parsed = dayjs(trimmed, "YYYY-MM-DD HH:mm:ss", true);
@@ -110,17 +115,17 @@ export default function CSBattleLeaderboardPage() {
 				<p className='mt-3 text-lg font-semibold text-center text-amber-300'>
 					Total prize pool:{" "}
 					<span className='text-white'>
-						${totalPoolUsd.toLocaleString()} USD
+						{formatPrizeC(totalPoolUsd)}
 					</span>
 				</p>
 				<p className='mt-1 text-sm text-center text-slate-400'>
-					1st ${rankPrizes[1]?.toLocaleString() ?? "—"} · 2nd $
-					{rankPrizes[2]?.toLocaleString() ?? "—"} · 3rd $
-					{rankPrizes[3]?.toLocaleString() ?? "—"} · 4th $
-					{rankPrizes[4]?.toLocaleString() ?? "—"} · 5th $
-					{rankPrizes[5]?.toLocaleString() ?? "—"} · 6th $
-					{rankPrizes[6]?.toLocaleString() ?? "—"} · 7th $
-					{rankPrizes[7]?.toLocaleString() ?? "—"}
+					1st {rankPrizes[1] != null ? formatPrizeC(rankPrizes[1]) : "—"} · 2nd{" "}
+					{rankPrizes[2] != null ? formatPrizeC(rankPrizes[2]) : "—"} · 3rd{" "}
+					{rankPrizes[3] != null ? formatPrizeC(rankPrizes[3]) : "—"} · 4th{" "}
+					{rankPrizes[4] != null ? formatPrizeC(rankPrizes[4]) : "—"} · 5th{" "}
+					{rankPrizes[5] != null ? formatPrizeC(rankPrizes[5]) : "—"} · 6th{" "}
+					{rankPrizes[6] != null ? formatPrizeC(rankPrizes[6]) : "—"} · 7th{" "}
+					{rankPrizes[7] != null ? formatPrizeC(rankPrizes[7]) : "—"}
 				</p>
 				<p className='mt-4 text-center text-slate-300'>
 					Ranked by total wager. Use MisterTee&apos;s CSBattle code to climb the
@@ -199,9 +204,7 @@ export default function CSBattleLeaderboardPage() {
 												})}
 											</td>
 											<td className='p-3 font-semibold text-right text-amber-300'>
-												{prizeUsd != null
-													? `$${prizeUsd.toLocaleString()}`
-													: "—"}
+												{prizeUsd != null ? formatPrizeC(prizeUsd) : "—"}
 											</td>
 										</tr>
 									);
