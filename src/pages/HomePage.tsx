@@ -190,7 +190,7 @@ function HomePage() {
 			</h3>
 
 			<ul className="mb-6 space-y-3 text-base text-gray-300">
-				<li>🏆 1,200 C leaderboard — prizes for top 7</li>
+				<li>🏆 1,000 C leaderboard — prizes for top 6</li>
 				<li>📊 Ranked by wager on the affiliate board</li>
 				<li>
 					<Link to="/csbattle" className="text-[#E10600] underline-offset-2 hover:underline">
@@ -198,7 +198,7 @@ function HomePage() {
 					</Link>
 				</li>
 				<li>🎁 Use MisterTee&apos;s code when you sign up</li>
-				<li>🔒 More perks coming soon</li>
+				<li>🔒 10% deposit bonus</li>
 			</ul>
 
 			<a
