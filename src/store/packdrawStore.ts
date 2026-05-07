@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 interface PackdrawEntry {
   username: string;
@@ -30,7 +31,7 @@ export const usePackdrawStore = create<PackdrawState>((set) => ({
     set({ loading: true, error: null });
 
     const res = await fetch(
-      `https://misterteedata-production.up.railway.app/api/packdraw?after=${afterISO}`
+      `${getApiBaseUrl()}/api/packdraw?after=${afterISO}`
     );
 
     const data = await res.json();

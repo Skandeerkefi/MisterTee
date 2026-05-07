@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 export type DiamondEntry = {
 	username?: string;
@@ -27,8 +28,6 @@ type DiamondsApiResponse =
 		end?: string;
 		[key: string]: unknown;
 	};
-
-const BACKEND_URL = "https://misterteedata-production.up.railway.app/api/leaderboard/diamonds";
 
 function normalizeErrorMessage(error: unknown) {
 	if (typeof error === "string") return error;
@@ -110,10 +109,13 @@ export const useDiamondStore = create<DiamondStore>((set, get) => ({
 		set({ loading: true, error: null, period: nextPeriod });
 
 		try {
-			const response = await axios.post(BACKEND_URL, {
-				before: nextPeriod.end.getTime(),
-				after: nextPeriod.start.getTime(),
-			});
+			const response = await axios.post(
+				`${getApiBaseUrl()}/api/leaderboard/diamonds`,
+				{
+					before: nextPeriod.end.getTime(),
+					after: nextPeriod.start.getTime(),
+				}
+			);
 
 			set({
 				leaderboard: normalizeDiamondEntries(response.data),

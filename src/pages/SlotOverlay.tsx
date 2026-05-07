@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 export default function SlotOverlay() {
 	const [visibleCalls, setVisibleCalls] = useState<any[]>([]);
@@ -9,7 +10,7 @@ export default function SlotOverlay() {
 		const fetchOverlayCalls = async () => {
 			try {
 				const res = await fetch(
-					"https://misterteedata.onrender.com/api/slot-calls",
+					`${getApiBaseUrl()}/api/slot-calls`,
 					{
 						headers: {
 							Authorization:

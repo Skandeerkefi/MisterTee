@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { getApiBaseUrl } from "@/lib/apiBase";
 import { useAuthStore } from "./useAuthStore";
 
 export type SlotCallStatus = "pending" | "accepted" | "rejected" | "played";
@@ -43,7 +44,7 @@ export const useSlotCallStore = create<SlotCallState>((set, get) => ({
 		set({ isSubmitting: true });
 		try {
 			const res = await fetch(
-				"https://misterteedata-production.up.railway.app/api/slot-calls",
+				`${getApiBaseUrl()}/api/slot-calls`,
 				{
 					method: "POST",
 					headers: {
@@ -92,7 +93,7 @@ export const useSlotCallStore = create<SlotCallState>((set, get) => ({
 
 		try {
 			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/slot-calls/${id}/bonus-call`,
+				`${getApiBaseUrl()}/api/slot-calls/${id}/bonus-call`,
 				{
 					method: "POST",
 					headers: {
@@ -127,7 +128,7 @@ export const useSlotCallStore = create<SlotCallState>((set, get) => ({
 
 		try {
 			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/slot-calls/${id}/status`,
+				`${getApiBaseUrl()}/api/slot-calls/${id}/status`,
 				{
 					method: "POST",
 					headers: {
@@ -169,7 +170,7 @@ export const useSlotCallStore = create<SlotCallState>((set, get) => ({
 
 		try {
 			const res = await fetch(
-				`https://misterteedata-production.up.railway.app/api/slot-calls/${id}`,
+				`${getApiBaseUrl()}/api/slot-calls/${id}`,
 				{
 					method: "DELETE",
 					headers: {
@@ -198,10 +199,11 @@ export const useSlotCallStore = create<SlotCallState>((set, get) => ({
 		const userRole = useAuthStore.getState().user?.role;
 		if (!token) return;
 
+		const base = getApiBaseUrl();
 		const url =
 			userRole === "admin"
-				? "https://misterteedata-production.up.railway.app/api/slot-calls"
-				: "https://misterteedata-production.up.railway.app/api/slot-calls/my";
+				? `${base}/api/slot-calls`
+				: `${base}/api/slot-calls/my`;
 
 		try {
 			const res = await fetch(url, {

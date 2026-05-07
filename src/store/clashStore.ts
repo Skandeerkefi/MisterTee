@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 interface Reward {
   type: string;
@@ -40,7 +41,7 @@ export const useClashStore = create<ClashState>((set) => ({
 
     try {
       const { data } = await axios.get(
-        "https://misterteedata-production.up.railway.app/api/leaderboard/clash/leaderboards"
+        `${getApiBaseUrl()}/api/leaderboard/clash/leaderboards`
       );
 
       // Convert startDate/endDate strings to Date objects

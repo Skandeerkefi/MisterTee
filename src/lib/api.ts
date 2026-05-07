@@ -1,9 +1,8 @@
 import axios from "axios";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 const api = axios.create({
-	// baseURL: "https://misterteedata.onrender.com",
-	baseURL: "https://misterteedata-production.up.railway.app",
-	// Your backend URL
+	baseURL: getApiBaseUrl(),
 });
 
 export default api;

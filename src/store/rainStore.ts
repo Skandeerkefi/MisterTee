@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 export type LeaderboardUser = {
 	id: string;
@@ -29,7 +30,7 @@ export const useRainStore = create<RainStore>((set) => ({
 		try {
 			set({ loading: true, error: null });
 			const res = await axios.get(
-				"https://misterteedata-production.up.railway.app/rain",
+				`${getApiBaseUrl()}/rain`,
 				{
 					params: { start_date, end_date, type },
 				}

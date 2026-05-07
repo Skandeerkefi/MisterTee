@@ -17,6 +17,8 @@ import CSGOLeadPage from "./pages/CSGOLead";
 import PackdrawPage from "./pages/PackdrawPage";
 import ClashLeaderboardPage from "./pages/ClashLeaderboardPage";
 import DiamondPage from "@/pages/DiamondPage";
+import CSBattleLeaderboardPage from "@/pages/CSBattleLeaderboardPage";
+import AdminLeaderboardPage from "@/pages/AdminLeaderboardPage";
 function App() {
 	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 	const user = useAuthStore((state) => state.user);
@@ -52,6 +54,11 @@ function App() {
 					<Route path='/clash' element={<ClashLeaderboardPage />} />
 					<Route path='/packdraw' element={<PackdrawPage />} />
 					<Route path='/diamonds' element={<DiamondPage />} />
+					<Route path='/csbattle' element={<CSBattleLeaderboardPage />} />
+					<Route
+						path='/admin/leaderboards'
+						element={<AdminLeaderboardPage />}
+					/>
 				</Routes>
 			</BrowserRouter>
 			<Toaster />

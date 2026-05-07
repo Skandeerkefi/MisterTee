@@ -50,7 +50,7 @@ export function Navbar() {
 				{ name: "Roobet", path: "/leaderboards" },
 				// { name: "Packdraw", path:"/packdraw"},
 				{ name: "CSGOWin", path:"/leaderboard"},
-					{ name: "Diamonds", path: "/diamonds" },
+					{ name: "CSBattle", path: "/csbattle" },
 			],
 		},
 		{
@@ -132,6 +132,14 @@ export function Navbar() {
 										<User className='w-5 h-5' />
 										<span>{user.username}</span>
 									</Link>
+									{user.role === "admin" && (
+										<Link
+											to='/admin/leaderboards'
+											className='text-sm font-semibold text-amber-400 hover:text-amber-300'
+										>
+											Leaderboard admin
+										</Link>
+									)}
 									<button
 										onClick={logout}
 										className='flex items-center space-x-2 bg-[#E10600] hover:bg-[#b00500] text-white px-4 py-1.5 rounded-md font-semibold transition'
@@ -271,6 +279,15 @@ export function Navbar() {
 										<User className='w-6 h-6' />
 										<span>{user.username}</span>
 									</Link>
+									{user.role === "admin" && (
+										<Link
+											to='/admin/leaderboards'
+											onClick={() => setIsOpen(false)}
+											className='block text-amber-400 font-semibold hover:text-amber-300'
+										>
+											Leaderboard admin
+										</Link>
+									)}
 									<button
 										onClick={() => {
 											logout();

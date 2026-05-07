@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import dayjs from "dayjs"; // lightweight date library (npm install dayjs)
+import { getApiBaseUrl } from "@/lib/apiBase";
 
 import utc from "dayjs/plugin/utc";
 
@@ -44,7 +45,7 @@ export const useRoobetStore = create<RoobetStore>((set) => ({
 }
 
 
-			let url = `https://misterteedata-production.up.railway.app/api/leaderboard/${startDate}/${endDate}`;
+			let url = `${getApiBaseUrl()}/api/leaderboard/${startDate}/${endDate}`;
 
 			const response = await axios.get(url);
 

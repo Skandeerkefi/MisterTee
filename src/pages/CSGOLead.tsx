@@ -4,6 +4,7 @@ import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import dayjs from "dayjs";
+import { getApiBaseUrl } from "@/lib/apiBase";
 import duration from "dayjs/plugin/duration";
 import utc from "dayjs/plugin/utc";
 
@@ -19,7 +20,7 @@ const CSGOLeadPage = () => {
     const fetchData = async () => {
       await fetchLeaderboard(10);
 
-      const res = await fetch(`https://misterteedata-production.up.railway.app/api/leaderboard/csgowin`);
+      const res = await fetch(`${getApiBaseUrl()}/api/leaderboard/csgowin`);
       const data = await res.json();
       const currentLB = data.leaderboards?.[0];
 

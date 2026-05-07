@@ -175,35 +175,40 @@ function HomePage() {
       </a>
     </div>
 
-		{/* CSGODiamonds */}
+		{/* CSBattle */}
 		<div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
 			<div className="flex items-center justify-center mb-6">
-				<img
-					src="https://i.ibb.co/93fsMNPh/Screenshot-2026-04-21-002032.png"
-					alt="CSGODiamonds"
-					className="object-contain h-20"
-				/>
+				<div className="flex items-center justify-center h-20 px-4 rounded-2xl border border-[#E10600]/50 bg-black/40">
+					<span className="text-2xl font-black tracking-tight">
+						<span className="text-[#E10600]">CS</span>
+						<span className="text-white">Battle</span>
+					</span>
+				</div>
 			</div>
 
 			<h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
-				💎 CSGODiamonds Rewards with MisterTee
+				🎯 CSBattle Rewards with MisterTee
 			</h3>
 
 			<ul className="mb-6 space-y-3 text-base text-gray-300">
-				<li>💎 10% Deposit Bonus from MisterTee rewards</li>
-				<li>🏆 500 Coins Bi-Weekly Leaderboard</li>
-				<li>🎁 Exclusive giveaways and community rewards</li>
-				<li>👑 VIP perks</li>
-				<li>🔒 More surprises coming soon</li>
+				<li>🏆 $1,200 leaderboard — cash prizes for top 7</li>
+				<li>📊 Ranked by wager on the affiliate board</li>
+				<li>
+					<Link to="/csbattle" className="text-[#E10600] underline-offset-2 hover:underline">
+						View live leaderboard
+					</Link>
+				</li>
+				<li>🎁 Use MisterTee&apos;s code when you sign up</li>
+				<li>🔒 More perks coming soon</li>
 			</ul>
 
 			<a
-				href="https://csgodiamonds.com/r/MisterTee"
+				href="https://csbattle.com/"
 				target="_blank"
 				rel="noreferrer"
 				className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
 			>
-				Join CSGODiamonds
+				Join CSBattle
 			</a>
 		</div>
 
