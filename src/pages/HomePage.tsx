@@ -178,12 +178,11 @@ function HomePage() {
 		{/* CSBattle */}
 		<div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
 			<div className="flex items-center justify-center mb-6">
-				<div className="flex items-center justify-center h-20 px-4 rounded-2xl border border-[#E10600]/50 bg-black/40">
-					<span className="text-2xl font-black tracking-tight">
-						<span className="text-[#E10600]">CS</span>
-						<span className="text-white">Battle</span>
-					</span>
-				</div>
+				<img
+					src="https://i.ibb.co/TD0JhQ97/Screenshot-2026-05-07-015130-removebg-preview.png"
+					alt="CSBattle"
+					className="object-contain h-20"
+				/>
 			</div>
 
 			<h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
