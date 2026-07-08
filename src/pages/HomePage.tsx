@@ -176,7 +176,7 @@ function HomePage() {
     </div>
 
 		{/* CSBattle */}
-		<div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
+		{/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
 			<div className="flex items-center justify-center mb-6">
 				<img
 					src="https://i.ibb.co/TD0JhQ97/Screenshot-2026-05-07-015130-removebg-preview.png"
@@ -209,7 +209,7 @@ function HomePage() {
 			>
 				Join CSBattle
 			</a>
-		</div>
+		</div> */}
 
     {/* PACKDRAW */}
     {/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
