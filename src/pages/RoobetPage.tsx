@@ -139,6 +139,9 @@ const RoobetPage: React.FC = () => {
 					⏳ Time Remaining Until Next Reset:{" "}
 					<span className='text-[#ffd01f] font-bold'>{timeLeft}</span>
 				</p>
+				<p className='mb-8 text-center text-md font-semibold text-[#fefefe]'>
+					Sniping Leaderboard is restricted You can't get be paid if u snipe
+				</p>
 
 				{loading && (
 					<p className='text-center text-[#fefefe]'>Loading leaderboard...</p>

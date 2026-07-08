@@ -50,7 +50,7 @@ export function Navbar() {
 				{ name: "Roobet", path: "/leaderboards" },
 				// { name: "Packdraw", path:"/packdraw"},
 				{ name: "CSGOWin", path:"/leaderboard"},
-					{ name: "CSBattle", path: "/csbattle" },
+					
 			],
 		},
 		{
