@@ -1,0 +1,106 @@
+* [33m06abbf1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m no csbattle
+[31m|[m * [33me3cb293[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #1 from Skandeerkefi/vercel/react-server-components-cve-vu-vlliwx
+[31m|[m[31m/[m[33m|[m 
+[31m|[m * [33m4b031f9[m[33m ([m[1;31morigin/vercel/react-server-components-cve-vu-vlliwx[m[33m)[m Fix React Server Components CVE vulnerabilities
+[31m|[m[31m/[m  
+* [33m030ff1e[m snipe
+* [33m3402a3f[m vd
+* [33mc05e755[m change $ to c
+* [33m90cf232[m admin
+* [33meec84b1[m admin
+* [33m3dee396[m add resend email service
+* [33m357af53[m add resend email service
+* [33m5e1c0b8[m fixed one lead
+* [33m7a3638b[m Diam Lead Added
+* [33m5f3f14f[m Diam Lead Added
+* [33m7c8789e[m Diam Lead Added
+* [33m0945f5b[m Diam Lead Added
+* [33m92b3e4f[m Diam Lead Added
+* [33m7cce43a[m Initial FastAPI ML API
+* [33mbd57739[m fix tme zone
+* [33md3071be[m fix tme zone
+* [33m4ea4bef[m fix tme zone
+* [33mb9c6c62[m fix tme zone
+* [33mea00f12[m fix tme zone
+* [33m2c10447[m fix tme zone
+* [33m610901a[m fix tme zone
+* [33m1d041fa[m fix tme zone
+* [33m5fa0cd2[m fix tme zone
+* [33me18f6d3[m fix tme zone
+* [33mea8c25a[m fix tme zone
+* [33m87db06b[m fix tme zone
+* [33m7662d9c[m fix tme zone
+* [33m37bec2d[m fix tme zone
+* [33md696528[m fix tme zone
+* [33macaf6de[m fix tme zone
+* [33mc1a0f52[m fix tme zone
+* [33m48b10af[m Initial FastAPI ML API
+* [33m0a35d2a[m Initial FastAPI ML API
+* [33mb340fa7[m Initial FastAPI ML API
+* [33m4ae512b[m Initial FastAPI ML API
+* [33m47790e5[m Initial FastAPI ML API
+* [33m12f6565[m Initial FastAPI ML API
+* [33m4066d3f[m Initial FastAPI ML API
+* [33mbe74707[m Initial FastAPI ML API
+* [33mb7c37f9[m Initial FastAPI ML API
+* [33mf71bd24[m Initial FastAPI ML API
+* [33m82e0d67[m Initial FastAPI ML API
+* [33m21823d2[m Initial FastAPI ML API
+* [33m3051c06[m Initial FastAPI ML API
+* [33mdc71e7c[m Initial FastAPI ML API
+* [33m976588d[m Initial FastAPI ML API
+* [33ma065400[m Initial FastAPI ML API
+* [33mf9487f6[m Initial FastAPI ML API
+* [33m5251bc3[m Initial FastAPI ML API
+* [33m616dcb1[m Initial FastAPI ML API
+* [33m319d894[m Initial FastAPI ML API
+* [33m2b03a06[m Initial FastAPI ML API
+* [33m1a4a4d5[m Initial FastAPI ML API
+* [33m0fa92a9[m Initial FastAPI ML API
+* [33meaa64a0[m Initial FastAPI ML API
+* [33md79b459[m Initial FastAPI ML API
+* [33m6e1afcb[m Initial FastAPI ML API
+* [33md1adeba[m Initial FastAPI ML API
+* [33m338de9d[m Initial FastAPI ML API
+* [33mfcaee35[m Initial FastAPI ML API
+* [33m2519b79[m Initial FastAPI ML API
+* [33m6bbda91[m Initial FastAPI ML API
+* [33m25dde6b[m Initial FastAPI ML API
+* [33m7e12dc4[m Initial FastAPI ML API
+* [33m4f89b03[m Initial FastAPI ML API
+* [33m06ef89e[m Added ignored files
+* [33m0d4518e[m Your commit message describing the changes
+* [33mb8ae659[m WIP: Save progress before merging into master
+* [33m63b65b4[m WIP: Save progress before merging into master
+* [33m19c319c[m WIP: Save progress before merging into master
+* [33m3623e6d[m WIP: Save progress before merging into master
+* [33me4313a9[m WIP: Save progress before merging into master
+* [33m4102e7a[m WIP: Save progress before merging into master
+* [33m65e4eec[m WIP: Save progress before merging into master
+* [33m29a6a6d[m WIP: Save progress before merging into master
+* [33m071f0ec[m WIP: Save progress before merging into master
+* [33mf94b4af[m WIP: Save progress before merging into master
+* [33mce31827[m WIP: Save progress before merging into master
+* [33m659d0d3[m WIP: Save progress before merging into master
+* [33m2bc37b5[m WIP: Save progress before merging into master
+* [33m485c262[m WIP: Save progress before merging into master
+* [33m7b595b2[m WIP: Save progress before merging into master
+* [33mb5200b9[m WIP: Save progress before merging into master
+* [33m055950c[m WIP: Save progress before merging into master
+* [33m780d2f3[m WIP: Save progress before merging into master
+* [33madafd19[m WIP: Save progress before merging into master
+* [33med56b59[m WIP: Save progress before merging into master
+* [33m6fa9b38[m WIP: Save progress before merging into master
+* [33madf057c[m WIP: Save progress before merging into master
+* [33m456bc4b[m WIP: Save progress before merging into master
+* [33m2a836d3[m WIP: Save progress before merging into master
+* [33maf703e3[m WIP: Save progress before merging into master
+* [33mc04920c[m WIP: Save progress before merging into master
+* [33m055b662[m WIP: Save progress before merging into master
+* [33m9f409bf[m WIP: Save progress before merging into master
+* [33m02f4437[m WIP: Save progress before merging into master
+* [33mff94b3a[m WIP: Save progress before merging into master
+* [33mc7e9160[m WIP: Save progress before merging into master
+* [33m654c3a8[m WIP: Save progress before merging into master
+* [33mf8309e8[m WIP: Save progress before merging into master
+* [33m6df8808[m Copied files from 5MOKING to Sparks
