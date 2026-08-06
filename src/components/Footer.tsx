@@ -38,6 +38,12 @@ export function Footer() {
 								Leaderboard
 							</Link>
 							<Link
+								to='/juice'
+								className='text-sm text-white/70 transition-colors hover:text-[#E10600]'
+							>
+								Juice
+							</Link>
+							<Link
 								to='/terms'
 								className='text-sm text-white/70 transition-colors hover:text-[#E10600]'
 							>

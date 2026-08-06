@@ -9,11 +9,13 @@ import { Label } from "@/components/ui/label";
 import { useAuthStore } from "@/store/useAuthStore";
 import {
 	type LeaderboardDisplayConfig,
+	normalizeLeaderboardDisplayConfig,
 	useLeaderboardDisplayStore,
 } from "@/store/leaderboardDisplayStore";
 
 const ROOBET_RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 const CSBATTLE_RANKS = [1, 2, 3, 4, 5, 6, 7] as const;
+const JUICE_RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 
 export default function AdminLeaderboardPage() {
 	const user = useAuthStore((s) => s.user);
@@ -30,7 +32,11 @@ export default function AdminLeaderboardPage() {
 	}, [fetchConfig]);
 
 	useEffect(() => {
-		if (config) setForm(JSON.parse(JSON.stringify(config)) as LeaderboardDisplayConfig);
+		if (config) {
+			setForm(
+				JSON.parse(JSON.stringify(normalizeLeaderboardDisplayConfig(config))) as LeaderboardDisplayConfig
+			);
+		}
 	}, [config]);
 
 	if (!user || user.role !== "admin") {
@@ -54,9 +60,14 @@ export default function AdminLeaderboardPage() {
 					to: form.csbattle.to.trim(),
 					prizes: { ...form.csbattle.prizes },
 				},
+				juice: {
+					startDate: form.juice.startDate.trim(),
+					endDate: form.juice.endDate.trim(),
+					prizes: { ...form.juice.prizes },
+				},
 			};
 			await saveConfig(payload, token);
-			setSaveMsg("Saved. CSBattle cache cleared; new dates apply immediately.");
+			setSaveMsg("Saved. Leaderboard caches cleared; new dates apply immediately.");
 		} catch (e: unknown) {
 			setSaveErr(e instanceof Error ? e.message : "Save failed");
 		} finally {
@@ -94,6 +105,21 @@ export default function AdminLeaderboardPage() {
 		});
 	};
 
+	const updateJuicePrize = (rank: number, value: string) => {
+		if (!form) return;
+		const n = value === "" ? 0 : Number(value);
+		setForm({
+			...form,
+			juice: {
+				...form.juice,
+				prizes: {
+					...form.juice.prizes,
+					[String(rank)]: Number.isFinite(n) ? Math.max(0, n) : 0,
+				},
+			},
+		});
+	};
+
 	return (
 		<div className='relative flex flex-col min-h-screen text-white bg-black'>
 			<GraphicalBackground />
@@ -104,9 +130,9 @@ export default function AdminLeaderboardPage() {
 					Admin — Leaderboard display
 				</h1>
 				<p className='mb-8 text-sm text-center text-slate-400'>
-					Set Roobet and CSBattle prize amounts and date ranges shown on the site.
-					Roobet: leave dates empty to use the current UTC calendar month for API
-					data.
+					Set Roobet, CSBattle, and Juice prize amounts and date ranges shown on the
+					site. Roobet: leave dates empty to use the current UTC calendar month for
+					API data.
 				</p>
 
 				{loading && !form && (
@@ -230,6 +256,68 @@ export default function AdminLeaderboardPage() {
 											className='mt-1 text-black bg-white'
 											value={form.csbattle.prizes[String(r)] ?? 0}
 											onChange={(e) => updateCsPrize(r, e.target.value)}
+										/>
+									</div>
+								))}
+							</div>
+						</section>
+
+						<section className='p-6 border rounded-2xl border-white/10 bg-black/50'>
+							<h2 className='mb-4 text-xl font-semibold text-amber-300'>
+								Juice.gg
+							</h2>
+							<p className='mb-3 text-xs text-slate-500'>
+								Set the date range for the Juice PLAY_AMOUNT leaderboard.
+							</p>
+							<div className='grid gap-4 sm:grid-cols-2'>
+								<div>
+									<Label htmlFor='juice-start'>Start date</Label>
+									<Input
+										id='juice-start'
+										type='date'
+										className='mt-1 text-black bg-white'
+										value={form.juice.startDate}
+										onChange={(e) =>
+											setForm({
+												...form,
+												juice: {
+													...form.juice,
+													startDate: e.target.value,
+												},
+											})
+										}
+									/>
+								</div>
+								<div>
+									<Label htmlFor='juice-end'>End date</Label>
+									<Input
+										id='juice-end'
+										type='date'
+										className='mt-1 text-black bg-white'
+										value={form.juice.endDate}
+										onChange={(e) =>
+											setForm({
+												...form,
+												juice: {
+													...form.juice,
+													endDate: e.target.value,
+												},
+											})
+										}
+									/>
+								</div>
+							</div>
+							<div className='grid grid-cols-2 gap-3 mt-4 sm:grid-cols-3'>
+								{JUICE_RANKS.map((r) => (
+									<div key={r}>
+										<Label htmlFor={`juice-p-${r}`}>Rank {r} ($)</Label>
+										<Input
+											id={`juice-p-${r}`}
+											type='number'
+											min={0}
+											className='mt-1 text-black bg-white'
+											value={form.juice.prizes[String(r)] ?? 0}
+											onChange={(e) => updateJuicePrize(r, e.target.value)}
 										/>
 									</div>
 								))}
