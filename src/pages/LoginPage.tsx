@@ -1,140 +1,26 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { LogIn } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { LogIn } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
-import { Link, useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
+import { getApiBaseUrl } from "@/lib/apiBase";
 import GraphicalBackground from "@/components/GraphicalBackground";
 
-function LoginPage() {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const { login, isLoading } = useAuthStore();
-	const { toast } = useToast();
-	const navigate = useNavigate();
+export default function LoginPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { setUser, setToken } = useAuthStore();
+  const error = searchParams.get("error");
+  const callbackToken = searchParams.get("token");
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!username || !password) return;
+  useEffect(() => {
+    if (!callbackToken) return;
+    fetch(`${getApiBaseUrl()}/api/auth/me`, { headers: { Authorization: `Bearer ${callbackToken}` } })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Invalid Kick session")))
+      .then((data) => { setToken(callbackToken); setUser(data.user); localStorage.setItem("token", callbackToken); localStorage.setItem("user", JSON.stringify(data.user)); navigate("/", { replace: true }); })
+      .catch(() => navigate("/login?error=session", { replace: true }));
+  }, [callbackToken, navigate, setToken, setUser]);
 
-		try {
-			const success = await login(username, password);
-
-			if (success) {
-				toast({
-					title: "Logged In",
-					description: `Welcome back, ${username}!`,
-				});
-				navigate("/");
-			}
-		} catch (error: any) {
-			toast({
-				title: "Login Failed",
-				description: error.message || "Invalid username or password.",
-				variant: "destructive",
-			});
-		}
-	};
-
-	return (
-		<div className='relative flex flex-col min-h-screen  text-[#000000]'>
-			{/* Background Canvas */}
-			<div className='fixed inset-0 -z-10'>
-				<GraphicalBackground />
-			</div>
-
-			<Navbar />
-
-			<main className='container relative z-10 flex items-center justify-center flex-grow py-12'>
-				<Card className='w-full max-w-md bg-[#F5F5F5] border border-[#E0E0E0] text-[#000000] shadow-md rounded-xl'>
-					<CardHeader className='space-y-1'>
-						<div className='flex items-center justify-center gap-2 mb-2'>
-							<LogIn className='w-6 h-6 text-[#000000]' />
-							<CardTitle className='text-2xl text-[#000000]'>Login</CardTitle>
-						</div>
-						<CardDescription className='text-center text-[#000000]'>
-							Enter your Kick username and password to access your account
-						</CardDescription>
-					</CardHeader>
-
-					<form onSubmit={handleSubmit}>
-						<CardContent className='space-y-4'>
-							<div className='space-y-2'>
-								<Label htmlFor='username' className='text-[#000000]'>
-									Kick Username
-								</Label>
-								<Input
-									id='username'
-									placeholder='Enter your username'
-									value={username}
-									onChange={(e) => setUsername(e.target.value)}
-									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
-								/>
-							</div>
-
-							<div className='space-y-2'>
-								<div className='flex items-center justify-between'>
-									<Label htmlFor='password' className='text-[#000000]'>
-										Password
-									</Label>
-									<Link
-										to='/forgot-password'
-										className='text-xs text-[#000000] hover:underline'
-									>
-										Forgot password?
-									</Link>
-								</div>
-								<Input
-									id='password'
-									type='password'
-									placeholder='Enter your password'
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									required
-									className='bg-[#FFFFFF] border border-[#E0E0E0] text-[#000000] placeholder:text-[#999999]'
-								/>
-							</div>
-						</CardContent>
-
-						<CardFooter className='flex flex-col space-y-4'>
-							<Button
-								type='submit'
-								className='w-full bg-[#000000] hover:bg-[#222222] text-[#FFFFFF]'
-								disabled={isLoading}
-							>
-								{isLoading ? "Signing In..." : "Sign In"}
-							</Button>
-
-							<div className='text-sm text-center text-[#000000]'>
-								Don't have an account?{" "}
-								<Link
-									to='/signup'
-									className='text-[#000000] font-semibold hover:underline'
-								>
-									Sign Up
-								</Link>
-							</div>
-						</CardFooter>
-					</form>
-				</Card>
-			</main>
-
-			<Footer />
-		</div>
-	);
+  return <div className="relative flex min-h-screen flex-col text-white"><GraphicalBackground /><Navbar /><main className="relative z-10 flex flex-1 items-center justify-center px-6 py-16"><div className="surface-panel w-full max-w-md p-8 text-center"><div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#8B5CF6]/15 text-[#A78BFA]"><LogIn className="h-7 w-7" /></div><p className="section-kicker">Members only</p><h1 className="mt-2 font-display text-3xl font-bold">Enter with Kick</h1><p className="mt-3 text-sm leading-6 text-[#8B93A3]">Use your Kick account to sign in or create your MisterTee community profile. No separate password required.</p>{error && <p className="mt-5 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error === "kick-linked" ? "That Kick account is already linked to another profile." : "Kick sign-in could not be completed. Please try again."}</p>}<a href={`${getApiBaseUrl()}/api/auth/kick`} className="btn-accent mt-7 inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 font-semibold"><LogIn className="h-4 w-4" /> Continue with Kick</a><p className="mt-5 text-xs text-[#5F6878]">Your Kick identity powers your MisterTee community account.</p></div></main><Footer /></div>;
 }
-
-export default LoginPage;

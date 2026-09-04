@@ -1,328 +1,99 @@
+﻿import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Dices, Crown, Gift, Users, LogIn, User, LogOut } from "lucide-react";
-import useMediaQuery from "@/hooks/use-media-query";
+import { Menu, X } from "lucide-react";
 import { useAuthStore } from "@/store/useAuthStore";
 
+function ShirtIcon({ color, accentColor, label }: { color: string; accentColor: string; label: string }) {
+  return (
+    <svg viewBox="0 0 60 72" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-9 w-8 sm:h-11 sm:w-10 lg:h-12 lg:w-11">
+      <path d="M30 4V1M30 8V14M6 13h48" stroke="#4A5568" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M10 20 6 32h8v32q0 2 2 2h28q2 0 2-2V32h8l-4-12-12-2q-2-6-8-6t-8 6z" fill={color} stroke="#303747" strokeWidth="1" />
+      <path d="M22 18q2-6 8-6t8 6" fill={color} stroke="#303747" strokeWidth="1" />
+      <path d="M24 18q2-4 6-4t6 4" fill="#0D1017" opacity=".75" />
+      <path d="M10 20 14 24M50 20 46 24" stroke={accentColor} strokeWidth="1" opacity=".5" />
+      <text x="30" y="43" textAnchor="middle" fill={accentColor} fontSize="4.2" fontWeight="700" letterSpacing=".35">{label.slice(0, 8).toUpperCase()}</text>
+      <circle cx="30" cy="51" r="2.2" fill="none" stroke={accentColor} strokeWidth=".7" opacity=".8" />
+      <path d="M28.5 51h3M30 49.5v3" stroke={accentColor} strokeWidth=".45" opacity=".8" />
+    </svg>
+  );
+}
+
+interface ShirtItemProps { to: string; label: string; isActive: boolean; }
+function ShirtItem({ to, label, isActive }: ShirtItemProps) {
+  return <Link to={to} title={label} className="group relative flex shrink-0 snap-start flex-col items-center justify-end select-none py-1 px-1">
+    <div className={`pointer-events-none absolute inset-x-0 top-0 h-12 rounded-full bg-[#8B5CF6]/20 blur-xl transition-opacity ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-70"}`} />
+    <div className={`relative transition duration-300 ${isActive ? "-translate-y-1 scale-110" : "group-hover:-translate-y-1 group-hover:rotate-1 group-hover:scale-105"}`}>
+      <ShirtIcon label={label} color={isActive ? "#242039" : "#121620"} accentColor={isActive ? "#A78BFA" : "#657087"} />
+      {isActive && <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#8B5CF6] shadow-glow-sm" />}
+    </div>
+    <span className={`mt-0.5 text-[7px] font-semibold uppercase tracking-[0.11em] transition-colors sm:text-[8px] lg:text-[9px] whitespace-nowrap ${isActive ? "text-[#A78BFA]" : "text-[#667084] group-hover:text-[#F5F7FA]"}`}>{label}</span>
+  </Link>;
+}
+
+function LeaderboardItem({ isActive, open, onToggle, onNavigate }: { isActive: boolean; open: boolean; onToggle: () => void; onNavigate: () => void }) {
+  return <div className="relative flex shrink-0 snap-start flex-col items-center justify-end py-1 px-1">
+    <button type="button" onClick={onToggle} title="Choose leaderboard" className="group relative flex flex-col items-center justify-end select-none">
+      <div className={`pointer-events-none absolute inset-x-0 top-0 h-12 rounded-full bg-[#8B5CF6]/20 blur-xl transition-opacity ${isActive || open ? "opacity-100" : "opacity-0 group-hover:opacity-70"}`} />
+      <div className={`relative transition duration-300 ${isActive || open ? "-translate-y-1 scale-110" : "group-hover:-translate-y-1 group-hover:rotate-1 group-hover:scale-105"}`}>
+        <ShirtIcon label="Leaderboard" color={isActive || open ? "#242039" : "#121620"} accentColor={isActive || open ? "#A78BFA" : "#657087"} />
+        {(isActive || open) && <span className="absolute -bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[#8B5CF6] shadow-glow-sm" />}
+      </div>
+      <span className={`mt-0.5 text-[7px] font-semibold uppercase tracking-[0.11em] transition-colors sm:text-[8px] lg:text-[9px] whitespace-nowrap ${isActive || open ? "text-[#A78BFA]" : "text-[#667084] group-hover:text-[#F5F7FA]"}`}>Leaderboard</span>
+    </button>
+    {open && <div className="absolute left-1/2 top-full z-50 mt-2 w-40 -translate-x-1/2 overflow-hidden rounded-xl border border-[#252B38] bg-[#121620] p-1 shadow-card-dark">
+      {[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }].map((board) => <Link key={board.to} to={board.to} onClick={onNavigate} className="block rounded-lg px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#8B93A3] hover:bg-[#8B5CF6]/15 hover:text-[#A78BFA]">{board.label}</Link>)}
+    </div>}
+  </div>;
+}
+
+const NAV_ITEMS = [
+  { to: "/rewards", label: "Rewards" }, { to: "/juice", label: "Leaderboard" }, { to: "/socials", label: "Social" },
+  { to: "/games", label: "Games" }, { to: "/shop", label: "Shop" }, { to: "/points-leaderboard", label: "Points" },
+  { to: "/slot-calls", label: "Slot Calls" },
+  { to: "/giveaways", label: "Giveaways" },
+];
+
 export function Navbar() {
-	const location = useLocation();
-	const isMobile = useMediaQuery("(max-width: 768px)");
-	const [isOpen, setIsOpen] = useState(false);
-	const [isLive, setIsLive] = useState(false);
-	const [viewerCount, setViewerCount] = useState<number | null>(null);
-
-	const { user, logout } = useAuthStore();
-
-	useEffect(() => {
-		setIsOpen(false);
-	}, [location, isMobile]);
-
-	useEffect(() => {
-		const fetchLiveStatus = async () => {
-			try {
-				const res = await fetch("https://kick.com/api/v2/channels/MisterTee");
-				const data = await res.json();
-
-				if (data.livestream) {
-					setIsLive(true);
-					setViewerCount(data.livestream.viewer_count);
-				} else {
-					setIsLive(false);
-					setViewerCount(null);
-				}
-			} catch (err) {
-				console.error("Error fetching live status", err);
-			}
-		};
-
-		fetchLiveStatus();
-		const interval = setInterval(fetchLiveStatus, 60000);
-		return () => clearInterval(interval);
-	}, []);
-
-	const menuItems = [
-		{ path: "/", name: "Home", icon: <Dices className='w-5 h-5' /> },
-		{
-			name: "Leaderboard",
-			icon: <Crown className='w-5 h-5' />,
-			subMenu: [
-				
-				{ name: "Roobet", path: "/leaderboards" },
-					{ name: "Juice", path: "/juice" },
-				// { name: "Packdraw", path:"/packdraw"},
-				{ name: "CSGOWin", path:"/leaderboard"},
-					
-			],
-		},
-		{
-			path: "/slot-calls",
-			name: "Slot Calls",
-			icon: <Users className='w-5 h-5' />,
-		},
-		{
-			path: "/giveaways",
-			name: "Giveaways",
-			icon: <Gift className='w-5 h-5' />,
-		},
-	];
-
-	return (
-		<nav className='sticky top-0 z-50 bg-black border-b border-gray-800 shadow-lg bg-opacity-90 backdrop-blur-md'>
-			<div className='container flex items-center justify-between px-6 py-4 mx-auto'>
-				{/* Logo */}
-				<Link to='/' className='flex items-center space-x-3 select-none'>
-					<img
-						src='https://i.ibb.co/x8zPpn5p/Capture-d-cran-2025-08-08-180638.png'
-						alt='MisterTee Logo'
-						className='w-10 h-10 rounded-full border-2 border-[#E10600] shadow-sm object-cover'
-					/>
-					<span className='text-3xl font-extrabold italic tracking-wide text-[#E10600] [text-shadow:2px_2px_4px_black]'>
-						Mister<span className='text-white'>Tee</span>
-					</span>
-				</Link>
-
-				{/* Desktop Menu */}
-				{!isMobile && (
-					<div className='flex items-center space-x-10'>
-						<ul className='flex space-x-8 font-medium text-white'>
-							{menuItems.map((item) => (
-								<li key={item.name} className='relative group'>
-									{item.subMenu ? (
-										<>
-											<span className='flex items-center space-x-2 text-lg px-1 cursor-pointer hover:border-[#E10600]'>
-												{item.icon} <span>{item.name}</span>
-											</span>
-											{/* Dropdown */}
-											<ul className='absolute left-0 w-40 mt-2 transition-opacity bg-black border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100'>
-												{item.subMenu.map((sub) => (
-													<li key={sub.path}>
-														<Link
-															to={sub.path}
-															className='block px-4 py-2 text-white hover:bg-[#E10600] hover:text-white transition-colors'
-														>
-															{sub.name}
-														</Link>
-													</li>
-												))}
-											</ul>
-										</>
-									) : (
-										<Link
-											to={item.path}
-											className={`flex items-center space-x-2 text-lg px-1 border-b-2 border-transparent transition-all duration-300 hover:border-[#E10600] ${
-												location.pathname === item.path
-													? "border-[#E10600]"
-													: ""
-											}`}
-										>
-											{item.icon} <span>{item.name}</span>
-										</Link>
-									)}
-								</li>
-							))}
-						</ul>
-
-						{/* User controls */}
-						<div className='flex items-center space-x-5'>
-							{user ? (
-								<>
-									<Link
-										to='/profile'
-										className='flex items-center space-x-2 text-white hover:text-[#E10600] font-semibold'
-									>
-										<User className='w-5 h-5' />
-										<span>{user.username}</span>
-									</Link>
-									{user.role === "admin" && (
-										<Link
-											to='/admin/leaderboards'
-											className='text-sm font-semibold text-amber-400 hover:text-amber-300'
-										>
-											Leaderboard admin
-										</Link>
-									)}
-									<button
-										onClick={logout}
-										className='flex items-center space-x-2 bg-[#E10600] hover:bg-[#b00500] text-white px-4 py-1.5 rounded-md font-semibold transition'
-									>
-										<LogOut className='w-5 h-5' />
-										<span>Logout</span>
-									</button>
-								</>
-							) : (
-								<>
-									<Link
-										to='/login'
-										className='flex items-center space-x-2 border border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white px-4 py-1.5 rounded-md font-semibold transition'
-									>
-										<LogIn className='w-5 h-5' />
-										<span>Login</span>
-									</Link>
-									<Link
-										to='/signup'
-										className='text-white font-semibold hover:text-[#E10600] transition'
-									>
-										Sign Up
-									</Link>
-								</>
-							)}
-						</div>
-					</div>
-				)}
-
-				{/* Live Status */}
-				<div
-					className={`ml-6 px-4 py-1 rounded-full text-sm font-bold select-none ${
-						isLive
-							? "bg-red-600 text-white shadow-lg animate-pulse"
-							: "bg-gray-700 text-gray-300"
-					}`}
-					title={isLive ? "Currently Live" : "Offline"}
-				>
-					{isLive ? (
-						<>
-							<span role='img' aria-label='Live'>
-								🔴
-							</span>{" "}
-							LIVE {viewerCount !== null ? `(${viewerCount})` : ""}
-						</>
-					) : (
-						"Offline"
-					)}
-				</div>
-
-				{/* Mobile Hamburger */}
-				{isMobile && (
-					<button
-						onClick={() => setIsOpen(!isOpen)}
-						aria-label='Toggle menu'
-						aria-expanded={isOpen}
-						className='relative z-50 w-8 h-8 flex flex-col justify-center items-center gap-1.5 focus:outline-none'
-					>
-						<span
-							className={`block w-8 h-1 bg-white rounded transition-transform duration-300 ${
-								isOpen ? "rotate-45 translate-y-2" : ""
-							}`}
-						/>
-						<span
-							className={`block w-8 h-1 bg-white rounded transition-opacity duration-300 ${
-								isOpen ? "opacity-0" : "opacity-100"
-							}`}
-						/>
-						<span
-							className={`block w-8 h-1 bg-white rounded transition-transform duration-300 ${
-								isOpen ? "-rotate-45 -translate-y-2" : ""
-							}`}
-						/>
-					</button>
-				)}
-			</div>
-
-			{/* Mobile Dropdown Menu */}
-			{isMobile && (
-				<div
-					className={`fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-40 transition-opacity duration-300 ${
-						isOpen
-							? "opacity-100 pointer-events-auto"
-							: "opacity-0 pointer-events-none"
-					}`}
-					onClick={() => setIsOpen(false)}
-				>
-					<div
-						className={`absolute top-0 right-0 w-64 bg-[#111] h-full shadow-lg py-6 px-6 flex flex-col space-y-6 transform transition-transform duration-300 ${
-							isOpen ? "translate-x-0" : "translate-x-full"
-						}`}
-						onClick={(e) => e.stopPropagation()}
-					>
-						<ul className='flex flex-col space-y-4 font-semibold text-white'>
-							{menuItems.map((item) => (
-								<li key={item.name}>
-									{item.subMenu ? (
-										<>
-											<span className='flex items-center space-x-3 text-lg px-2 py-2 rounded-md cursor-pointer hover:bg-[#E10600] hover:text-white transition-colors'>
-												{item.icon} <span>{item.name}</span>
-											</span>
-											<ul className='pl-6 mt-1 space-y-1'>
-												{item.subMenu.map((sub) => (
-													<li key={sub.path}>
-														<Link
-															to={sub.path}
-															onClick={() => setIsOpen(false)}
-															className='block text-white hover:text-[#E10600] transition-colors'
-														>
-															{sub.name}
-														</Link>
-													</li>
-												))}
-											</ul>
-										</>
-									) : (
-										<Link
-											to={item.path}
-											onClick={() => setIsOpen(false)}
-											className='flex items-center space-x-3 text-lg px-2 py-2 rounded-md hover:bg-[#E10600] hover:text-white transition-colors'
-										>
-											{item.icon} <span>{item.name}</span>
-										</Link>
-									)}
-								</li>
-							))}
-						</ul>
-
-						<div className='mt-auto space-y-4'>
-							{user ? (
-								<>
-									<Link
-										to='/profile'
-										onClick={() => setIsOpen(false)}
-										className='flex items-center space-x-3 text-white text-lg font-semibold hover:text-[#E10600] transition'
-									>
-										<User className='w-6 h-6' />
-										<span>{user.username}</span>
-									</Link>
-									{user.role === "admin" && (
-										<Link
-											to='/admin/leaderboards'
-											onClick={() => setIsOpen(false)}
-											className='block text-amber-400 font-semibold hover:text-amber-300'
-										>
-											Leaderboard admin
-										</Link>
-									)}
-									<button
-										onClick={() => {
-											logout();
-											setIsOpen(false);
-										}}
-										className='w-full bg-[#E10600] hover:bg-[#b00500] text-white py-2 rounded-md font-semibold transition'
-									>
-										<LogOut className='inline w-5 h-5 mr-2' />
-										Logout
-									</button>
-								</>
-							) : (
-								<>
-									<Link
-										to='/login'
-										onClick={() => setIsOpen(false)}
-										className='flex items-center space-x-3 bg-[#E10600] hover:bg-[#b00500] text-white py-2 px-4 rounded-md font-semibold transition'
-									>
-										<LogIn className='w-5 h-5' />
-										<span>Login</span>
-									</Link>
-									<Link
-										to='/signup'
-										onClick={() => setIsOpen(false)}
-										className='block text-center text-white font-semibold hover:text-[#E10600] transition'
-									>
-										Sign Up
-									</Link>
-								</>
-							)}
-						</div>
-					</div>
-				</div>
-			)}
-		</nav>
-	);
+  const location = useLocation();
+  const { user, logout } = useAuthStore();
+  const [isLive, setIsLive] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false);
+  const items = [...NAV_ITEMS, ...(user ? [{ to: "/profile", label: "Profile" }] : []), ...(user?.role === "admin" ? [{ to: "/admin/panel", label: "Admin" }] : [])];
+  useEffect(() => {
+    const checkLive = async () => { try { const r = await fetch("https://kick.com/api/v2/channels/MisterTee"); const d = await r.json(); setIsLive(!!d.livestream); } catch { setIsLive(false); } };
+    checkLive(); const id = setInterval(checkLive, 60000); return () => clearInterval(id);
+  }, []);
+  useEffect(() => { setLeaderboardOpen(false); setMenuOpen(false); }, [location.pathname]);
+  const isActive = (path: string) => path === "/juice" ? ["/juice","/leaderboards","/leaderboard"].includes(location.pathname.toLowerCase()) : path === "/games" ? location.pathname.startsWith("/games") : location.pathname === path;
+  return <nav className="sticky top-0 z-50 w-full border-b border-[#252B38] bg-[#0D1017]/95 shadow-[0_8px_30px_rgba(0,0,0,.25)] backdrop-blur-xl">
+    <div className="mx-auto flex min-h-[60px] max-w-[1440px] items-center gap-2 px-3 sm:min-h-[76px] sm:gap-4 sm:px-6">
+      <Link to="/" className="group flex shrink-0 items-center gap-2 sm:gap-3" onClick={() => setMenuOpen(false)}>
+        <img src="https://i.ibb.co/x8zPpn5p/Capture-d-cran-2025-08-08-180638.png" alt="MisterTee" className="h-9 w-9 rounded-full border border-[#252B38] group-hover:border-[#8B5CF6] sm:h-11 sm:w-11" />
+        <span className="font-display text-lg font-bold tracking-wide text-[#F5F7FA] sm:text-2xl">Mister<span className="text-[#8B5CF6]">Tee</span></span>
+      </Link>
+      <div className="mx-auto hidden min-w-0 flex-1 items-end justify-center gap-2 overflow-visible py-2 sm:gap-3 lg:flex lg:gap-4">
+        {items.map((item) => item.label === "Leaderboard" ? <LeaderboardItem key={item.to} isActive={isActive(item.to)} open={leaderboardOpen} onToggle={() => setLeaderboardOpen(!leaderboardOpen)} onNavigate={() => setLeaderboardOpen(false)} /> : <ShirtItem key={item.to} to={item.to} label={item.label} isActive={isActive(item.to)} />)}
+      </div>
+      <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0">
+        {isLive && <span className="hidden items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA] xl:flex"><span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />Live</span>}
+        {user ? <div className="relative"><button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center gap-2 rounded-lg border border-[#252B38] bg-[#121620] px-2 py-1.5 hover:border-[#8B5CF6]/60 sm:px-3"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#8B5CF6]/20 text-xs font-bold text-[#A78BFA]">{user.kickUsername?.[0]?.toUpperCase() || "U"}</span><span className="hidden max-w-20 truncate text-xs font-medium text-[#F5F7FA] sm:block sm:text-sm">{user.kickUsername}</span></button>{showUserMenu && <div className="absolute right-0 top-full z-50 mt-2 w-48 overflow-hidden rounded-xl border border-[#252B38] bg-[#121620] shadow-card-dark"><Link to="/profile" onClick={() => setShowUserMenu(false)} className="block px-4 py-3 text-sm text-[#8B93A3] hover:bg-[#181D27] hover:text-white">Profile</Link>{user.role === "admin" && <><Link to="/admin/panel" onClick={() => setShowUserMenu(false)} className="block px-4 py-3 text-sm text-[#A78BFA] hover:bg-[#181D27]">Admin Panel</Link><Link to="/admin/leaderboards" onClick={() => setShowUserMenu(false)} className="block px-4 py-3 text-sm text-[#A78BFA] hover:bg-[#181D27]">Leaderboard Settings</Link></>}<button onClick={() => { logout(); setShowUserMenu(false); }} className="w-full border-t border-[#252B38] px-4 py-3 text-left text-sm text-red-400 hover:bg-[#181D27]">Logout</button></div>}</div> : <Link to="/login" className="btn-accent hidden rounded-lg px-3 py-2 text-xs font-semibold sm:inline-flex lg:px-4">Sign in with Kick</Link>}
+        <button onClick={() => setMenuOpen(!menuOpen)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#252B38] bg-[#121620] text-[#8B93A3] transition hover:border-[#8B5CF6]/60 hover:text-white lg:hidden" aria-label="Toggle navigation">{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</button>
+      </div>
+    </div>
+    <div className="border-t border-[#252B38]/60 bg-[#08090D]/80 backdrop-blur lg:hidden">
+      <div className="flex gap-1 overflow-x-auto scrollbar-hide px-1 py-1.5 snap-x snap-mandatory sm:px-3 sm:py-2">
+        {items.map((item) => item.label === "Leaderboard" ? <ShirtItem key={item.to} to="/juice" label="Leaderboard" isActive={isActive("/juice")} /> : <ShirtItem key={item.to} to={item.to} label={item.label} isActive={isActive(item.to)} />)}
+      </div>
+    </div>
+    {menuOpen && <div className="border-t border-[#252B38] bg-[#0D1017] p-3 lg:hidden max-h-[70vh] overflow-y-auto">
+      <div className="grid gap-1">
+        {!user && <Link to="/login" onClick={() => setMenuOpen(false)} className="btn-accent flex items-center justify-center rounded-lg px-4 py-3 text-sm font-semibold sm:hidden">Sign in with Kick</Link>}
+        {isLive && <div className="flex items-center gap-2 rounded-lg bg-[#8B5CF6]/10 px-3 py-2 text-xs font-bold uppercase tracking-widest text-[#A78BFA]"><span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" /> Live on Kick</div>}
+        <p className="px-2 pt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#5F6878]">Navigate</p>
+        {items.map((item) => item.label === "Leaderboard" ? <div key={item.to} className="rounded-xl bg-[#121620] p-1"><p className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA]">Leaderboards</p>{[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }].map((b) => <Link key={b.to} to={b.to} onClick={() => setMenuOpen(false)} className={`block rounded-lg px-4 py-2.5 text-sm ${location.pathname.toLowerCase()===b.to.toLowerCase()?"bg-[#8B5CF6]/15 text-[#A78BFA]":"text-[#8B93A3] hover:bg-[#181D27] hover:text-white"}`}>{b.label}</Link>)}</div> : <Link key={item.to} to={item.to} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-medium ${isActive(item.to)?"bg-[#8B5CF6]/15 text-[#A78BFA] border border-[#8B5CF6]/20":"bg-[#121620] text-[#8B93A3] hover:bg-[#181D27] hover:text-white border border-transparent"}`}>{item.label}</Link>)}
+      </div>
+    </div>}
+  </nav>;
 }

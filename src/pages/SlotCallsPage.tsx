@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { SlotCallCard } from "@/components/SlotCallCard";
@@ -188,7 +188,7 @@ function SlotCallsPage() {
 
 			<Navbar />
 
-			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 mx-auto'>
+			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 sm:px-6 mx-auto'>
 				<div className='flex items-center justify-between mb-4'>
 					<h1 className='text-2xl font-bold'>Slot Calls</h1>
 					<Dialog>
@@ -294,7 +294,7 @@ function SlotCallsPage() {
 						No slot calls found.
 					</div>
 				) : (
-					<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+					<div className='grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3'>
 						{filteredSlotCalls.map((call) => (
 							<SlotCallCard
 								key={call.id}
@@ -325,3 +325,4 @@ function SlotCallsPage() {
 }
 
 export default SlotCallsPage;
+

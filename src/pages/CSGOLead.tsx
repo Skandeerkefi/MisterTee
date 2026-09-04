@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useCSGOLeadStore } from "@/store/csgoleadStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import LeaderboardPodium from "@/components/LeaderboardPodium";
 import dayjs from "dayjs";
 import { getApiBaseUrl } from "@/lib/apiBase";
 import duration from "dayjs/plugin/duration";
@@ -64,95 +65,67 @@ const CSGOLeadPage = () => {
   const totalPrize = prizes.reduce((acc, p) => acc + p, 0);
 
   return (
-    <div className="relative flex flex-col min-h-screen text-white bg-black">
+    <div className="relative flex flex-col min-h-screen">
       <GraphicalBackground />
       <Navbar />
 
-      <main className="container flex-grow p-4 mx-auto">
-        <h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
-          🔥 CSGOWin 1K Leaderboard 🔥
+      <main className="relative z-10 flex-grow w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10 mx-auto">
+        <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-[#F5F7FA] drop-shadow-lg">
+          CSGOWIN Leaderboard – {totalPrize.toLocaleString()} C Prize Pool
         </h1>
 
-        <p className="text-center text-gray-400 mb-2">
-          Range: <span className="text-red-400">{displayRange}</span>
+        <p className="mb-2 text-center text-sm font-medium text-[#8B93A3]">
+          Event Duration: <span className="font-bold text-[#A78BFA]">{displayRange || "—"} (UTC)</span>
         </p>
 
-        <p className="text-center text-md font-semibold text-gray-300 mb-6">
-          ⏳ Next Reset In: <span className="text-yellow-400 font-bold">{timeLeft}</span>
+        <p className="mb-2 text-center text-md font-semibold text-[#F5F7FA]">
+          ⏳ Time Remaining Until Next Reset: <span className="text-[#A78BFA] font-bold">{timeLeft || "—"}</span>
         </p>
 
-        <div className="mt-2 text-center text-gray-400">
-          <p className="text-lg font-semibold text-red-400">
-            Total Prize Pool: {totalPrize.toLocaleString()} C 💰
-          </p>
-          <p>
-            Use code <span className="font-bold text-white">"MisterTee"</span> to participate!
-          </p>
-        </div>
+        <p className="mb-8 text-center text-xs text-[#8B93A3]">
+          Use code <span className="font-bold text-white">"MisterTee"</span> on csgowin.com/r/MisterTee — wager abuse is prohibited
+        </p>
 
-        {loading && <p className="mt-10 text-center text-gray-400">Loading...</p>}
-        {error && <p className="mt-10 text-center text-red-500">{error}</p>}
+        {loading && <p className="mt-10 text-center text-[#8B93A3]">Loading...</p>}
+        {error && <p className="mt-10 text-center text-[#e10600]">{error}</p>}
 
         {!loading && !error && (
-          <div className="mt-8 overflow-x-auto">
-            <table className="min-w-full text-sm bg-gray-900 border border-red-600 shadow-xl rounded-2xl">
-              <thead className="text-white bg-gradient-to-r from-red-700 to-black">
-                <tr>
-                  <th className="p-3 text-left uppercase">#</th>
-                  <th className="p-3 text-left uppercase">Name</th>
-                  <th className="p-3 text-left uppercase">Wagered</th>
-                  <th className="p-3 text-left uppercase">Prize</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {leaderboard.length > 0 ? (
-                  leaderboard.map((entry, idx) => (
-                    <tr
-                      key={entry.rank}
-                      className={`transition-all ${
-                        entry.rank <= 3
-                          ? "bg-red-800/60 hover:bg-red-700"
-                          : entry.rank % 2 === 0
-                          ? "bg-gray-800"
-                          : "bg-gray-900"
-                      } hover:text-white`}
-                    >
-                      <td className="p-3 font-bold text-red-500">#{idx + 1}</td>
-
-                      <td className="p-3 font-medium">{entry.name}</td>
-                      <td className="p-3 font-semibold text-red-400">
-                        {entry.wagered.toLocaleString()}
-                      </td>
-                      <td className="p-3 font-semibold text-yellow-400">
-                        {prizes[idx] ? prizes[idx].toLocaleString() : "—"} C
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  prizes.map((p, idx) => (
-                    <tr
-                      key={idx}
-                      className={`transition-all ${
-                        idx < 3
-                          ? "bg-red-800/60 hover:bg-red-700"
-                          : idx % 2 === 0
-                          ? "bg-gray-800"
-                          : "bg-gray-900"
-                      } hover:text-white`}
-                    >
-                      <td className="p-3 font-bold text-red-500">#{idx + 1}</td>
-                      <td className="p-3 font-medium">—</td>
-                      <td className="p-3 font-semibold text-red-400">0</td>
-                      <td className="p-3 font-semibold text-yellow-400">
-                        {p.toLocaleString()} C
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <LeaderboardPodium players={leaderboard.length > 0 ? leaderboard.slice(0, 3).map((entry, idx) => ({ name: entry.name, value: `${entry.wagered.toLocaleString()} wagered`, prize: prizes[idx] ? `${prizes[idx].toLocaleString()} C` : undefined })) : prizes.slice(0, 3).map((prize) => ({ prize: `${prize.toLocaleString()} C` }))} valueLabel="CSGOWIN affiliate rankings" />
+            <div className="overflow-x-auto rounded-xl border border-[#252B38] bg-[#121620]/80 p-4">
+              <table className="w-full min-w-[600px] text-left">
+                <thead className="border-b border-[#252B38] text-xs uppercase tracking-widest text-[#8B93A3]">
+                  <tr>
+                    <th className="p-3">Rank</th>
+                    <th className="p-3">Player</th>
+                    <th className="p-3 text-right">Wagered</th>
+                    <th className="p-3 text-right">Prize</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {leaderboard.length > 0 ? (
+                    leaderboard.map((entry, idx) => (
+                      <tr key={entry.rank} className="border-b border-[#252B38]/70 text-[#F5F7FA] hover:bg-[#8B5CF6]/10">
+                        <td className="p-3 font-bold text-[#A78BFA]">#{entry.rank}</td>
+                        <td className="p-3 font-semibold">{entry.name}</td>
+                        <td className="p-3 text-right font-semibold">{entry.wagered.toLocaleString()}</td>
+                        <td className="p-3 text-right font-bold text-[#A78BFA]">{prizes[idx] ? `${prizes[idx].toLocaleString()} C` : "—"}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    prizes.map((p, idx) => (
+                      <tr key={idx} className="border-b border-[#252B38]/70 text-[#F5F7FA] hover:bg-[#8B5CF6]/10">
+                        <td className="p-3 font-bold text-[#A78BFA]">#{idx + 1}</td>
+                        <td className="p-3 font-medium text-[#8B93A3]">—</td>
+                        <td className="p-3 text-right font-semibold">0</td>
+                        <td className="p-3 text-right font-bold text-[#A78BFA]">{p.toLocaleString()} C</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </main>
 
@@ -162,3 +135,5 @@ const CSGOLeadPage = () => {
 };
 
 export default CSGOLeadPage;
+
+

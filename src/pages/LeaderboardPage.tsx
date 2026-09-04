@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LeaderboardTable } from "@/components/LeaderboardTable";
@@ -65,12 +65,12 @@ function LeaderboardPage() {
 
 			<Navbar />
 
-			<main className='container relative z-10 flex-grow max-w-6xl px-6 py-12 mx-auto'>
+			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 sm:px-6 sm:py-12 mx-auto'>
 				{/* Header */}
 				<div className='flex flex-col items-center justify-between gap-4 mb-10 sm:flex-row'>
 					<div className='flex items-center gap-3 text-[#AF2D03]'>
 						<Crown className='w-7 h-7' />
-						<h1 className='text-3xl font-extrabold tracking-tight'>
+						<h1 className='text-2xl sm:text-3xl font-extrabold tracking-tight'>
 							Rainbet Monthly Leaderboard
 						</h1>
 					</div>
@@ -286,3 +286,4 @@ function RewardCard({
 }
 
 export default LeaderboardPage;
+

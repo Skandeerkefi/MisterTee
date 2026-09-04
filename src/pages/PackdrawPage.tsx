@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { usePackdrawStore } from "@/store/packdrawStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
@@ -80,8 +80,8 @@ const PackdrawPage = () => {
 			<GraphicalBackground />
 			<Navbar />
 
-			<main className="container flex-grow p-4 mx-auto">
-				<h1 className="mb-4 text-5xl font-extrabold text-center text-red-500 drop-shadow-lg">
+			<main className="container flex-grow px-4 py-8 sm:px-6 mx-auto">
+				<h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-red-500 drop-shadow-lg">
 					🔥 Packdraw Monthly Leaderboard 🔥
 				</h1>
 
@@ -169,3 +169,4 @@ const PackdrawPage = () => {
 };
 
 export default PackdrawPage;
+

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { GiveawayCard } from "@/components/GiveawayCard";
@@ -78,10 +78,10 @@ function GiveawaysPage() {
 
 			<Navbar />
 
-			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 mx-auto'>
+			<main className='container relative z-10 flex-grow max-w-6xl px-4 py-8 sm:px-6 mx-auto'>
 				<div className='flex items-center gap-2 mb-8'>
 					<Gift className='w-6 h-6 text-[#ffffff]' />
-					<h1 className='text-3xl font-bold'>Giveaways</h1>
+					<h1 className='text-2xl sm:text-3xl font-bold'>Giveaways</h1>
 				</div>
 
 				<div className='p-6 mb-8 rounded-lg bg-[#000000] border border-[#AF2D03]'>
@@ -151,7 +151,7 @@ function GiveawaysPage() {
 				</div>
 
 				{filteredGiveaways.length > 0 ? (
-					<div className='grid grid-cols-1 gap-6 md:grid-cols-3'>
+					<div className='grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3'>
 						{filteredGiveaways.map((giveaway) => (
 							<div
 								key={giveaway._id}
@@ -208,3 +208,4 @@ function GiveawaysPage() {
 }
 
 export default GiveawaysPage;
+

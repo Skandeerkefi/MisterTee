@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -80,7 +80,7 @@ export default function DiamondPage() {
 						<Diamond className='w-4 h-4 sm:w-5 sm:h-5' />
 						<span className='font-semibold uppercase tracking-[0.3em]'>500 Coins</span>
 					</div>
-					<h1 className='mt-3 text-2xl font-extrabold tracking-tight sm:mt-4 sm:text-4xl md:text-5xl'>
+					<h1 className='mt-3 text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight'>
 						CsgoDiamonds Bi-Weekly Leaderboard
 					</h1>
 					<p className='mt-2 text-xs sm:mt-3 sm:text-sm text-slate-300'>

@@ -1,166 +1,121 @@
 import { useEffect, useRef } from "react";
 
-export function GraphicalBackground() {
-	const canvasRef = useRef<HTMLCanvasElement>(null);
+export default function GraphicalBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-	useEffect(() => {
-		const canvas = canvasRef.current;
-		if (!canvas) return;
-		const ctx = canvas.getContext("2d");
-		if (!ctx) return;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-		// Resize canvas
-		const resizeCanvas = () => {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		};
-		resizeCanvas();
-		window.addEventListener("resize", resizeCanvas);
+    let animId: number;
+    let tick = 0;
 
-		// Particles
-		interface Particle {
-			x: number;
-			y: number;
-			size: number;
-			speedX: number;
-			speedY: number;
-			color: string;
-			alpha: number;
-		}
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
-		const particles: Particle[] = [];
-		const particleCount = 40;
-		const colors = [
-			"rgba(255, 0, 0, ", // red
-			"rgba(255, 255, 255, ", // white
-			"rgba(120, 120, 120, ", // gray
-		];
+    const particles: { x: number; y: number; vx: number; vy: number; r: number; a: number; da: number; color: string }[] = [];
+    const COLORS = ["rgba(139,92,246,", "rgba(34,211,238,", "rgba(167,139,250,"];
 
-		for (let i = 0; i < particleCount; i++) {
-			const color = colors[Math.floor(Math.random() * colors.length)];
-			particles.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				size: Math.random() * 2 + 1,
-				speedX: (Math.random() - 0.5) * 0.3,
-				speedY: (Math.random() - 0.5) * 0.3,
-				color,
-				alpha: Math.random() * 0.3 + 0.1,
-			});
-		}
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 2 + 0.5,
+        a: Math.random() * 0.5 + 0.1,
+        da: (Math.random() - 0.5) * 0.01,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      });
+    }
 
-		// Floating T-shirts
-		interface FloatingItem {
-			x: number;
-			y: number;
-			size: number;
-			speedX: number;
-			speedY: number;
-			rotation: number;
-			rotationSpeed: number;
-			layer: number;
-			opacity: number;
-		}
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		const tshirtImage = new Image();
-		tshirtImage.src =
-			"https://i.ibb.co/ksFzpHVx/Capture-d-cran-2025-08-11-133856-removebg-preview.png";
+      // Base dark gradient
+      const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      bg.addColorStop(0, "#08090D");
+      bg.addColorStop(0.5, "#0D1017");
+      bg.addColorStop(1, "#08090D");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		const shirts: FloatingItem[] = [];
-		const shirtCount = 25;
+      // Top purple radial glow
+      const rg1 = ctx.createRadialGradient(canvas.width * 0.5, 0, 0, canvas.width * 0.5, 0, canvas.width * 0.7);
+      rg1.addColorStop(0, "rgba(139,92,246,0.07)");
+      rg1.addColorStop(1, "transparent");
+      ctx.fillStyle = rg1;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		for (let i = 0; i < shirtCount; i++) {
-			const layer = Math.floor(Math.random() * 3); // 0 = far, 2 = close
-			const baseSize = [50, 80, 120][layer];
-			shirts.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				size: baseSize + Math.random() * 40,
-				speedX: (Math.random() - 0.5) * (0.1 + layer * 0.05),
-				speedY: (Math.random() - 0.5) * (0.1 + layer * 0.05),
-				rotation: Math.random() * Math.PI * 2,
-				rotationSpeed: (Math.random() - 0.5) * 0.002,
-				layer,
-				opacity: 0.3 + layer * 0.3,
-			});
-		}
+      // Cyan accent glow (subtle)
+      const rg2 = ctx.createRadialGradient(canvas.width * 0.8, canvas.height * 0.3, 0, canvas.width * 0.8, canvas.height * 0.3, 400);
+      rg2.addColorStop(0, "rgba(34,211,238,0.04)");
+      rg2.addColorStop(1, "transparent");
+      ctx.fillStyle = rg2;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		let time = 0;
-		let animationFrameId: number;
+      // Subtle grid
+      ctx.save();
+      ctx.strokeStyle = "rgba(37,43,56,0.4)";
+      ctx.lineWidth = 1;
+      const gridSize = 60;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+      ctx.restore();
 
-		const render = () => {
-			time += 0.01;
+      // Floating particles
+      tick += 0.5;
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a += p.da;
+        if (p.a < 0.05 || p.a > 0.6) p.da *= -1;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
 
-			// Background
-			ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y + Math.sin(tick * 0.01 + p.x) * 3, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color + p.a + ")";
+        ctx.fill();
+      });
 
-			// Particles
-			particles.forEach((p) => {
-				p.x += p.speedX;
-				p.y += p.speedY;
+      // Subtle vignette
+      const vg = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, canvas.height * 0.3,
+        canvas.width / 2, canvas.height / 2, canvas.height * 0.9
+      );
+      vg.addColorStop(0, "transparent");
+      vg.addColorStop(1, "rgba(8,9,13,0.6)");
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-				if (p.x > canvas.width) p.x = 0;
-				if (p.x < 0) p.x = canvas.width;
-				if (p.y > canvas.height) p.y = 0;
-				if (p.y < 0) p.y = canvas.height;
+      animId = requestAnimationFrame(draw);
+    };
 
-				ctx.beginPath();
-				ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-				ctx.fillStyle = `${p.color}${p.alpha})`;
-				ctx.fill();
-			});
+    draw();
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
 
-			// Floating shirts
-			shirts.forEach((shirt, idx) => {
-				// Wavy motion
-				shirt.x +=
-					shirt.speedX + Math.sin(time + idx) * 0.1 * (shirt.layer + 1);
-				shirt.y +=
-					shirt.speedY + Math.cos(time + idx) * 0.1 * (shirt.layer + 1);
-				shirt.rotation += shirt.rotationSpeed;
-
-				if (shirt.x > canvas.width) shirt.x = -shirt.size;
-				if (shirt.x < -shirt.size) shirt.x = canvas.width;
-				if (shirt.y > canvas.height) shirt.y = -shirt.size;
-				if (shirt.y < -shirt.size) shirt.y = canvas.height;
-
-				ctx.save();
-				ctx.globalAlpha = shirt.opacity;
-				ctx.shadowColor = "rgba(0,0,0,0.5)";
-				ctx.shadowBlur = 15;
-
-				ctx.translate(shirt.x + shirt.size / 2, shirt.y + shirt.size / 2);
-				ctx.rotate(shirt.rotation);
-				ctx.drawImage(
-					tshirtImage,
-					-shirt.size / 2,
-					-shirt.size / 2,
-					shirt.size,
-					shirt.size
-				);
-				ctx.restore();
-			});
-
-			animationFrameId = requestAnimationFrame(render);
-		};
-
-		tshirtImage.onload = () => {
-			render();
-		};
-
-		return () => {
-			window.removeEventListener("resize", resizeCanvas);
-			cancelAnimationFrame(animationFrameId);
-		};
-	}, []);
-
-	return (
-		<canvas
-			ref={canvasRef}
-			className='fixed top-0 left-0 w-full h-full pointer-events-none -z-10'
-		/>
-	);
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 w-full h-full pointer-events-none z-0"
+      style={{ opacity: 0.7 }}
+    />
+  );
 }
-
-export default GraphicalBackground;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useRainStore } from "../store/rainStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
@@ -49,8 +49,8 @@ export default function RainPage() {
 			<GraphicalBackground />
 			<Navbar />
 
-			<main className='relative z-10 flex-1 w-full max-w-6xl p-6 mx-auto'>
-				<h1 className='mb-2 text-3xl font-bold text-center'>
+			<main className='relative z-10 flex-1 w-full max-w-6xl px-4 py-8 sm:px-6 mx-auto'>
+				<h1 className='mb-2 text-2xl sm:text-3xl font-bold text-center'>
 					🌧 Rain.gg Leaderboard
 				</h1>
 				<h2 className='mb-6 text-xl text-center text-yellow-400'>
@@ -119,3 +119,4 @@ export default function RainPage() {
 		</div>
 	);
 }
+

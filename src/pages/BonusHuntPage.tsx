@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ function BonusHuntPage() {
 	return (
 		<div className='flex flex-col min-h-screen bg-[#191F3B] text-white'>
 			<Navbar />
-			<main className='container flex-grow py-8'>
+			<main className='container flex-grow px-4 py-8 sm:px-6'>
 				<Card className='bg-[#1E2547] text-white border border-[#EA8105]/40 p-6'>
 					<CardHeader>
 						<CardTitle className='text-2xl text-[#EA8105]'>
@@ -82,7 +82,7 @@ function BonusHuntPage() {
 						{games.map((game, index) => (
 							<div
 								key={index}
-								className='grid grid-cols-1 md:grid-cols-6 gap-4 items-end border-t border-[#EA8105]/20 pt-4'
+								className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3 sm:gap-4 items-end border-t border-[#EA8105]/20 pt-4'
 							>
 								<div>
 									<Label className='text-[#EA8105]'>Slot Name</Label>
@@ -173,3 +173,4 @@ function BonusHuntPage() {
 }
 
 export default BonusHuntPage;
+

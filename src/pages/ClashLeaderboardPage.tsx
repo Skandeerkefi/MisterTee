@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -49,8 +49,8 @@ const ClashLeaderboardPage = () => {
       <GraphicalBackground />
       <Navbar />
 
-      <main className="flex-grow container mx-auto p-4 relative z-10">
-        <h1 className="text-3xl font-bold mb-2 text-center text-white">
+      <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 relative z-10">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-center text-white">
           Clash Leaderboard
         </h1>
 
@@ -110,3 +110,4 @@ const ClashLeaderboardPage = () => {
 };
 
 export default ClashLeaderboardPage;
+

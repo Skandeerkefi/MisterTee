@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -96,7 +96,7 @@ export default function CSBattleLeaderboardPage() {
 			<Navbar />
 
 			<main className='container relative z-10 flex-1 max-w-5xl px-4 py-8 mx-auto'>
-				<h1 className='mb-2 text-3xl font-extrabold text-center sm:text-5xl text-red-500 drop-shadow-lg'>
+				<h1 className='mb-2 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-red-500 drop-shadow-lg'>
 					CSBattle Affiliate Leaderboard
 				</h1>
 				{period && (
@@ -219,3 +219,4 @@ export default function CSBattleLeaderboardPage() {
 		</div>
 	);
 }
+

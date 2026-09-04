@@ -1,433 +1,66 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, CalendarDays, Crown, Dices, Gift, Play, Users } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { LeaderboardTable } from "@/components/LeaderboardTable";
-import { Link } from "react-router-dom";
-import { Dices, Crown, Gift, Users, ArrowRight } from "lucide-react";
 import { useLeaderboardStore } from "@/store/useLeaderboardStore";
-import { useSlotCallStore } from "@/store/useSlotCallStore";
-import { useGiveawayStore } from "@/store/useGiveawayStore";
 import GraphicalBackground from "@/components/GraphicalBackground";
 
+const destinations = [
+  { icon: Dices, label: "Games", title: "Play the board", copy: "Coinflip, blackjack, mines and more, with your points on the line.", to: "/games" },
+  { icon: Crown, label: "Leaderboard", title: "Earn your place", copy: "Climb the monthly rankings and make your run impossible to ignore.", to: "/juice" },
+  { icon: Gift, label: "Rewards", title: "Unlock access", copy: "Partner drops, community perks and rewards reserved for members.", to: "/rewards" },
+  { icon: Users, label: "Social", title: "Stay connected", copy: "Find the stream, the chat and the next moment before it happens.", to: "/socials" },
+];
+
 function HomePage() {
-	const { slotCalls } = useSlotCallStore();
-	const { giveaways } = useGiveawayStore();
-	const { monthlyLeaderboard, fetchLeaderboard } = useLeaderboardStore();
+  const { monthlyLeaderboard, fetchLeaderboard } = useLeaderboardStore();
 
-	const topLeaderboard = Array.isArray(monthlyLeaderboard)
-		? monthlyLeaderboard.slice(0, 5)
-		: [];
+  useEffect(() => {
+    if (monthlyLeaderboard.length === 0) fetchLeaderboard();
+  }, [fetchLeaderboard, monthlyLeaderboard.length]);
 
-	const now = new Date();
-	const monthEndDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-	monthEndDate.setHours(23, 59, 59, 999);
-	const monthEndISO = monthEndDate.toISOString();
-
-	useEffect(() => {
-		if (monthlyLeaderboard.length === 0) {
-			fetchLeaderboard();
-		}
-	}, []);
-
-	const [timeLeft, setTimeLeft] = useState("");
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			const now = new Date();
-			const end = new Date(monthEndISO);
-			const diff = end.getTime() - now.getTime();
-
-			if (diff <= 0) {
-				setTimeLeft("00d : 00h : 00m : 00s");
-				clearInterval(interval);
-				return;
-			}
-
-			const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-			const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-			const minutes = Math.floor((diff / (1000 * 60)) % 60);
-			const seconds = Math.floor((diff / 1000) % 60);
-
-			setTimeLeft(
-				`${days.toString().padStart(2, "0")}d : ${hours
-					.toString()
-					.padStart(2, "0")}h : ${minutes
-					.toString()
-					.padStart(2, "0")}m : ${seconds.toString().padStart(2, "0")}s`
-			);
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, [monthEndISO]);
-
-	return (
-		<div className='relative flex flex-col min-h-screen text-white'>
-			{/* 🎨 Animated Graphical Background */}
-			<GraphicalBackground />
-
-			<Navbar />
-
-			<main className='relative z-10 flex-grow'>
-				{/* Modern Hero Section with Kick Player Side-by-Side */}
-				<section className='flex flex-col-reverse items-center justify-center max-w-6xl gap-16 px-6 mx-auto py-28 sm:flex-row sm:items-center'>
-					{/* Text Content */}
-					<div className='max-w-xl text-center sm:text-left'>
-						<h1 className='text-5xl font-extrabold leading-tight tracking-tight bg-gradient-to-r from-[#E10600] via-[#B03400] to-[#E10600] bg-clip-text text-transparent drop-shadow-md'>
-							MisterTee&apos;s <br /> Official Stream
-						</h1>
-
-						<div className='w-24 h-1 mt-6 rounded-full bg-[#E10600] animate-pulse' />
-
-						<p className='mt-6 text-lg font-medium tracking-wide text-gray-300'>
-							Watch MisterTee live on Kick — your go-to destination for
-							thrilling gambling streams, giveaways, and more.
-						</p>
-					</div>
-
-					{/* Kick Stream Embed */}
-					<div className='w-full max-w-xl aspect-video rounded-3xl overflow-hidden shadow-lg border-4 border-[#E10600]'>
-						<iframe
-							src='https://player.kick.com/mistertee'
-							frameBorder='0'
-							allowFullScreen
-							title='MisterTee Live Stream'
-							className='w-full h-full'
-						></iframe>
-					</div>
-				</section>
-				{/* cards */}
-				<section className="flex flex-col items-center w-full px-4 py-16">
-  <h2 className="mb-12 text-4xl font-bold text-center text-white">
-    Affiliate Rewards with MisterTee ✨
-  </h2>
-
-  <div className="
-    flex flex-wrap md:flex-nowrap
-    justify-center 
-    gap-8 
-    w-full 
-    max-w-[1600px]
-  ">
-
-    {/* Roobet */}
-    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
-      <div className="flex items-center justify-center mb-6">
-        <img
-          src="https://i.postimg.cc/5NcLGnKn/Roobet-logo.png"
-          alt="Roobet"
-          className="object-contain h-20"
-        />
-      </div>
-
-      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
-        🦘 Roobet Rewards with MisterTee
-      </h3>
-
-      <ul className="mb-6 space-y-3 text-base text-gray-300">
-        <li>🎁 Welcome Bonus on your first play</li>
-        <li>⚡ Exclusive MisterTee promotions & boosts</li>
-        <li>🎟️ Access to community giveaways</li>
-        <li>🔒 More rewards rolling out soon</li>
-      </ul>
-
-      <a
-        href="https://roobet.com/?ref=mistertee"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
-      >
-        Join Roobet
-      </a>
+  return (
+    <div className="relative flex flex-col min-h-screen overflow-hidden text-white">
+      <GraphicalBackground />
+      <Navbar />
+      <main className="relative z-10 flex-grow">
+        <section className="mx-auto grid max-w-7xl items-center gap-8 px-4 py-10 sm:gap-12 sm:px-6 sm:py-20 lg:grid-cols-[1.05fr_.95fr] lg:py-28">
+          <div className="max-w-2xl">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#8B5CF6]/30 bg-[#8B5CF6]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[#A78BFA] sm:text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#22D3EE] shadow-[0_0_12px_#22D3EE]" />
+              The community is live
+            </div>
+            <h1 className="font-display text-4xl font-bold leading-[0.98] tracking-tight text-[#F5F7FA] sm:text-5xl lg:text-7xl">Your crew.<br /><span className="text-gradient-accent">Your arena.</span></h1>
+            <p className="mt-5 max-w-lg text-base leading-7 text-[#8B93A3] sm:mt-7 sm:text-lg sm:leading-8">MisterTee is a premium gambling community for live moments, competitive boards, exclusive rewards, and the people who make every stream count.</p>
+            <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:flex-wrap">
+              <Link to="/login" className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3.5 text-sm font-semibold btn-accent sm:w-auto">Sign in with Kick <ArrowRight className="w-4 h-4" /></Link>
+              <a href="https://kick.com/MisterTee" target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3.5 text-sm font-semibold btn-accent-outline sm:w-auto"><Play className="w-4 h-4" /> Watch on Kick</a>
+            </div>
+            <div className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-[#252B38] pt-5">
+              <div><p className="font-display text-2xl font-bold text-[#F5F7FA]">24/7</p><p className="mt-1 text-xs uppercase tracking-widest text-[#5F6878]">Energy</p></div>
+              <div><p className="font-display text-2xl font-bold text-[#F5F7FA]">2</p><p className="mt-1 text-xs uppercase tracking-widest text-[#5F6878]">Game modes</p></div>
+            </div>
+          </div>
+          <div className="relative rounded-2xl border border-[#252B38] bg-[#121620]/80 p-2 shadow-[0_24px_80px_rgba(0,0,0,.45)]">
+            <div className="pointer-events-none absolute -inset-8 -z-10 rounded-full bg-[#8B5CF6]/10 blur-3xl" />
+            <iframe src="https://player.kick.com/mistertee" frameBorder="0" allowFullScreen title="MisterTee Live Stream" className="w-full h-full aspect-video rounded-xl" />
+            <div className="flex items-center justify-between px-3 py-3"><span className="text-xs uppercase tracking-[0.2em] text-[#5F6878]">Live broadcast</span><span className="flex items-center gap-2 text-xs font-semibold text-[#A78BFA]"><span className="h-1.5 w-1.5 rounded-full bg-[#8B5CF6]" /> MisterTee</span></div>
+          </div>
+        </section>
+        <section className="px-4 py-10 sm:px-6 sm:py-16 mx-auto max-w-7xl">
+          <div className="flex flex-col gap-3 mb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:mb-8"><div><p className="section-kicker">Inside the club</p><h2 className="mt-2 text-2xl font-bold font-display sm:text-3xl lg:text-4xl">Built for the regulars.</h2></div><Link to="/rewards" className="hidden items-center gap-2 text-sm text-[#A78BFA] hover:text-white sm:flex">Explore rewards <ArrowRight className="w-4 h-4" /></Link></div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {destinations.map(({ icon: Icon, label, title, copy, to }) => <Link key={to} to={to} className="group surface-panel flex min-h-40 flex-col justify-between p-6 transition duration-300 hover:-translate-y-1 hover:border-[#8B5CF6]/60"><div className="flex items-start justify-between"><Icon className="h-5 w-5 text-[#A78BFA]" /><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#5F6878]">{label}</span></div><div><h3 className="font-display text-xl font-bold text-[#F5F7FA] group-hover:text-[#A78BFA]">{title}</h3><p className="mt-2 max-w-sm text-sm leading-6 text-[#8B93A3]">{copy}</p></div></Link>)}
+          </div>
+        </section>
+        <section className="px-4 pt-6 pb-20 sm:px-6 mx-auto max-w-7xl">
+          <div className="flex flex-col justify-between gap-6 p-6 surface-panel sm:flex-row sm:items-center sm:p-8"><div className="flex gap-4"><CalendarDays className="mt-1 h-5 w-5 text-[#22D3EE]" /><div><p className="section-kicker">Every day on Kick</p><h2 className="mt-2 text-2xl font-bold font-display">The next session starts here.</h2><p className="mt-2 text-sm text-[#8B93A3]">Pull up at 7:30pm EST for live games, slot calls and community drops.</p></div></div><a href="https://kick.com/MisterTee" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-3 text-sm rounded-lg btn-accent shrink-0">Enter stream <ArrowRight className="w-4 h-4" /></a></div>
+        </section>
+      </main>
+      <Footer />
     </div>
-
-    
-
-    {/* CSGOWIN */}
-    <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
-      <div className="flex items-center justify-center mb-6">
-        <img
-          src="https://i.ibb.co/2YjY0XSt/Screenshot-2025-12-07-224214-removebg-preview.png"
-          alt="CSGOWIN"
-          className="object-contain h-20"
-        />
-      </div>
-
-      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
-        🔥 CSGOWIN Rewards with MisterTee
-      </h3>
-
-      <ul className="mb-6 space-y-3 text-base text-gray-300">
-        <li>🎁 Claim 3 FREE cases when signing up</li>
-        <li>💵 5% Deposit Bonus + EXTRA bonuses for code users</li>
-        <li>🎟️ Free battles & daily rewards</li>
-        <li>🏆 VIP bonuses & rank rewards</li>
-        <li>🔒 More exclusive perks coming soon</li>
-      </ul>
-
-      <a
-        href="https://csgowin.com/r/mistertee"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
-      >
-        Join CSGOWIN
-      </a>
-    </div>
-
-		{/* CSBattle */}
-		{/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
-			<div className="flex items-center justify-center mb-6">
-				<img
-					src="https://i.ibb.co/TD0JhQ97/Screenshot-2026-05-07-015130-removebg-preview.png"
-					alt="CSBattle"
-					className="object-contain h-20"
-				/>
-			</div>
-
-			<h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
-				🎯 CSBattle Rewards with MisterTee
-			</h3>
-
-			<ul className="mb-6 space-y-3 text-base text-gray-300">
-				<li>🏆 1,000 C leaderboard — prizes for top 6</li>
-				<li>📊 Ranked by wager on the affiliate board</li>
-				<li>
-					<Link to="/csbattle" className="text-[#E10600] underline-offset-2 hover:underline">
-						View live leaderboard
-					</Link>
-				</li>
-				<li>🎁 Use MisterTee&apos;s code when you sign up</li>
-				<li>🔒 10% deposit bonus</li>
-			</ul>
-
-			<a
-				href="https://csbattle.com/"
-				target="_blank"
-				rel="noreferrer"
-				className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
-			>
-				Join CSBattle
-			</a>
-		</div> */}
-
-    {/* PACKDRAW */}
-    {/* <div className="bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.03] transition-transform flex flex-col w-[300px]">
-      <div className="flex items-center justify-center mb-4">
-        <img
-          src="https://i.ibb.co/cXZbz0cy/IMG-0404-removebg-preview.png"
-          alt="Packdraw"
-          className="object-contain h-24"
-        />
-      </div>
-
-      <h3 className="text-2xl font-semibold text-center text-[#E10600] mb-6">
-        🎉 Packdraw Rewards with MisterTee
-      </h3>
-
-      <ul className="mb-6 space-y-3 text-base text-gray-300">
-        <li>💵 5% Deposit Bonus + Extra 5% (10% Total)</li>
-        <li>🎁 +$20 on your first deposit over $100</li>
-        <li>🏆 $200 Monthly Leaderboard</li>
-        <li>🔔 Free Battles</li>
-        <li>😎 VIP Bonuses & More</li>
-      </ul>
-
-      <a
-        href="https://packdraw.com/?ref=MisterTee"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-auto w-full text-center py-3 px-4 bg-[#E10600] text-white font-semibold rounded-xl shadow-lg hover:bg-[#b00500] transition"
-      >
-        Join Packdraw
-      </a>
-    </div> */}
-
-  </div>
-</section>
-
-
-
-
-				{/* Metric-style Countdown Section */}
-				{/* <section className='max-w-4xl mx-auto px-6 py-10 rounded-3xl bg-black/70 border border-[#E10600] shadow-lg'>
-					<h2 className='text-center text-3xl font-semibold mb-8 text-[#E10600] tracking-wide'>
-						⏳ Monthly Leaderboard Ends In
-					</h2>
-
-					<div className='flex flex-col justify-center gap-6 text-center select-none sm:flex-row'>
-						{["Days", "Hours", "Minutes", "Seconds"].map((label, idx) => {
-							const timeParts = timeLeft.split(" : ");
-							const value =
-								timeParts.length === 4 ? timeParts[idx].slice(0, -1) : "--";
-
-							return (
-								<div
-									key={label}
-									className='flex flex-col items-center justify-center bg-[#E10600]/10 rounded-xl py-6 px-8 min-w-[80px] sm:min-w-[100px] shadow-sm'
-								>
-									<span className='text-5xl font-extrabold tracking-tight text-white'>
-										{value}
-									</span>
-									<span className='mt-2 text-sm font-medium text-[#E10600]'>
-										{label}
-									</span>
-								</div>
-							);
-						})}
-					</div>
-				</section> */}
-
-				{/* Leaderboard */}
-				{/*<section className='container py-16'>
-					<div className='flex items-center justify-between mb-8'>
-						<div className='flex items-center gap-2'>
-							<Crown className='w-6 h-6 text-[#E10600]' />
-							<h2 className='text-2xl font-bold'>Monthly Leaderboard</h2>
-						</div>
-						<Button
-							variant='outline'
-							size='sm'
-							className='border-[#E10600] text-[#E10600] hover:bg-[#E10600] hover:text-white bg-black'
-							asChild
-						>
-							<Link to='/leaderboard' className='flex items-center gap-1'>
-								View Full Leaderboard <ArrowRight className='w-4 h-4' />
-							</Link>
-						</Button>
-					</div>
-					<LeaderboardTable period='monthly' data={topLeaderboard} />
-				</section>
-				 Leaderboard */}
-
-				{/* Redesigned Features Section */}
-				<section className='max-w-6xl px-6 py-16 mx-auto'>
-					<h2 className='mb-12 text-4xl font-bold text-center text-white'>
-						What We Offer
-					</h2>
-					<div className='grid grid-cols-1 gap-10 sm:grid-cols-3'>
-						{[
-							{
-								icon: (
-									<Dices className='w-12 h-12 text-[#E10600] animate-pulse' />
-								),
-								title: "Exciting Gambling Streams",
-								description:
-									"Watch thrilling slot sessions, casino games, and big win moments with MisterTee on Roobet.",
-							},
-							{
-								icon: (
-									<Users className='w-12 h-12 text-[#E10600] animate-pulse' />
-								),
-								title: "Slot Call System",
-								description:
-									"Suggest slots for MisterTee to play during streams and see your suggestions come to life.",
-							},
-							{
-								icon: (
-									<Gift className='w-12 h-12 text-[#E10600] animate-pulse' />
-								),
-								title: "Regular Giveaways",
-								description:
-									"Participate in frequent giveaways for a chance to win cash, gaming gear, and more.",
-							},
-						].map(({ icon, title, description }) => (
-							<div
-								key={title}
-								className='flex flex-col items-center bg-black/60 backdrop-blur-md rounded-3xl p-8 shadow-lg border border-[#E10600] hover:scale-[1.05] transition-transform cursor-default'
-							>
-								<div className='flex items-center justify-center w-20 h-20 rounded-full bg-black/50 border-2 border-[#E10600] mb-6'>
-									{icon}
-								</div>
-								<h3 className='text-xl font-semibold text-white mb-3 relative after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-14 after:h-[2px] after:bg-gradient-to-r after:from-[#E10600] after:to-[#B03400]'>
-									{title}
-								</h3>
-								<p className='text-center text-gray-300'>{description}</p>
-							</div>
-						))}
-					</div>
-				</section>
-
-				{/* Redesigned Schedule Section */}
-				<section className='max-w-5xl px-6 py-16 mx-auto'>
-					<h2 className='mb-8 text-4xl font-bold text-center text-white'>
-						📅 Stream Schedule
-					</h2>
-					<p className='max-w-xl mx-auto mb-10 text-center text-gray-400'>
-						MisterTee goes live <strong>every day</strong> — join the fun
-						anytime!
-					</p>
-
-					{/* Timeline container */}
-					<div className='relative items-center justify-between hidden max-w-full gap-8 px-4 mx-auto select-none sm:flex'>
-						{/* Horizontal connecting line */}
-						<div className='absolute top-1/2 left-8 right-8 h-1 bg-[#E10600]/30 rounded-full -z-10'></div>
-
-						{[
-							"Monday",
-							"Tuesday",
-							"Wednesday",
-							"Thursday",
-							"Friday",
-							"Saturday",
-							"Sunday",
-						].map((day) => (
-							<div
-								key={day}
-								className='flex flex-col items-center cursor-default group'
-							>
-								<div className='w-14 h-14 rounded-full border-4 border-[#E10600] bg-black/70 shadow-[0_0_12px_#E10600] group-hover:scale-110 transition-transform flex items-center justify-center text-[#E10600] font-semibold text-lg select-text'>
-									{day.slice(0, 3)}
-								</div>
-								<p className='mt-3 text-sm text-gray-300 select-text'>
-									7:30pm EST
-								</p>
-							</div>
-						))}
-					</div>
-
-					{/* Mobile stacked schedule */}
-					<div className='flex flex-col gap-4 sm:hidden'>
-						{[
-							"Monday",
-							"Tuesday",
-							"Wednesday",
-							"Thursday",
-							"Friday",
-							"Saturday",
-							"Sunday",
-						].map((day) => (
-							<div
-								key={day}
-								className='bg-black/60 rounded-xl border border-[#E10600] p-4 shadow-md flex justify-between items-center'
-							>
-								<span className='font-semibold text-[#E10600]'>{day}</span>
-								<span className='text-gray-300'>7:30pm EST</span>
-							</div>
-						))}
-					</div>
-
-					<div className='flex justify-center mt-12'>
-						<Button
-							size='lg'
-							className='bg-[#E10600] hover:bg-[#b00500] text-white shadow-lg transition'
-							asChild
-						>
-							<a
-								href='https://kick.com/MisterTee'
-								target='_blank'
-								rel='noreferrer'
-							>
-								Watch Live on Kick
-							</a>
-						</Button>
-					</div>
-				</section>
-			</main>
-
-			<Footer />
-		</div>
-	);
+  );
 }
 
 export default HomePage;

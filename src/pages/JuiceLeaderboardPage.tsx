@@ -1,11 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import GraphicalBackground from "@/components/GraphicalBackground";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import LeaderboardPodium from "@/components/LeaderboardPodium";
 import { useLeaderboardDisplayStore } from "@/store/leaderboardDisplayStore";
 import { useJuiceLeaderboardStore } from "@/store/useJuiceLeaderboardStore";
-import { Crown, Loader2, Trophy, Award, Medal } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(duration);
+dayjs.extend(utc);
 
 const FALLBACK_JUICE_PRIZES: Record<number, number> = {
 	1: 500,
@@ -59,6 +65,15 @@ export default function JuiceLeaderboardPage() {
 		[rankPrizes]
 	);
 
+	const displayRange = useMemo(() => {
+		const s = period?.startDate || config?.juice?.startDate || "";
+		const e = period?.endDate || config?.juice?.endDate || "";
+		if (s && e) return { start: dayjs.utc(s).format("MMMM D"), end: dayjs.utc(e).format("MMMM D") };
+		if (s) return { start: dayjs.utc(s).format("MMMM D"), end: "—" };
+		if (e) return { start: "—", end: dayjs.utc(e).format("MMMM D") };
+		return { start: dayjs.utc().startOf("month").format("MMMM D"), end: dayjs.utc().endOf("month").format("MMMM D") };
+	}, [config?.juice?.endDate, config?.juice?.startDate, period?.endDate, period?.startDate]);
+
 	useEffect(() => {
 		fetchConfig();
 	}, [fetchConfig]);
@@ -93,115 +108,78 @@ export default function JuiceLeaderboardPage() {
 	}, [periodEnd]);
 
 	return (
-		<div className='relative flex flex-col min-h-screen text-white bg-black'>
+		<div className='relative flex flex-col min-h-screen'>
 			<GraphicalBackground />
 			<Navbar />
 
-			<main className='container relative z-10 flex-1 max-w-6xl px-4 py-8 mx-auto'>
-				<div className='flex flex-col items-center gap-3 mb-8 text-center'>
-					<div className='flex items-center gap-3 text-amber-300'>
-						<Crown className='w-7 h-7' />
-						<h1 className='text-3xl font-extrabold tracking-tight sm:text-5xl'>
-							Juice.gg Affiliate Leaderboard
-						</h1>
-					</div>
-					<p className='max-w-2xl text-sm text-slate-300 sm:text-base'>
-						Ranked by weighted play amount from Juice.gg&apos;s PLAY_AMOUNT board.
-						Only the selected date range is counted.
-					</p>
-					{period && (
-						<p className='text-sm text-slate-400'>
-							Period: <span className='text-amber-300'>{period.startDate} → {period.endDate}</span>
-						</p>
-					)}
-					{countdown && <p className='text-sm font-semibold text-amber-300'>{countdown}</p>}
-					<p className='text-lg font-semibold text-amber-300'>
-						Total prize pool: <span className='text-white'>${totalPrizePool.toLocaleString()}</span>
-					</p>
-				</div>
+			<main className='relative z-10 flex-grow w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10 mx-auto'>
+				<h1 className='mb-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-center text-[#F5F7FA] drop-shadow-lg'>
+					Juice.gg Leaderboard – ${totalPrizePool.toLocaleString()} Prize Pool
+				</h1>
 
-				<div className='grid grid-cols-1 gap-4 mb-8 md:grid-cols-3'>
-					<PrizeCard
-						title='1st Place'
-						amount={rankPrizes[1] ?? 0}
-						player={users[0]}
-						accent='from-amber-500 to-orange-600'
-						icon={<Trophy className='w-10 h-10 text-yellow-300' />}
-					/>
-					<PrizeCard
-						title='2nd Place'
-						amount={rankPrizes[2] ?? 0}
-						player={users[1]}
-						accent='from-slate-500 to-slate-700'
-						icon={<Award className='w-9 h-9 text-slate-200' />}
-					/>
-					<PrizeCard
-						title='3rd Place'
-						amount={rankPrizes[3] ?? 0}
-						player={users[2]}
-						accent='from-orange-700 to-amber-900'
-						icon={<Medal className='w-9 h-9 text-orange-200' />}
-					/>
-				</div>
+				<p className='mb-2 text-center text-sm font-medium text-[#8B93A3]'>
+					Event Duration: <span className='font-bold text-[#A78BFA]'>{displayRange.start} - {displayRange.end} (UTC)</span>
+				</p>
 
-				{loading ? (
+				<p className='mb-2 text-center text-md font-semibold text-[#F5F7FA]'>
+					⏳ Time Remaining: <span className='text-[#A78BFA] font-bold'>{countdown || "—"}</span>
+				</p>
+				<p className='mb-8 text-center text-xs text-[#8B93A3]'>Ranked by weighted play amount — only the selected date range is counted. Use code <span className='font-bold text-white'>MisterTee</span> on juice.gg/r/MisterTee</p>
+
+				<LeaderboardPodium players={[0, 1, 2].map((index) => ({ name: users[index]?.username, value: users[index] ? `${formatWeightedAmount(users[index].weighted_play_amount)} weighted` : undefined, prize: rankPrizes[index + 1] ? `$${rankPrizes[index + 1].toLocaleString()}` : undefined }))} valueLabel='Juice.gg weighted play rankings' />
+
+				{loading && (
 					<div className='flex items-center justify-center h-56'>
-						<Loader2 className='w-10 h-10 text-amber-300 animate-spin' />
+						<Loader2 className='w-10 h-10 text-[#A78BFA] animate-spin' />
 					</div>
-				) : error ? (
-					<p className='mt-10 text-center text-red-400' role='alert'>
-						{error}
-					</p>
-				) : users.length === 0 ? (
-					<p className='mt-10 text-center text-slate-400'>
-						No Juice leaderboard data is available for the selected period.
-					</p>
-				) : (
-					<div className='overflow-x-auto rounded-2xl border border-amber-500/40 shadow-xl bg-gray-950/80'>
-						<table className='min-w-full text-sm'>
-							<thead>
-								<tr className='text-left text-white bg-gradient-to-r from-amber-700 to-black'>
-									<th className='p-3 font-semibold uppercase'>#</th>
-									<th className='p-3 font-semibold uppercase'>Player</th>
-									<th className='p-3 font-semibold uppercase text-right'>Weighted Play</th>
-									<th className='p-3 font-semibold uppercase text-right'>Prize</th>
+				)}
+				{error && <p className='mt-10 text-center text-[#e10600]'>{error}</p>}
+				{!loading && !error && users.length === 0 && (
+					<p className='mt-10 text-center text-[#8B93A3]'>No Juice leaderboard data is available for the selected period.</p>
+				)}
+				{!loading && !error && users.length > 0 && users.length <= 3 && (
+					<p className='mt-6 text-center text-xs text-[#5F6878]'>Only top 3 — more players will appear as the period fills.</p>
+				)}
+				{!loading && !error && users.length > 3 && (
+					<div className='overflow-x-auto rounded-xl border border-[#252B38] bg-[#121620]/80 p-4'>
+						<table className='w-full min-w-[600px] text-left'>
+							<thead className='border-b border-[#252B38] text-xs uppercase tracking-widest text-[#8B93A3]'>
+								<tr>
+									<th className='p-3'>Rank</th>
+									<th className='p-3'>Player</th>
+									<th className='p-3 text-right'>Weighted Play</th>
+									<th className='p-3 text-right'>Prize</th>
 								</tr>
 							</thead>
 							<tbody>
-								{users.map((user, index) => {
+								{users.slice(3).map((user) => {
 									const prize = rankPrizes[user.rank] ?? 0;
 									return (
 										<tr
-											key={user.id ?? `${user.rank}-${index}`}
-											className={`border-t border-amber-900/40 ${
-												user.rank <= 3
-													? "bg-amber-950/35 hover:bg-amber-950/50"
-													: index % 2 === 0
-														? "bg-gray-900/80 hover:bg-gray-800/90"
-														: "bg-black/40 hover:bg-gray-900/80"
-											}`}
+											key={String(user.id ?? user.rank)}
+											className='border-b border-[#252B38]/70 text-[#F5F7FA] hover:bg-[#8B5CF6]/10'
 										>
-											<td className='p-3 font-bold text-amber-300'>#{user.rank}</td>
+											<td className='p-3 font-bold text-[#A78BFA]'>#{user.rank}</td>
 											<td className='p-3'>
 												<div className='flex items-center gap-3'>
 													{user.avatar ? (
 														<img
 															src={user.avatar}
 															alt=''
-															className='object-cover w-10 h-10 rounded-full border border-amber-500/40'
+															className='object-cover w-8 h-8 rounded-full border border-[#252B38]'
 														/>
 													) : (
-														<div className='flex items-center justify-center w-10 h-10 text-xs font-bold rounded-full bg-amber-900/50 text-amber-100'>
+														<div className='flex items-center justify-center w-8 h-8 text-xs font-bold rounded-full bg-[#252B38] text-[#8B93A3]'>
 															?
 														</div>
 													)}
-													<span className='font-medium text-white'>{user.username}</span>
+													<span className='font-semibold'>{user.username}</span>
 												</div>
 											</td>
-											<td className='p-3 font-semibold text-right text-amber-300'>
+											<td className='p-3 text-right font-semibold text-[#F5F7FA]'>
 												{formatWeightedAmount(user.weighted_play_amount)}
 											</td>
-											<td className='p-3 font-semibold text-right text-yellow-300'>
+											<td className='p-3 text-right font-bold text-[#A78BFA]'>
 												{prize > 0 ? `$${prize.toLocaleString()}` : "—"}
 											</td>
 										</tr>
@@ -218,33 +196,4 @@ export default function JuiceLeaderboardPage() {
 	);
 }
 
-interface PrizeCardProps {
-	title: string;
-	amount: number;
-	player?: { username: string; weighted_play_amount: number };
-	accent: string;
-	icon: ReactNode;
-}
 
-function PrizeCard({ title, amount, player, accent, icon }: PrizeCardProps) {
-	return (
-		<div className='overflow-hidden rounded-xl border border-amber-500/30 bg-black/60 shadow-lg'>
-			<div className={`h-2 bg-gradient-to-r ${accent}`} />
-			<div className='flex flex-col items-center gap-4 p-6 text-center'>
-				{icon}
-				<h2 className='text-xl font-bold text-white'>{title}</h2>
-				<p className='text-lg font-semibold text-amber-300'>${amount.toLocaleString()}</p>
-				{player ? (
-					<div>
-						<p className='font-medium text-white'>{player.username}</p>
-						<p className='text-sm text-slate-300'>
-							{formatWeightedAmount(player.weighted_play_amount)} weighted
-						</p>
-					</div>
-				) : (
-					<p className='text-sm text-slate-400'>Waiting for leaderboard data</p>
-				)}
-			</div>
-		</div>
-	);
-}
