@@ -12,9 +12,9 @@ interface AffiliateLink {
   url: string;
   imageUrl: string;
   category?: string;
-  // backend aliases
   signupUrl?: string;
   logoUrl?: string;
+  rewards?: { icon: string; label: string }[];
 }
 
 const defaultRewards: AffiliateLink[] = [
@@ -23,18 +23,36 @@ const defaultRewards: AffiliateLink[] = [
     url: "https://roobet.com/?code=MisterTee",
     imageUrl: "https://i.ibb.co/S7Mht4qH/r-NQNxh0.png",
     description: "Play on Roobet with code MisterTee.",
+    rewards: [
+      { icon: "🏅", label: "Monthly Leaderboard" },
+      { icon: "💵", label: "Weekly Deposit bonus" },
+      { icon: "🎁", label: "Monthly wager promotion" },
+      { icon: "🎰", label: "Weekly free spins giveaway" },
+    ],
   },
   {
     name: "",
     url: "https://csgowin.com/r/mistertee",
     imageUrl: "https://i.ibb.co/2YjY0XSt/Screenshot-2025-12-07-224214-removebg-preview.png",
     description: "Join CSGOWIN with MisterTee — battles & cases.",
+    rewards: [
+      { icon: "🏅", label: "Monthly Leaderboard" },
+      { icon: "💵", label: "Weekly Deposit bonus" },
+      { icon: "🎁", label: "Monthly wager promotion" },
+      { icon: "🔪", label: "Weekly free battle giveaway" },
+    ],
   },
   {
     name: "",
     url: "http://juice.gg/r/MisterTee",
     imageUrl: "https://juice.gg/_nuxt/juice-logo-white.BZVtVaam.png",
     description: "Play on Juice — code MisterTee affiliate.",
+    rewards: [
+      { icon: "🏅", label: "Monthly Leaderboard" },
+      { icon: "💵", label: "Weekly Deposit bonus" },
+      { icon: "🎁", label: "Monthly wager promotion" },
+      { icon: "🔪", label: "Weekly free battle giveaway" },
+    ],
   },
 ];
 
@@ -78,6 +96,19 @@ function RewardShirt({ link, index }: { link: AffiliateLink; index: number }) {
       <div className="relative text-center">
         <h2 className="font-display text-lg font-bold text-[#F5F7FA] group-hover:text-[#A78BFA]">{link.name}</h2>
         <p className="mt-1 text-xs leading-5 text-[#8B93A3] line-clamp-2">{link.description}</p>
+        {link.rewards && link.rewards.length > 0 && (
+          <div className="mt-3 w-full rounded-xl border border-[#252B38] bg-[#0D1017] p-3">
+            <p className="mb-2 text-[9px] font-bold uppercase tracking-widest text-[#5F6878]">Rewards</p>
+            <div className="flex flex-col gap-1.5">
+              {link.rewards.map((r, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs text-[#8B93A3]">
+                  <span className="text-sm">{r.icon}</span>
+                  <span>{r.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <span className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA]">
           Open <ArrowUpRight className="w-3 h-3" />
         </span>
@@ -107,6 +138,7 @@ export default function RewardsPage() {
           url: a.url || a.signupUrl || "",
           imageUrl: a.imageUrl || a.logoUrl || "",
           category: a.category || "",
+          rewards: a.rewards || [],
         }));
         // if backend already has our 3, use them; otherwise merge/fallback
         const hasAll = ["roobet", "csgowin", "juice"].every((k) => mapped.some((m) => m.name.toLowerCase().includes(k)));
@@ -124,9 +156,9 @@ export default function RewardsPage() {
     <div className="relative flex flex-col min-h-screen text-white">
       <GraphicalBackground />
       <Navbar />
-      <main className="relative z-10 flex-1 w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12 mx-auto">
+      <main className="relative z-10 flex-1 w-full max-w-6xl px-4 py-8 mx-auto sm:px-6 sm:py-12">
         <p className="text-center section-kicker">Our partners</p>
-        <h1 className="mt-2 text-3xl sm:text-4xl font-bold text-center font-display">Rewards & Partnerships</h1>
+        <h1 className="mt-2 text-3xl font-bold text-center sm:text-4xl font-display">Rewards & Partnerships</h1>
         <p className="mx-auto mb-10 mt-3 max-w-xl text-center text-[#8B93A3]">Every shirt opens a partner — code MisterTee active.</p>
         {loading ? (
           <p className="text-center text-gray-400">Loading...</p>
