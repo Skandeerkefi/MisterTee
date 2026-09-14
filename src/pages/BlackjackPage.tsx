@@ -784,7 +784,7 @@ export default function BlackjackPage() {
               </div>
               <div className="text-center mt-3">
                 <span className="text-xs text-green-200/40">
-                  game.phase === "dealing" ? "Dealing cards..." : game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."
+                  {game.phase === "dealing" ? "Dealing cards..." : game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."}
                 </span>
               </div>
             </div>
