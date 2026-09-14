@@ -242,27 +242,35 @@ function GameConfig({ request, onMessage }: { request: (path: string, options?: 
   const [game, setGame] = useState("coinflip");
   const [values, setValues] = useState({ minBet: 10, maxBet: 10000, minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
   const [loadingCfg, setLoadingCfg] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const loadConfig = async (g: string) => {
+  const refresh = async () => {
     setLoadingCfg(true);
     try {
-      const data = await request(`/api/games/config/${g}`);
+      const data = await request(`/api/games/config/${game}`);
       setValues({ minBet: data.minBet ?? 10, maxBet: data.maxBet ?? 10000, minWager: data.minWager ?? 10, maxWager: data.maxWager ?? 10000, dailyLossCap: data.dailyLossCap ?? 5000, active: data.active ?? true });
-    } catch {
-      setValues({ minBet: 10, maxBet: 10000, minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
+    } catch (err) {
+      console.error("[GameConfig] failed to load config for", game, err);
+      onMessage("Failed to load current config — please reload the page.");
     } finally {
       setLoadingCfg(false);
     }
   };
 
-  useEffect(() => { loadConfig(game); }, [game]);
+  useEffect(() => { refresh(); }, [game]);
 
   const save = async () => {
+    setSaving(true);
     try {
       await request(`/api/admin/game-configs/${game}`, { method: "PUT", body: JSON.stringify(values) });
-      onMessage(`${game} configuration saved`);
+      // Re-fetch to confirm what was actually persisted
+      await refresh();
+      onMessage(`${game} configuration saved and verified`);
     } catch (error) {
+      console.error("[GameConfig] save failed:", error);
       onMessage(error instanceof Error ? error.message : "Unable to save game config");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -294,8 +302,8 @@ function GameConfig({ request, onMessage }: { request: (path: string, options?: 
           Game enabled
         </label>
       </div>
-      <button onClick={save} disabled={loadingCfg} className="btn-accent mt-6 rounded-lg px-4 py-2 text-sm">
-        {loadingCfg ? "Loading..." : "Save configuration"}
+      <button onClick={save} disabled={loadingCfg || saving} className="btn-accent mt-6 rounded-lg px-4 py-2 text-sm">
+        {loadingCfg ? "Loading..." : saving ? "Saving…" : "Save configuration"}
       </button>
     </Panel>
   );
