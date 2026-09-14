@@ -240,16 +240,16 @@ function Panel({ title, action, children }: { title: string; action?: ReactNode;
 function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) { return <div className="overflow-x-auto"><table className="w-full min-w-[620px] text-left text-sm"><thead><tr className="border-b border-[#252B38] text-[10px] uppercase tracking-widest text-[#5F6878]">{headers.map((header) => <th key={header} className="px-3 py-3 font-semibold">{header}</th>)}</tr></thead><tbody>{rows.length ? rows.map((row, index) => <tr key={index} className="border-b border-[#252B38]/70 text-[#8B93A3] last:border-0 hover:bg-[#181D27]/60">{row.map((cell, cellIndex) => <td key={cellIndex} className="px-3 py-3">{cell}</td>)}</tr>) : <tr><td colSpan={headers.length} className="px-3 py-10 text-center text-[#5F6878]">No records found.</td></tr>}</tbody></table></div>; }
 function GameConfig({ request, onMessage }: { request: (path: string, options?: RequestInit) => Promise<any>; onMessage: (message: string) => void }) {
   const [game, setGame] = useState("coinflip");
-  const [values, setValues] = useState({ minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
+  const [values, setValues] = useState({ minBet: 10, maxBet: 10000, minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
   const [loadingCfg, setLoadingCfg] = useState(false);
 
   const loadConfig = async (g: string) => {
     setLoadingCfg(true);
     try {
       const data = await request(`/api/games/config/${g}`);
-      setValues({ minWager: data.minWager ?? 10, maxWager: data.maxWager ?? 10000, dailyLossCap: data.dailyLossCap ?? 5000, active: data.active ?? true });
+      setValues({ minBet: data.minBet ?? 10, maxBet: data.maxBet ?? 10000, minWager: data.minWager ?? 10, maxWager: data.maxWager ?? 10000, dailyLossCap: data.dailyLossCap ?? 5000, active: data.active ?? true });
     } catch {
-      setValues({ minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
+      setValues({ minBet: 10, maxBet: 10000, minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
     } finally {
       setLoadingCfg(false);
     }
@@ -277,9 +277,15 @@ function GameConfig({ request, onMessage }: { request: (path: string, options?: 
             <option>blackjack</option>
           </select>
         </label>
-        {(["minWager", "maxWager", "dailyLossCap"] as const).map((key) => (
+        {[
+          { key: "minBet", label: "Min Bet" },
+          { key: "maxBet", label: "Max Bet" },
+          { key: "minWager", label: "Min Wager" },
+          { key: "maxWager", label: "Max Wager" },
+          { key: "dailyLossCap", label: "Max Loss (Daily)" },
+        ].map(({ key, label }) => (
           <label key={key} className="text-xs text-[#8B93A3]">
-            {key}
+            {label}
             <input type="number" value={values[key]} onChange={(e) => setValues({ ...values, [key]: Number(e.target.value) })} className="field mt-2" />
           </label>
         ))}
