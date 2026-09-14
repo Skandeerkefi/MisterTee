@@ -28,7 +28,7 @@ interface Hand {
   id: string;
   cards: Card[];
   bet: number;
-  status: "active" | "stand" | "bust" | "blackjack" | "surrendered";
+  status: "active" | "stand" | "bust" | "blackjack";
   isSplit?: boolean;
 }
 
@@ -314,31 +314,10 @@ export default function BlackjackPage() {
         animTimeouts.current.push(t);
       });
 
-      const revealTimeout = setTimeout(() => {
-        const ph = handTotal([pCard1, pCard2]);
-        const dhShow = dCard0.rank === "A";
-
-        // Reveal hole card regardless so we can check for dealer BJ
-        setGame((prev) => ({
-          ...prev,
-          dealerCards: [{ ...prev.dealerCards[0], faceUp: true }, { ...prev.dealerCards[1], faceUp: true }],
-        }));
-
-        const dt = setTimeout(() => {
-          const dealerTotalNow = handTotal([dCard0, dCard1]);
-          if (ph === 21 && dealerTotalNow === 21) {
-            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // push both BJ
-          } else if (ph === 21) {
-            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // player BJ vs non-BJ dealer
-          } else if (dealerTotalNow === 21) {
-            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // dealer BJ
-          } else {
-            setGame((prev) => ({ ...prev, phase: "playing" }));
-          }
-        }, dhShow ? 600 : 300);
-        animTimeouts.current.push(dt);
+            const playingTimeout = setTimeout(() => {
+        setGame((prev) => ({ ...prev, phase: "playing" }));
       }, 250 * (allCards.length + 1) + 200);
-      animTimeouts.current.push(revealTimeout);
+      animTimeouts.current.push(playingTimeout);
 
     } catch (err: any) {
       setError(err.message || "Failed to start round");
@@ -481,17 +460,6 @@ export default function BlackjackPage() {
     });
   };
 
-  // ──── Surrender ────
-  const surrender = () => {
-    if (game.phase !== "playing" || !game.currentHandId) return;
-    const hand = game.hands.find((h) => h.id === game.currentHandId)!;
-    if (hand.cards.length !== 2) return;
-    setGame((prev) => ({
-      ...prev,
-      hands: prev.hands.map((h) => h.id === game.currentHandId ? { ...h, status: "surrendered" as const } : h),
-    }));
-    setTimeout(() => advanceToDealer(), 400);
-  };
 
   // ──── Advance to dealer ────
   const advanceToDealer = () => {
@@ -546,7 +514,6 @@ export default function BlackjackPage() {
     let messages: string[] = [];
     let types: string[] = [];
     hands.forEach((hand) => {
-      if (hand.status === "surrendered") { messages.push("Surrendered \u2013 half returned"); return; }
       const pt = handTotal(hand.cards);
       if (pt > 21) { messages.push("Bust!"); types.push("lose"); }
       else if (dealerBJ && !firstHandBJ) { messages.push("Dealer Blackjack"); types.push("lose"); }
@@ -577,7 +544,6 @@ export default function BlackjackPage() {
   const canStand = canHit;
   const canDouble = game.phase === "playing" && game.hands.some((h) => h.status === "active" && h.cards.length === 2 && h.bet * 2 <= balance);
   const canSplitAction = game.phase === "playing" && game.hands.some((h) => h.status === "active" && canSplit(h));
-  const canSurrender = game.phase === "playing" && game.hands.some((h) => h.status === "active" && h.cards.length === 2);
 
   const resultGlowClass = game.resultType === "win" || game.resultType === "blackjack" ? "text-emerald-400"
     : game.resultType === "lose" || game.resultType === "bust" ? "text-red-400"
@@ -722,7 +688,6 @@ export default function BlackjackPage() {
                     </div>
                     <div className={`text-sm font-bold px-3 py-1 rounded-full ${ht > 21 ? "bg-red-500/30 text-red-400" : ht === 21 && hand.cards.length === 2 ? "bg-yellow-500/30 text-yellow-300" : isActive ? "bg-purple-500/30 text-purple-300" : "bg-white/10 text-white/60"}`}>
                       {ht}
-                      {hand.status === "surrendered" && " \u00b7 Surr."}
                       {isBlackjack(hand.cards) && " BJ!"}
                     </div>
                     {isActive && game.phase === "playing" && <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />}
@@ -780,8 +745,6 @@ export default function BlackjackPage() {
                   className="bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Double</Button>
                 <Button onClick={split} disabled={!canSplitAction || isSubmitting}
                   className="bg-teal-600 hover:bg-teal-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Split</Button>
-                <Button onClick={surrender} disabled={!canSurrender || isSubmitting} variant="outline"
-                  className="border-red-500/40 text-red-300 hover:bg-red-500/10 disabled:bg-transparent disabled:text-gray-600 px-8 py-3 rounded-xl transition-all duration-150">Surrender</Button>
               </div>
               <div className="text-center mt-3">
                 <span className="text-xs text-green-200/40">
@@ -827,7 +790,7 @@ export default function BlackjackPage() {
               <p className="text-sm font-bold text-[#F5F7FA] mb-1">Blackjack Rules</p>
               <p className="text-xs text-[#8B93A3] leading-relaxed">
                 6-deck shoe \u00b7 Dealer stands on 17 (including soft 17) \u00b7 Blackjack pays 3:2 \u00b7
-                Double down on any two cards \u00b7 Split up to 3 hands \u00b7 Surrender allowed.
+                Double down on any two cards \u00b7 Split up to 3 hands.
                 Bets are deducted from your points balance and payouts are processed server-side.
               </p>
             </div>
