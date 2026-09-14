@@ -357,7 +357,7 @@ export default function BlackjackPage() {
     const dealerCards = fcards?.length ? fcards : g.dealerCards;
     const dealerTotal = handTotal(dealerCards);
     const playerBJ = isBlackjack(playerHand.cards);
-    const dealerBJ = isBlackjack(game.dealerCards);
+    const dealerBJ = isBlackjack(g.dealerCards);
 
     let multiplier = 0;
     let outcome = "lose";
@@ -495,9 +495,10 @@ export default function BlackjackPage() {
 
   // ──── Advance to dealer ────
   const advanceToDealer = () => {
-    const allDone = game.hands.every((h) => h.status !== "active");
+    const g = gameRef.current;
+    const allDone = g.hands.every((h) => h.status !== "active");
     if (!allDone) {
-      const next = game.hands.find((h) => h.status === "active");
+      const next = g.hands.find((h) => h.status === "active");
       if (next) { setGame((prev) => ({ ...prev, currentHandId: next.id })); return; }
     }
     // Reveal dealer hole card
@@ -784,7 +785,7 @@ export default function BlackjackPage() {
               </div>
               <div className="text-center mt-3">
                 <span className="text-xs text-green-200/40">
-                  {game.phase === "dealing" ? "Dealing cards..." : game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."}
+                  {game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."}
                 </span>
               </div>
             </div>
