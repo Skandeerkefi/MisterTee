@@ -342,7 +342,7 @@ export default function BlackjackPage() {
     let outcome = "lose";
     let message = "Dealer Wins";
 
-    if (playerBJ && !dealerBJ) { multiplier = 1.5; outcome = "blackjack"; message = "Blackjack!"; }
+    if (playerBJ && !dealerBJ) { multiplier = 1.2; outcome = "blackjack"; message = "Blackjack!"; }
     else if (playerBJ && dealerBJ) { multiplier = 0; outcome = "push"; message = "Push \u2013 Both Blackjack"; }
     else if (dealerBJ) { multiplier = 0; outcome = "lose"; message = "Dealer Blackjack"; }
     else if (playerTotal > 21) { multiplier = 0; outcome = "lose"; message = "Bust!"; }
@@ -356,12 +356,12 @@ export default function BlackjackPage() {
       const res = await fetch(`${getApiBaseUrl()}/api/games/blackjack/resolve`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ roundId: game.roundId, outcome, multiplier, message }),
+        body: JSON.stringify({ roundId: g.roundId, outcome, multiplier, message }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Resolution failed");
 
-      const ptsWon = Math.floor(game.bet * multiplier);
+      const ptsWon = Math.floor(g.bet * multiplier);
       setGame((prev) => ({ ...prev, phase: "result", resultMessage: message, resultType: outcome as any }));
       setLastResult({ type: outcome, msg: message, pts: ptsWon });
       if (outcome === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
@@ -475,31 +475,33 @@ export default function BlackjackPage() {
       dealerCards: prev.dealerCards.map((c, i) => i === 1 ? { ...c, faceUp: true } : c),
       phase: "dealerTurn",
     }));
-    const drawLoop = () => {
+    const drawNextCard = () => {
       const t = setTimeout(() => {
         setGame((prev) => {
           const total = handTotal(prev.dealerCards);
           if (total < 17) {
             const shoe = [...prev.deck];
             const card = shoe.pop()!;
-            return { ...prev, deck: shoe, dealerCards: [...prev.dealerCards, card] };
+            const newDealerCards = [...prev.dealerCards, card];
+            const newTotal = handTotal(newDealerCards);
+            if (newTotal < 17) {
+              // Dealer needs another card — schedule next draw
+              const t2 = setTimeout(drawNextCard, 500);
+              animTimeouts.current.push(t2);
+            } else {
+              // Dealer stands — resolve with the final confirmed cards
+              resolveAllHands(newDealerCards);
+            }
+            return { ...prev, deck: shoe, dealerCards: newDealerCards };
           }
-          return prev;
-        });
-        setGame((prev) => {
-          const total = handTotal(prev.dealerCards);
-          if (total < 17) {
-            const t2 = setTimeout(drawLoop, 500);
-            animTimeouts.current.push(t2);
-          } else {
-            resolveAllHands();
-          }
+          // Dealer already ≥ 17 — resolve immediately
+          resolveAllHands(prev.dealerCards);
           return prev;
         });
       }, 500);
       animTimeouts.current.push(t);
     };
-    const t0 = setTimeout(drawLoop, 600);
+    const t0 = setTimeout(drawNextCard, 600);
     animTimeouts.current.push(t0);
   };
 
@@ -789,7 +791,7 @@ export default function BlackjackPage() {
             <div>
               <p className="text-sm font-bold text-[#F5F7FA] mb-1">Blackjack Rules</p>
               <p className="text-xs text-[#8B93A3] leading-relaxed">
-                6-deck shoe \u00b7 Dealer stands on 17 (including soft 17) \u00b7 Blackjack pays 3:2 \u00b7
+                6-deck shoe \u00b7 Dealer stands on 17 (including soft 17) \u00b7 Blackjack pays 6:5 \u00b7
                 Double down on any two cards \u00b7 Split up to 3 hands.
                 Bets are deducted from your points balance and payouts are processed server-side.
               </p>
