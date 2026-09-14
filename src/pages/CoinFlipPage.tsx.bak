@@ -42,10 +42,10 @@ export default function CoinFlipPage() {
           </CardContent>
         </Card>
         {result && (
-          <Card className={`bg-black/70 backdrop-blur border mb-6 ${result.gameRound?.outcome === "win" ? "border-green-500" : "border-red-500"}`}>
+          <Card className={`bg-black/70 backdrop-blur border mb-6 ${result.outcome === "win" ? "border-green-500" : "border-red-500"}`}>
             <CardContent className="text-center py-6">
-              <p className={`text-3xl font-bold ${result.gameRound?.outcome === "win" ? "text-green-500" : "text-red-500"}`}>{result.gameRound?.outcome === "win" ? "YOU WIN!" : "YOU LOSE"}</p>
-              {result.gameRound?.outcome === "win" && <p className="text-2xl text-white mt-2">+{result.gameRound?.payout?.toLocaleString()} pts!</p>}
+              <p className={`text-3xl font-bold ${result.outcome === "win" ? "text-green-500" : "text-red-500"}`}>{result.outcome === "win" ? "YOU WIN!" : "YOU LOSE"}</p>
+              {result.outcome === "win" && <p className="text-2xl text-white mt-2">+{result.gameRound?.payout?.toLocaleString()} pts!</p>}
               <p className="text-gray-400 mt-2">Result: {result.gameRound?.meta?.resultSide?.toUpperCase()}</p>
               <Button onClick={() => setResult(null)} variant="outline" className="mt-4 border-gray-600"><RefreshCw className="w-4 h-4 mr-2" />Play Again</Button>
             </CardContent>

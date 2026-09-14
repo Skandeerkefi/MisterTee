@@ -260,6 +260,10 @@ export default function BlackjackPage() {
   // Cleanup
   useEffect(() => { return () => { animTimeouts.current.forEach(clearTimeout); }; }, []);
 
+  // Keep a live ref so async callbacks (timeouts) always read the freshest state
+  const gameRef = useRef(game);
+  useEffect(() => { gameRef.current = game; }, [game]);
+
   // ──── Deck management ────
   const ensureDeck = (): Card[] => {
     if (game.deck.length === 0) return createShoe();
@@ -323,11 +327,11 @@ export default function BlackjackPage() {
         const dt = setTimeout(() => {
           const dealerTotalNow = handTotal([dCard0, dCard1]);
           if (ph === 21 && dealerTotalNow === 21) {
-            resolveAllHands(); // push both BJ
+            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // push both BJ
           } else if (ph === 21) {
-            resolveAllHands(); // player BJ vs non-BJ dealer
+            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // player BJ vs non-BJ dealer
           } else if (dealerTotalNow === 21) {
-            resolveAllHands(); // dealer BJ
+            resolveAllHands([dCard0, dCard1], gameRef.current.hands); // dealer BJ
           } else {
             setGame((prev) => ({ ...prev, phase: "playing" }));
           }
@@ -344,11 +348,14 @@ export default function BlackjackPage() {
   };
 
   // ──── Resolve round server-side ────
-  const resolveRound = async () => {
-    if (!game.roundId) return;
-    const playerHand = game.hands.find((h) => h.id === game.currentHandId) ?? game.hands[0];
+  const resolveRound = async (fcards?: Card[], fhands?: Hand[]) => {
+    const g = gameRef.current;
+    if (!g.roundId) return;
+    const hands = fhands?.length ? fhands : g.hands;
+    const playerHand = hands.find((h) => h.id === g.currentHandId) ?? hands[0];
     const playerTotal = handTotal(playerHand.cards);
-    const dealerTotal = handTotal(game.dealerCards);
+    const dealerCards = fcards?.length ? fcards : g.dealerCards;
+    const dealerTotal = handTotal(dealerCards);
     const playerBJ = isBlackjack(playerHand.cards);
     const dealerBJ = isBlackjack(game.dealerCards);
 
@@ -528,13 +535,16 @@ export default function BlackjackPage() {
   };
 
   // ──── Resolve all hands ────
-  const resolveAllHands = () => {
-    const dealerTotal = handTotal(game.dealerCards);
-    const dealerBJ = isBlackjack(game.dealerCards);
-    const firstHandBJ = isBlackjack(game.hands[0]?.cards ?? []);
+  const resolveAllHands = (dcards: Card[] = [], hnds: Hand[] = []) => {
+    const g = gameRef.current;
+    const dealerCards = dcards.length ? dcards : g.dealerCards;
+    const hands = hnds.length ? hnds : g.hands;
+    const dealerTotal = handTotal(dealerCards);
+    const dealerBJ = isBlackjack(dealerCards);
+    const firstHandBJ = isBlackjack(hands[0]?.cards ?? []);
     let messages: string[] = [];
     let types: string[] = [];
-    game.hands.forEach((hand) => {
+    hands.forEach((hand) => {
       if (hand.status === "surrendered") { messages.push("Surrendered \u2013 half returned"); return; }
       const pt = handTotal(hand.cards);
       if (pt > 21) { messages.push("Bust!"); types.push("lose"); }
@@ -547,7 +557,7 @@ export default function BlackjackPage() {
     const primaryType = types.find((t) => t !== "lose") || "lose";
     setGame((prev) => ({ ...prev, phase: "result", resultMessage: messages[0] || "Round over", resultType: primaryType as any }));
     if (primaryType === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
-    resolveRound();
+    resolveRound(dealerCards, hands);
   };
 
   // ──── Clear / Rebet ────
@@ -758,7 +768,7 @@ export default function BlackjackPage() {
           )}
 
           {/* ──── ACTION BUTTONS ──── */}
-          {(game.phase === "playing" || game.phase === "dealing") && (
+          {(game.phase === "playing") && (
             <div className="border-t border-white/10 pt-5 slide-up-anim">
               <div className="flex flex-wrap justify-center gap-3">
                 <Button onClick={hit} disabled={!canHit || isSubmitting}
@@ -774,7 +784,7 @@ export default function BlackjackPage() {
               </div>
               <div className="text-center mt-3">
                 <span className="text-xs text-green-200/40">
-                  {game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."}
+                  game.phase === "dealing" ? "Dealing cards..." : game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."
                 </span>
               </div>
             </div>

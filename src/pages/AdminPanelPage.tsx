@@ -238,6 +238,61 @@ export default function AdminPanelPage() {
 
 function Panel({ title, action, children }: { title: string; action?: ReactNode; children: ReactNode }) { return <div className="surface-panel overflow-hidden"><div className="flex items-center justify-between border-b border-[#252B38] px-5 py-4"><h2 className="font-display text-xl font-bold">{title}</h2>{action}</div><div className="p-5">{children}</div></div>; }
 function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) { return <div className="overflow-x-auto"><table className="w-full min-w-[620px] text-left text-sm"><thead><tr className="border-b border-[#252B38] text-[10px] uppercase tracking-widest text-[#5F6878]">{headers.map((header) => <th key={header} className="px-3 py-3 font-semibold">{header}</th>)}</tr></thead><tbody>{rows.length ? rows.map((row, index) => <tr key={index} className="border-b border-[#252B38]/70 text-[#8B93A3] last:border-0 hover:bg-[#181D27]/60">{row.map((cell, cellIndex) => <td key={cellIndex} className="px-3 py-3">{cell}</td>)}</tr>) : <tr><td colSpan={headers.length} className="px-3 py-10 text-center text-[#5F6878]">No records found.</td></tr>}</tbody></table></div>; }
-function GameConfig({ request, onMessage }: { request: (path: string, options?: RequestInit) => Promise<any>; onMessage: (message: string) => void }) { const [game, setGame] = useState("coinflip"); const [values, setValues] = useState({ minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true }); const save = async () => { try { await request(`/api/admin/game-configs/${game}`, { method: "PUT", body: JSON.stringify(values) }); onMessage(`${game} configuration saved`); } catch (error) { onMessage(error instanceof Error ? error.message : "Unable to save game config"); } }; return <Panel title="Game safeguards and limits"><div className="grid max-w-xl gap-4 sm:grid-cols-2"><label className="text-xs text-[#8B93A3]">Game<select value={game} onChange={(e) => setGame(e.target.value)} className="field mt-2"><option>coinflip</option><option>mines</option></select></label>{(["minWager", "maxWager", "dailyLossCap"] as const).map((key) => <label key={key} className="text-xs text-[#8B93A3]">{key}<input type="number" value={values[key]} onChange={(e) => setValues({ ...values, [key]: Number(e.target.value) })} className="field mt-2" /></label>)}<label className="flex items-center gap-2 text-sm text-[#8B93A3]"><input type="checkbox" checked={values.active} onChange={(e) => setValues({ ...values, active: e.target.checked })} /> Game enabled</label></div><button onClick={save} className="btn-accent mt-6 rounded-lg px-4 py-2 text-sm">Save configuration</button></Panel>; }
+function GameConfig({ request, onMessage }: { request: (path: string, options?: RequestInit) => Promise<any>; onMessage: (message: string) => void }) {
+  const [game, setGame] = useState("coinflip");
+  const [values, setValues] = useState({ minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
+  const [loadingCfg, setLoadingCfg] = useState(false);
+
+  const loadConfig = async (g: string) => {
+    setLoadingCfg(true);
+    try {
+      const data = await request(`/api/games/config/${g}`);
+      setValues({ minWager: data.minWager ?? 10, maxWager: data.maxWager ?? 10000, dailyLossCap: data.dailyLossCap ?? 5000, active: data.active ?? true });
+    } catch {
+      setValues({ minWager: 10, maxWager: 10000, dailyLossCap: 5000, active: true });
+    } finally {
+      setLoadingCfg(false);
+    }
+  };
+
+  useEffect(() => { loadConfig(game); }, [game]);
+
+  const save = async () => {
+    try {
+      await request(`/api/admin/game-configs/${game}`, { method: "PUT", body: JSON.stringify(values) });
+      onMessage(`${game} configuration saved`);
+    } catch (error) {
+      onMessage(error instanceof Error ? error.message : "Unable to save game config");
+    }
+  };
+
+  return (
+    <Panel title="Game safeguards and limits">
+      <div className="grid max-w-xl gap-4 sm:grid-cols-2">
+        <label className="text-xs text-[#8B93A3]">
+          Game
+          <select value={game} onChange={(e) => setGame(e.target.value)} className="field mt-2">
+            <option>coinflip</option>
+            <option>mines</option>
+            <option>blackjack</option>
+          </select>
+        </label>
+        {(["minWager", "maxWager", "dailyLossCap"] as const).map((key) => (
+          <label key={key} className="text-xs text-[#8B93A3]">
+            {key}
+            <input type="number" value={values[key]} onChange={(e) => setValues({ ...values, [key]: Number(e.target.value) })} className="field mt-2" />
+          </label>
+        ))}
+        <label className="flex items-center gap-2 text-sm text-[#8B93A3]">
+          <input type="checkbox" checked={values.active} onChange={(e) => setValues({ ...values, active: e.target.checked })} />
+          Game enabled
+        </label>
+      </div>
+      <button onClick={save} disabled={loadingCfg} className="btn-accent mt-6 rounded-lg px-4 py-2 text-sm">
+        {loadingCfg ? "Loading..." : "Save configuration"}
+      </button>
+    </Panel>
+  );
+}
 
 
