@@ -23,6 +23,7 @@ import JuiceLeaderboardPage from "@/pages/JuiceLeaderboardPage";
 // New Community Hub Pages
 import CoinFlipPage from "@/pages/CoinFlipPage";
 import MinesPage from "@/pages/MinesPage";
+import BlackjackPage from "@/pages/BlackjackPage";
 import GamesPage from "@/pages/GamesPage";
 import PointsShopPage from "@/pages/PointsShopPage";
 import PointsLeaderboardPage from "@/pages/PointsLeaderboardPage";
@@ -94,6 +95,7 @@ function App() {
 					{/* NEW Community Hub Routes */}
 					<Route path='/games/coinflip' element={<CoinFlipPage />} />
 					<Route path='/games/mines' element={<MinesPage />} />
+					<Route path='/games/blackjack' element={<BlackjackPage />} />
 					<Route path='/games' element={<GamesPage />} />
 					<Route path='/shop' element={<PointsShopPage />} />
 					<Route path='/points-leaderboard' element={<PointsLeaderboardPage />} />

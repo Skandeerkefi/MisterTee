@@ -1,4 +1,4 @@
-﻿import { ArrowRight, Bomb, CircleDollarSign } from "lucide-react";
+﻿import { ArrowRight, Bomb, CircleDollarSign, Spade } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -7,6 +7,7 @@ import GraphicalBackground from "@/components/GraphicalBackground";
 const games = [
   { name: "Coin Flip", label: "50 / 50", description: "Choose heads or tails and double your points when the call lands.", to: "/games/coinflip", icon: CircleDollarSign, accent: "#A78BFA" },
   { name: "Mines 5x5", label: "High risk", description: "Pick a tile, chase the multiplier, and avoid the hidden mines.", to: "/games/mines", icon: Bomb, accent: "#22D3EE" },
+  { name: "Blackjack", label: "Classic", description: "Beat the dealer to 21. 3:2 on blackjack. Double, split, and surrender available.", to: "/games/blackjack", icon: Spade, accent: "#34D399" },
 ];
 
 export default function GamesPage() {
