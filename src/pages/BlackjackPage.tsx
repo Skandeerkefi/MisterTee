@@ -342,14 +342,14 @@ export default function BlackjackPage() {
     let outcome = "lose";
     let message = "Dealer Wins";
 
-    if (playerBJ && !dealerBJ) { multiplier = 1.2; outcome = "blackjack"; message = "Blackjack!"; }
-    else if (playerBJ && dealerBJ) { multiplier = 0; outcome = "push"; message = "Push \u2013 Both Blackjack"; }
+    if (playerBJ && !dealerBJ) { multiplier = 2.2; outcome = "blackjack"; message = "Blackjack!"; }
+    else if (playerBJ && dealerBJ) { multiplier = 1; outcome = "push"; message = "Push – Both Blackjack"; }
     else if (dealerBJ) { multiplier = 0; outcome = "lose"; message = "Dealer Blackjack"; }
     else if (playerTotal > 21) { multiplier = 0; outcome = "lose"; message = "Bust!"; }
-    else if (dealerTotal > 21) { multiplier = 1; outcome = "win"; message = "Dealer Busts \u2013 You Win!"; }
-    else if (playerTotal > dealerTotal) { multiplier = 1; outcome = "win"; message = "You Win!"; }
+    else if (dealerTotal > 21) { multiplier = 2; outcome = "win"; message = "Dealer Busts – You Win!"; }
+    else if (playerTotal > dealerTotal) { multiplier = 2; outcome = "win"; message = "You Win!"; }
     else if (playerTotal < dealerTotal) { multiplier = 0; outcome = "lose"; message = "Dealer Wins"; }
-    else { multiplier = 0; outcome = "push"; message = "Push"; }
+    else { multiplier = 1; outcome = "push"; message = "Push"; }
 
     setIsSubmitting(true);
     try {
@@ -361,11 +361,11 @@ export default function BlackjackPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Resolution failed");
 
-      const ptsWon = Math.floor(g.bet * multiplier);
+      const ptsWon = Math.floor(g.bet * multiplier) - g.bet;
       setGame((prev) => ({ ...prev, phase: "result", resultMessage: message, resultType: outcome as any }));
       setLastResult({ type: outcome, msg: message, pts: ptsWon });
       if (outcome === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
-      fetchProfile();
+      await fetchProfile();
     } catch (err: any) {
       setError(err.message || "Failed to resolve round");
     } finally {

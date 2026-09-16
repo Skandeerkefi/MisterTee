@@ -78,6 +78,24 @@ export function Footer() {
             </a>
           </div>
         </div>
+
+        {/* Responsible gambling disclaimer */}
+        <div className="mt-6 border-t border-[#252B38] pt-6 text-center">
+          <p className="text-[10px] text-[#5F6878] leading-relaxed max-w-3xl mx-auto">
+            <span className="text-[#A78BFA] font-semibold">(18+)</span>{" "}
+            Please gamble responsibly and verify your local laws. This site is for entertainment purposes only;
+            we are not liable for any losses. Visit{" "}
+            <a
+              href="https://www.begambleaware.org/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[#8B93A3] underline hover:text-[#A78BFA] transition-colors"
+            >
+              begambleaware.org
+            </a>
+            {" "}for help and resources.
+          </p>
+        </div>
       </div>
 
       {/* Accent line */}
