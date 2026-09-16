@@ -60,7 +60,7 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
-  const items = [...NAV_ITEMS, ...(user ? [{ to: "/profile", label: "Profile" }] : []), ...(user?.role === "admin" ? [{ to: "/admin/panel", label: "Admin" }] : [])];
+  const items = [...NAV_ITEMS, ...(user ? [{ to: "/profile", label: "Profile" }] : []), ...(user?.role === "admin" ? [{ to: "/admin/panel", label: "Admin Panel" }, { to: "/admin/leaderboards", label: "Admin Leaderboard" }] : [])];
   useEffect(() => {
     const checkLive = async () => { try { const r = await fetch("https://kick.com/api/v2/channels/MisterTee"); const d = await r.json(); setIsLive(!!d.livestream); } catch { setIsLive(false); } };
     checkLive(); const id = setInterval(checkLive, 60000); return () => clearInterval(id);

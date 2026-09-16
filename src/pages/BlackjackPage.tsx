@@ -361,11 +361,13 @@ export default function BlackjackPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Resolution failed");
 
-      const ptsWon = Math.floor(g.bet * multiplier) - g.bet;
+      const ptsWon = Math.max(0, data.payout - g.bet);
       setGame((prev) => ({ ...prev, phase: "result", resultMessage: message, resultType: outcome as any }));
       setLastResult({ type: outcome, msg: message, pts: ptsWon });
       if (outcome === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
-      await fetchProfile();
+      // Immediately apply the server-reported balance so the UI updates even if fetchProfile fails
+      usePointsStore.setState((s) => ({ profile: s.profile ? { ...s.profile, balance: data.balance } : null }));
+      fetchProfile(); // fire-and-forget backup sync
     } catch (err: any) {
       setError(err.message || "Failed to resolve round");
     } finally {
