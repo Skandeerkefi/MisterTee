@@ -365,9 +365,9 @@ export default function BlackjackPage() {
       setGame((prev) => ({ ...prev, phase: "result", resultMessage: message, resultType: outcome as any }));
       setLastResult({ type: outcome, msg: message, pts: ptsWon });
       if (outcome === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
-      // Immediately apply the server-reported balance so the UI updates even if fetchProfile fails
-      usePointsStore.setState((s) => ({ profile: s.profile ? { ...s.profile, balance: data.balance } : null }));
-      fetchProfile(); // fire-and-forget backup sync
+      // Always update balance from server response — even if profile was never loaded
+      usePointsStore.setState((s) => ({ profile: { ...(s.profile || {}), balance: data.balance } }));
+      fetchProfile(); // background sync to keep profile in step
     } catch (err: any) {
       setError(err.message || "Failed to resolve round");
     } finally {
