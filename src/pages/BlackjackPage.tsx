@@ -230,6 +230,7 @@ export default function BlackjackPage() {
   const [animatingCards, setAnimatingCards] = useState<Map<string, boolean>>(new Map());
   const [showConfetti, setShowConfetti] = useState(false);
   const [lastResult, setLastResult] = useState<{ type: string; msg: string; pts: number } | null>(null);
+  const [lastWager, setLastWager] = useState(0); // BUG FIX: track original bet for correct rebet amount
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
@@ -304,6 +305,7 @@ export default function BlackjackPage() {
       });
       setShowConfetti(false);
       setAnimatingCards(new Map()); setLastResult(null);
+      setLastWager(currentBet); // BUG FIX: store original wager for rebet
 
       const allCards = [pCard1, pCard2, dCard0, dCard1];
       allCards.forEach((card, i) => {
@@ -331,43 +333,55 @@ export default function BlackjackPage() {
     const g = gameRef.current;
     if (!g.roundId) return;
     const hands = fhands?.length ? fhands : g.hands;
-    const playerHand = hands.find((h) => h.id === g.currentHandId) ?? hands[0];
-    const playerTotal = handTotal(playerHand.cards);
     const dealerCards = fcards?.length ? fcards : g.dealerCards;
     const dealerTotal = handTotal(dealerCards);
-    const playerBJ = isBlackjack(playerHand.cards);
-    const dealerBJ = isBlackjack(g.dealerCards);
+    const dealerBJ = isBlackjack(dealerCards);
 
-    let multiplier = 0;
+    // BUG FIX: Compute result for ALL hands (handles splitting correctly)
+    let totalMultiplier = 0;
     let outcome = "lose";
     let message = "Dealer Wins";
+    let hasWin = false;
 
-    if (playerBJ && !dealerBJ) { multiplier = 2.2; outcome = "blackjack"; message = "Blackjack!"; }
-    else if (playerBJ && dealerBJ) { multiplier = 1; outcome = "push"; message = "Push – Both Blackjack"; }
-    else if (dealerBJ) { multiplier = 0; outcome = "lose"; message = "Dealer Blackjack"; }
-    else if (playerTotal > 21) { multiplier = 0; outcome = "lose"; message = "Bust!"; }
-    else if (dealerTotal > 21) { multiplier = 2; outcome = "win"; message = "Dealer Busts – You Win!"; }
-    else if (playerTotal > dealerTotal) { multiplier = 2; outcome = "win"; message = "You Win!"; }
-    else if (playerTotal < dealerTotal) { multiplier = 0; outcome = "lose"; message = "Dealer Wins"; }
-    else { multiplier = 1; outcome = "push"; message = "Push"; }
+    hands.forEach((hand) => {
+      const pt = handTotal(hand.cards);
+      const handBJ = isBlackjack(hand.cards);
+
+      if (handBJ && !dealerBJ) { totalMultiplier += 2.2; outcome = "blackjack"; message = "Blackjack!"; hasWin = true; }
+      else if (handBJ && dealerBJ) { totalMultiplier += 1; /* push — no change */ }
+      else if (dealerBJ && !handBJ) { /* lose — no change */ }
+      else if (pt > 21) { /* bust — lose */ }
+      else if (dealerTotal > 21) { totalMultiplier += 2; outcome = "win"; message = "Dealer Busts – You Win!"; hasWin = true; }
+      else if (pt > dealerTotal) { totalMultiplier += 2; outcome = "win"; message = "You Win!"; hasWin = true; }
+      else if (pt < dealerTotal) { /* lose — no change */ }
+      else { totalMultiplier += 1; outcome = "push"; message = "Push"; }
+    });
+
+    // Average multiplier across winning hands; use 1.0 for all-push
+    if (!hasWin && outcome !== "push") totalMultiplier = 0;
+    else if (hasWin) totalMultiplier = Math.round((totalMultiplier / hands.length) * 100) / 100;
+
+    // Total wager = sum of all active hand bets
+    const totalWager = hands.reduce((sum, h) => sum + h.bet, 0);
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${getApiBaseUrl()}/api/games/blackjack/resolve`, {
+      const res = await fetch(`${getApiBaseUrl()}/api/games/blackjack/resolve`, {\
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ roundId: g.roundId, outcome, multiplier, message }),
+        body: JSON.stringify({ roundId: g.roundId, outcome, multiplier: totalMultiplier, message }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Resolution failed");
 
-      const ptsWon = Math.max(0, data.payout - g.bet);
+      // BUG FIX: Use FULL payout from server, not net profit. The server now returns
+      // the complete payout amount (since placeWager already deducted the wager).
+      const ptsWon = Math.max(0, data.payout - totalWager);
       setGame((prev) => ({ ...prev, phase: "result", resultMessage: message, resultType: outcome as any }));
       setLastResult({ type: outcome, msg: message, pts: ptsWon });
       if (outcome === "blackjack") { setShowConfetti(true); setTimeout(() => setShowConfetti(false), 3000); }
-      // Always update balance from server response — even if profile was never loaded
       usePointsStore.setState((s) => ({ profile: { ...(s.profile || {}), balance: data.balance } }));
-      fetchProfile(); // background sync to keep profile in step
+      fetchProfile();
     } catch (err: any) {
       setError(err.message || "Failed to resolve round");
     } finally {
@@ -418,6 +432,14 @@ export default function BlackjackPage() {
     if (hand.bet * 2 > balance) { setError("Insufficient points to double"); return; }
     setIsSubmitting(true);
     try {
+      // BUG FIX: Call backend to deduct extra wager before drawing the card
+      if (token && game.roundId) {
+        await fetch(`${getApiBaseUrl()}/api/games/blackjack/double`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ roundId: game.roundId }),
+        });
+      }
       const shoe = [...game.deck];
       const newCard = shoe.pop()!;
       const updatedHand: Hand = { ...hand, cards: [...hand.cards, newCard], bet: hand.bet * 2 };
@@ -514,14 +536,14 @@ export default function BlackjackPage() {
     const hands = hnds.length ? hnds : g.hands;
     const dealerTotal = handTotal(dealerCards);
     const dealerBJ = isBlackjack(dealerCards);
-    const firstHandBJ = isBlackjack(hands[0]?.cards ?? []);
+    // BUG FIX: Check EACH hand's blackjack individually, not just the first hand
     let messages: string[] = [];
     let types: string[] = [];
     hands.forEach((hand) => {
       const pt = handTotal(hand.cards);
       if (pt > 21) { messages.push("Bust!"); types.push("lose"); }
-      else if (dealerBJ && !firstHandBJ) { messages.push("Dealer Blackjack"); types.push("lose"); }
       else if (isBlackjack(hand.cards) && !dealerBJ) { messages.push("Blackjack!"); types.push("blackjack"); }
+      else if (dealerBJ && !isBlackjack(hand.cards)) { messages.push("Dealer Blackjack"); types.push("lose"); }
       else if (pt > dealerTotal) { messages.push("Wins!"); types.push("win"); }
       else if (pt < dealerTotal) { messages.push("Loses"); types.push("lose"); }
       else { messages.push("Push"); types.push("push"); }
@@ -536,7 +558,8 @@ export default function BlackjackPage() {
   const clearBet = () => { setCurrentBet(0); setError(null); };
   const rebet = () => {
     if (lastResult) {
-      const amount = lastResult.pts > 0 ? lastResult.pts : game.bet;
+      // BUG FIX: use original wager (lastWager), not net profit (lastResult.pts)
+      const amount = lastWager > 0 ? lastWager : game.bet;
       if (amount >= minBet && amount <= balance) setCurrentBet(amount);
     }
   };
