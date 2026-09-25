@@ -122,7 +122,7 @@ const CardSvg = ({ card, className = "", style = {} }: { card: Card; className?:
           ...style,
         }}
       >
-        <div className="absolute inset-2 rounded-lg border border-white/10" />
+        <div className="absolute border rounded-lg inset-2 border-white/10" />
         <div className="grid grid-cols-3 grid-rows-4 gap-[2px] opacity-30">
           {Array.from({ length: 12 }).map((_, i) => (
             <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />
@@ -145,7 +145,7 @@ const CardSvg = ({ card, className = "", style = {} }: { card: Card; className?:
         <span className="text-xs font-bold leading-none" style={{ color: isRed ? "#DC2626" : "#111827" }}>{card.rank}</span>
         <SuitIcon className="w-2.5 h-2.5 mt-0.5" style={{ color: isRed ? "#DC2626" : "#111827" }} />
       </div>
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex items-center justify-center flex-1">
         <span className="text-3xl leading-none" style={{ color: isRed ? "#DC2626" : "#111827" }}>{suitSymbol}</span>
       </div>
       <div className="flex flex-col items-center pb-1.5 px-1.5 rotate-180">
@@ -194,7 +194,7 @@ const Confetti = () => {
     rotation: Math.random() * 360,
   }));
   return (
-    <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-hidden pointer-events-none">
       {particles.map((p) => (
         <div
           key={p.id}
@@ -366,7 +366,7 @@ export default function BlackjackPage() {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${getApiBaseUrl()}/api/games/blackjack/resolve`, {\
+      const res = await fetch(`${getApiBaseUrl()}/api/games/blackjack/resolve`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ roundId: g.roundId, outcome, multiplier: totalMultiplier, message }),
@@ -581,7 +581,7 @@ export default function BlackjackPage() {
 
   // ──── JSX ────
   return (
-    <div className="relative flex flex-col min-h-screen text-white overflow-hidden">
+    <div className="relative flex flex-col min-h-screen overflow-hidden text-white">
       <GraphicalBackground />
       <Navbar />
       {showConfetti && <Confetti />}
@@ -616,17 +616,17 @@ export default function BlackjackPage() {
         .bust-shake { animation: shake 0.3s ease-in-out; }
       `}</style>
 
-      <main className="relative z-10 flex-1 flex flex-col items-center px-4 py-6 sm:px-6 sm:py-8">
+      <main className="relative z-10 flex flex-col items-center flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {/* Header */}
-        <div className="w-full max-w-4xl flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between w-full max-w-4xl mb-4">
           <div>
             <p className="section-kicker">Points arcade</p>
-            <h1 className="font-display text-2xl sm:text-3xl font-bold flex items-center gap-2">
+            <h1 className="flex items-center gap-2 text-2xl font-bold font-display sm:text-3xl">
               <Spade className="w-6 h-6 text-[#A78BFA]" /> Blackjack
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <div className="surface-panel px-4 py-2 flex items-center gap-2">
+            <div className="flex items-center gap-2 px-4 py-2 surface-panel">
               <Coins className="w-4 h-4 text-yellow-400" />
               <span className="text-sm text-[#8B93A3]">Balance:</span>
               <span className="font-bold text-[#A78BFA]">{balance.toLocaleString()} pts</span>
@@ -639,7 +639,7 @@ export default function BlackjackPage() {
 
         {/* Error banner */}
         {error && (
-          <div className="w-full max-w-4xl mb-3 surface-panel border border-red-500/50 px-4 py-3 flex items-center gap-2 text-red-400 text-sm slide-up-anim">
+          <div className="flex items-center w-full max-w-4xl gap-2 px-4 py-3 mb-3 text-sm text-red-400 border surface-panel border-red-500/50 slide-up-anim">
             <AlertTriangle className="w-4 h-4 shrink-0" />
             {error}
             <button onClick={() => setError(null)} className="ml-auto text-red-400 hover:text-red-300">\u00d7</button>
@@ -653,7 +653,7 @@ export default function BlackjackPage() {
           {/* Dealer area */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-green-300/60">
+              <span className="text-xs font-bold tracking-widest uppercase text-green-300/60">
                 Dealer{dealerTotalFull !== null && ` \u00b7 ${dealerTotalFull}`}
               </span>
               {dealerTotalFull !== null && dealerTotalFull > 21 && (
@@ -663,7 +663,7 @@ export default function BlackjackPage() {
             <div className="flex items-center justify-center gap-2 min-h-[134px]">
               {game.dealerCards.length === 0 ? (
                 <div className="w-[80px] h-[112px] sm:w-[96px] sm:h-[134px] rounded-xl border-2 border-dashed border-white/10 flex items-center justify-center">
-                  <span className="text-white/10 text-2xl">\u2660</span>
+                  <span className="text-2xl text-white/10">\u2660</span>
                 </div>
               ) : game.dealerCards.map((card) => (
                 <div key={card.id} className={`transition-all duration-200 ${animatingCards.get(card.id) ? "card-deal-anim" : ""}`}>
@@ -691,7 +691,7 @@ export default function BlackjackPage() {
           {/* Player hands */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-green-300/60">
+              <span className="text-xs font-bold tracking-widest uppercase text-green-300/60">
                 Your Hand{playerTotal > 0 && ` \u00b7 ${playerTotal}`}
               </span>
               {playerTotal > 21 && <span className="text-xs font-bold text-red-400 animate-pulse">BUST!</span>}
@@ -703,7 +703,7 @@ export default function BlackjackPage() {
                 const ht = handTotal(hand.cards);
                 return (
                   <div key={hand.id} className={`flex flex-col items-center gap-2 transition-all duration-200 ${hand.status === "bust" ? "bust-shake opacity-70" : ""} ${hand.status === "blackjack" ? "win-glow rounded-xl" : ""} ${isActive ? "scale-105" : ""}`} style={isActive ? { boxShadow: "0 0 25px rgba(139,92,246,0.5)" } : {}}>
-                    <div className="flex items-center gap-1 bg-black/40 rounded-full px-3 py-1 text-xs font-bold text-yellow-400">
+                    <div className="flex items-center gap-1 px-3 py-1 text-xs font-bold text-yellow-400 rounded-full bg-black/40">
                       <Coins className="w-3 h-3" />{hand.bet}
                     </div>
                     <div className="flex -space-x-6">
@@ -717,63 +717,63 @@ export default function BlackjackPage() {
                       {ht}
                       {isBlackjack(hand.cards) && " BJ!"}
                     </div>
-                    {isActive && game.phase === "playing" && <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />}
+                    {isActive && game.phase === "playing" && <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />}
                   </div>
                 );
               })}
               {game.hands.length === 0 && (
                 <div className="w-[80px] h-[112px] sm:w-[96px] sm:h-[134px] rounded-xl border-2 border-dashed border-white/10 flex items-center justify-center">
-                  <span className="text-white/10 text-2xl">\u2665</span>
+                  <span className="text-2xl text-white/10">\u2665</span>
                 </div>
               )}
             </div>
           </div>
           {/* ──── BETTING AREA ──── */}
           {game.phase === "betting" && (
-            <div className="border-t border-white/10 pt-5 slide-up-anim">
-              <p className="text-center text-sm text-green-200/60 mb-4">Place your bet to begin</p>
-              <div className="flex items-center justify-center gap-3 mb-4 flex-wrap">
+            <div className="pt-5 border-t border-white/10 slide-up-anim">
+              <p className="mb-4 text-sm text-center text-green-200/60">Place your bet to begin</p>
+              <div className="flex flex-wrap items-center justify-center gap-3 mb-4">
                 {BET_OPTIONS.map((val) => (
                   <Chip key={val} value={val} onClick={() => setCurrentBet(currentBet + val)} disabled={currentBet + val > balance} />
                 ))}
               </div>
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="surface-panel px-6 py-3 flex items-center gap-3">
+                <div className="flex items-center gap-3 px-6 py-3 surface-panel">
                   <span className="text-sm text-[#8B93A3]">Current Bet:</span>
                   <span className="text-2xl font-black text-yellow-400">{currentBet.toLocaleString()}</span>
                   <span className="text-sm text-[#8B93A3]">pts</span>
                 </div>
                 {currentBet > 0 && (
-                  <Button variant="outline" onClick={clearBet} className="border-red-500/40 text-red-400 hover:bg-red-500/10 text-sm">Clear</Button>
+                  <Button variant="outline" onClick={clearBet} className="text-sm text-red-400 border-red-500/40 hover:bg-red-500/10">Clear</Button>
                 )}
               </div>
               <div className="flex justify-center gap-3">
                 <Button onClick={startRound} disabled={currentBet < minBet || isSubmitting}
-                  className="bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-12 py-4 text-lg rounded-xl transition-all duration-200 hover:shadow-glow-md active:scale-95">
+                  className="px-12 py-4 text-lg font-bold text-white transition-all duration-200 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl hover:shadow-glow-md active:scale-95">
                   <Play className="w-5 h-5 mr-2" />
                   {isSubmitting ? "Dealing..." : "Deal"}
                 </Button>
               </div>
               {currentBet > 0 && currentBet > balance && (
-                <p className="text-center text-red-400 text-xs mt-2">Not enough points for this bet</p>
+                <p className="mt-2 text-xs text-center text-red-400">Not enough points for this bet</p>
               )}
             </div>
           )}
 
           {/* ──── ACTION BUTTONS ──── */}
           {(game.phase === "playing") && (
-            <div className="border-t border-white/10 pt-5 slide-up-anim">
+            <div className="pt-5 border-t border-white/10 slide-up-anim">
               <div className="flex flex-wrap justify-center gap-3">
                 <Button onClick={hit} disabled={!canHit || isSubmitting}
-                  className="bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Hit</Button>
+                  className="px-8 py-3 font-bold text-white transition-all duration-150 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl active:scale-95">Hit</Button>
                 <Button onClick={stand} disabled={!canStand || isSubmitting}
-                  className="bg-orange-600 hover:bg-orange-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Stand</Button>
+                  className="px-8 py-3 font-bold text-white transition-all duration-150 bg-orange-600 hover:bg-orange-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl active:scale-95">Stand</Button>
                 <Button onClick={doubleDown} disabled={!canDouble || isSubmitting}
-                  className="bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Double</Button>
+                  className="px-8 py-3 font-bold text-white transition-all duration-150 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl active:scale-95">Double</Button>
                 <Button onClick={split} disabled={!canSplitAction || isSubmitting}
-                  className="bg-teal-600 hover:bg-teal-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold px-8 py-3 rounded-xl transition-all duration-150 active:scale-95">Split</Button>
+                  className="px-8 py-3 font-bold text-white transition-all duration-150 bg-teal-600 hover:bg-teal-500 disabled:bg-gray-700 disabled:text-gray-500 rounded-xl active:scale-95">Split</Button>
               </div>
-              <div className="text-center mt-3">
+              <div className="mt-3 text-center">
                 <span className="text-xs text-green-200/40">
                   {game.hands.find((h) => h.id === game.currentHandId)?.status === "active" ? "Your turn" : "Waiting..."}
                 </span>
@@ -783,24 +783,24 @@ export default function BlackjackPage() {
 
           {/* ──── DEALER TURN ──── */}
           {game.phase === "dealerTurn" && (
-            <div className="border-t border-white/10 pt-4 text-center">
+            <div className="pt-4 text-center border-t border-white/10">
               <p className="text-sm text-green-200/60 animate-pulse">Dealer is drawing...</p>
             </div>
           )}
 
           {/* ──── RESULT ACTIONS ──── */}
           {game.phase === "result" && (
-            <div className="border-t border-white/10 pt-5 slide-up-anim">
+            <div className="pt-5 border-t border-white/10 slide-up-anim">
               <div className="flex flex-wrap justify-center gap-3">
                 <Button onClick={() => {
                   setGame({ phase: "betting", deck: game.deck, dealerCards: [], hands: [], currentHandId: null, bet: 0, resultMessage: "", resultType: null, roundId: null });
                   setError(null);
-                }} className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-10 py-3 rounded-xl transition-all duration-150 active:scale-95">
+                }} className="px-10 py-3 font-bold text-white transition-all duration-150 bg-emerald-600 hover:bg-emerald-500 rounded-xl active:scale-95">
                   <Play className="w-4 h-4 mr-2" /> New Hand
                 </Button>
                 {lastResult && (
                   <Button onClick={rebet} disabled={isSubmitting} variant="outline"
-                    className="border-purple-500/40 text-purple-300 hover:bg-purple-500/10 disabled:bg-transparent disabled:text-gray-600 px-6 py-3 rounded-xl">
+                    className="px-6 py-3 text-purple-300 border-purple-500/40 hover:bg-purple-500/10 disabled:bg-transparent disabled:text-gray-600 rounded-xl">
                     <RefreshCw className="w-4 h-4 mr-2" /> Rebet
                   </Button>
                 )}
@@ -810,7 +810,7 @@ export default function BlackjackPage() {
         </div>
 
         {/* Rules */}
-        <div className="w-full max-w-4xl mt-4 surface-panel p-4">
+        <div className="w-full max-w-4xl p-4 mt-4 surface-panel">
           <div className="flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#A78BFA] shrink-0 mt-0.5" />
             <div>
@@ -826,7 +826,7 @@ export default function BlackjackPage() {
 
         {/* History */}
         {history.length > 0 && (
-          <div className="w-full max-w-4xl mt-4 surface-panel p-4">
+          <div className="w-full max-w-4xl p-4 mt-4 surface-panel">
             <button onClick={() => setShowHistory(!showHistory)} className="flex items-center gap-2 text-sm font-bold text-[#A78BFA] hover:text-white transition-colors w-full">
               <History className="w-4 h-4" /> Recent Rounds
               <span className="text-[#5F6878] text-xs ml-auto">{showHistory ? "\u25b2" : "\u25bc"}</span>

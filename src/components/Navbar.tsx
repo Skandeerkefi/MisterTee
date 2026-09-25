@@ -41,7 +41,7 @@ function LeaderboardItem({ isActive, open, onToggle, onNavigate }: { isActive: b
       <span className={`mt-0.5 text-[7px] font-semibold uppercase tracking-[0.11em] transition-colors sm:text-[8px] lg:text-[9px] whitespace-nowrap ${isActive || open ? "text-[#A78BFA]" : "text-[#667084] group-hover:text-[#F5F7FA]"}`}>Leaderboard</span>
     </button>
     {open && <div className="absolute left-1/2 top-full z-50 mt-2 w-40 -translate-x-1/2 overflow-hidden rounded-xl border border-[#252B38] bg-[#121620] p-1 shadow-card-dark">
-      {[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }].map((board) => <Link key={board.to} to={board.to} onClick={onNavigate} className="block rounded-lg px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#8B93A3] hover:bg-[#8B5CF6]/15 hover:text-[#A78BFA]">{board.label}</Link>)}
+      {[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }, { to: "/rust", label: "Rust" }].map((board) => <Link key={board.to} to={board.to} onClick={onNavigate} className="block rounded-lg px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider text-[#8B93A3] hover:bg-[#8B5CF6]/15 hover:text-[#A78BFA]">{board.label}</Link>)}
     </div>}
   </div>;
 }
@@ -66,7 +66,7 @@ export function Navbar() {
     checkLive(); const id = setInterval(checkLive, 60000); return () => clearInterval(id);
   }, []);
   useEffect(() => { setLeaderboardOpen(false); setMenuOpen(false); }, [location.pathname]);
-  const isActive = (path: string) => path === "/juice" ? ["/juice","/leaderboards","/leaderboard"].includes(location.pathname.toLowerCase()) : path === "/games" ? location.pathname.startsWith("/games") : location.pathname === path;
+  const isActive = (path: string) => path === "/juice" ? ["/juice","/leaderboards","/leaderboard","/rust"].includes(location.pathname.toLowerCase()) : path === "/games" ? location.pathname.startsWith("/games") : location.pathname === path;
   return <nav className="sticky top-0 z-50 w-full border-b border-[#252B38] bg-[#0D1017]/95 shadow-[0_8px_30px_rgba(0,0,0,.25)] backdrop-blur-xl">
     <div className="mx-auto flex min-h-[60px] max-w-[1440px] items-center gap-2 px-3 sm:min-h-[76px] sm:gap-4 sm:px-6">
       <Link to="/" className="flex items-center gap-2 group shrink-0 sm:gap-3" onClick={() => setMenuOpen(false)}>
@@ -92,7 +92,7 @@ export function Navbar() {
         {!user && <Link to="/login" onClick={() => setMenuOpen(false)} className="flex items-center justify-center px-4 py-3 text-sm font-semibold rounded-lg btn-accent sm:hidden">Sign in with Kick</Link>}
         {isLive && <div className="flex items-center gap-2 rounded-lg bg-[#8B5CF6]/10 px-3 py-2 text-xs font-bold uppercase tracking-widest text-[#A78BFA]"><span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" /> Live on Kick</div>}
         <p className="px-2 pt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#5F6878]">Navigate</p>
-        {items.map((item) => item.label === "Leaderboard" ? <div key={item.to} className="rounded-xl bg-[#121620] p-1"><p className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA]">Leaderboards</p>{[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }].map((b) => <Link key={b.to} to={b.to} onClick={() => setMenuOpen(false)} className={`block rounded-lg px-4 py-2.5 text-sm ${location.pathname.toLowerCase()===b.to.toLowerCase()?"bg-[#8B5CF6]/15 text-[#A78BFA]":"text-[#8B93A3] hover:bg-[#181D27] hover:text-white"}`}>{b.label}</Link>)}</div> : <Link key={item.to} to={item.to} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-medium ${isActive(item.to)?"bg-[#8B5CF6]/15 text-[#A78BFA] border border-[#8B5CF6]/20":"bg-[#121620] text-[#8B93A3] hover:bg-[#181D27] hover:text-white border border-transparent"}`}>{item.label}</Link>)}
+        {items.map((item) => item.label === "Leaderboard" ? <div key={item.to} className="rounded-xl bg-[#121620] p-1"><p className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA]">Leaderboards</p>{[{ to: "/Leaderboards", label: "Roobet" }, { to: "/leaderboard", label: "CSGOWIN" }, { to: "/juice", label: "Juice" }, { to: "/rust", label: "Rust" }].map((b) => <Link key={b.to} to={b.to} onClick={() => setMenuOpen(false)} className={`block rounded-lg px-4 py-2.5 text-sm ${location.pathname.toLowerCase()===b.to.toLowerCase()?"bg-[#8B5CF6]/15 text-[#A78BFA]":"text-[#8B93A3] hover:bg-[#181D27] hover:text-white"}`}>{b.label}</Link>)}</div> : <Link key={item.to} to={item.to} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-medium ${isActive(item.to)?"bg-[#8B5CF6]/15 text-[#A78BFA] border border-[#8B5CF6]/20":"bg-[#121620] text-[#8B93A3] hover:bg-[#181D27] hover:text-white border border-transparent"}`}>{item.label}</Link>)}
       </div>
     </div>}
   </nav>;

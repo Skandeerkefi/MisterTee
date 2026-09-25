@@ -19,6 +19,7 @@ import DiamondPage from "@/pages/DiamondPage";
 import CSBattleLeaderboardPage from "@/pages/CSBattleLeaderboardPage";
 import AdminLeaderboardPage from "@/pages/AdminLeaderboardPage";
 import JuiceLeaderboardPage from "@/pages/JuiceLeaderboardPage";
+import RustLeaderboardPage from "@/pages/RustLeaderboardPage";
 
 // New Community Hub Pages
 import CoinFlipPage from "@/pages/CoinFlipPage";
@@ -90,6 +91,7 @@ function App() {
 					<Route path='/diamonds' element={<DiamondPage />} />
 					<Route path='/csbattle' element={<CSBattleLeaderboardPage />} />
 					<Route path='/juice' element={<JuiceLeaderboardPage />} />
+					<Route path='/rust' element={<RustLeaderboardPage />} />
 					<Route path='/admin/leaderboards' element={<AdminLeaderboardPage />} />
 
 					{/* NEW Community Hub Routes */}
