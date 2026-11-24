@@ -20,6 +20,11 @@ export interface LeaderboardDisplayConfig {
 		endDate: string;
 		prizes: RankPrizes;
 	};
+	sixty: {
+		startDate: string;
+		endDate: string;
+		prizes: RankPrizes;
+	};
 }
 
 const DEFAULT_ROOBET_PRIZES: RankPrizes = {
@@ -57,6 +62,17 @@ const DEFAULT_JUICE_PRIZES: RankPrizes = {
 	10: 0,
 };
 
+const DEFAULT_SIXTY_PRIZES: RankPrizes = {
+	1: 1000,
+	2: 425,
+	3: 275,
+	4: 125,
+	5: 75,
+	6: 50,
+	7: 25,
+	8: 25,
+};
+
 const getCurrentUtcMonthRange = () => {
 	const now = new Date();
 	const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0));
@@ -86,6 +102,11 @@ export function normalizeLeaderboardDisplayConfig(
 			startDate: config?.juice?.startDate ?? month.startDate,
 			endDate: config?.juice?.endDate ?? month.endDate,
 			prizes: { ...DEFAULT_JUICE_PRIZES, ...(config?.juice?.prizes ?? {}) },
+		},
+		sixty: {
+			startDate: config?.sixty?.startDate ?? "2026-11-23",
+			endDate: config?.sixty?.endDate ?? "2026-12-23",
+			prizes: { ...DEFAULT_SIXTY_PRIZES, ...(config?.sixty?.prizes ?? {}) },
 		},
 	};
 }

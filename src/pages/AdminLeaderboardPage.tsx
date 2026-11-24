@@ -16,6 +16,7 @@ import {
 const ROOBET_RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 const CSBATTLE_RANKS = [1, 2, 3, 4, 5, 6, 7] as const;
 const JUICE_RANKS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+const SIXTY_RANKS = [1, 2, 3, 4, 5, 6, 7, 8] as const;
 
 export default function AdminLeaderboardPage() {
 	const user = useAuthStore((s) => s.user);
@@ -64,6 +65,11 @@ export default function AdminLeaderboardPage() {
 					startDate: form.juice.startDate.trim(),
 					endDate: form.juice.endDate.trim(),
 					prizes: { ...form.juice.prizes },
+				},
+				sixty: {
+					startDate: form.sixty.startDate.trim(),
+					endDate: form.sixty.endDate.trim(),
+					prizes: { ...form.sixty.prizes },
 				},
 			};
 			await saveConfig(payload, token);
@@ -120,6 +126,21 @@ export default function AdminLeaderboardPage() {
 		});
 	};
 
+	const updateSixtyPrize = (rank: number, value: string) => {
+		if (!form) return;
+		const n = value === "" ? 0 : Number(value);
+		setForm({
+			...form,
+			sixty: {
+				...form.sixty,
+				prizes: {
+					...form.sixty.prizes,
+					[String(rank)]: Number.isFinite(n) ? Math.max(0, n) : 0,
+				},
+			},
+		});
+	};
+
 	return (
 		<div className='relative flex flex-col min-h-screen text-white bg-black'>
 			<GraphicalBackground />
@@ -130,9 +151,9 @@ export default function AdminLeaderboardPage() {
 					Admin — Leaderboard display
 				</h1>
 				<p className='mb-8 text-sm text-center text-slate-400'>
-					Set Roobet, CSBattle, and Juice prize amounts and date ranges shown on the
-					site. Roobet: leave dates empty to use the current UTC calendar month for
-					API data.
+					Set Roobet, CSBattle, Juice, and Sixty.gg prize amounts and date ranges
+					shown on the site. Roobet: leave dates empty to use the current UTC
+					calendar month for API data.
 				</p>
 
 				{loading && !form && (
@@ -318,6 +339,68 @@ export default function AdminLeaderboardPage() {
 											className='mt-1 text-black bg-white'
 											value={form.juice.prizes[String(r)] ?? 0}
 											onChange={(e) => updateJuicePrize(r, e.target.value)}
+										/>
+									</div>
+								))}
+							</div>
+						</section>
+
+						<section className='p-6 border rounded-2xl border-white/10 bg-black/50'>
+							<h2 className='mb-4 text-xl font-semibold text-amber-300'>
+								Sixty.gg
+							</h2>
+							<p className='mb-3 text-xs text-slate-500'>
+								Set the date range and prizes for the Sixty.gg wager leaderboard.
+							</p>
+							<div className='grid gap-4 sm:grid-cols-2'>
+								<div>
+									<Label htmlFor='sixty-start'>Start date</Label>
+									<Input
+										id='sixty-start'
+										type='date'
+										className='mt-1 text-black bg-white'
+										value={form.sixty.startDate}
+										onChange={(e) =>
+											setForm({
+												...form,
+												sixty: {
+													...form.sixty,
+													startDate: e.target.value,
+												},
+											})
+										}
+									/>
+								</div>
+								<div>
+									<Label htmlFor='sixty-end'>End date</Label>
+									<Input
+										id='sixty-end'
+										type='date'
+										className='mt-1 text-black bg-white'
+										value={form.sixty.endDate}
+										onChange={(e) =>
+											setForm({
+												...form,
+												sixty: {
+													...form.sixty,
+													endDate: e.target.value,
+												},
+											})
+										}
+									/>
+								</div>
+							</div>
+							<div className='grid grid-cols-2 gap-3 mt-4 sm:grid-cols-3'>
+								{SIXTY_RANKS.map((r) => (
+									<div key={r}>
+										<Label htmlFor={`sixty-p-${r}`}>Rank {r} ($)</Label>
+										<Input
+											id={`sixty-p-${r}`}
+											type='number'
+											min={0}
+											className='mt-1 text-black bg-white'
+											value={form.sixty.prizes[String(r)] ?? 0}
+											onChange={(e) => updateSixtyPrize(r, e.target.value)}
 										/>
 									</div>
 								))}
